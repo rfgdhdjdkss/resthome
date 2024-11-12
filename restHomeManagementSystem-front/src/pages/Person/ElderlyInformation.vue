@@ -99,7 +99,7 @@ const recharge = (index: number, row: User) => {
 const tableData = reactive<Elderly[]>([])
 //获取已经完成预定的老人信息
 const fetchData = () => {
-  axios.get(`/elderly/selectAllElderly/${loginUser.uid}`, {
+  axios.get(`/elderly/selectAllElderlyByUid/${loginUser.uid}`, {
   }).then(function (response) {
     const convertedData: Elderly[] = response.data.data.map(item => ({
       ...item,
@@ -196,11 +196,12 @@ const rechargeHandler = () => {
       message: '充值成功',
       type: 'success',
     })
+    transactionDeduct()
     rechargeValue.value = 0
   }
-  setTimeout = () => {
-    fetchData(), 0.1
-  }
+  setTimeout(() => {
+    fetchData()
+  }, 300);
 }
 //取消充值事件
 const cancelPay = () => {
@@ -214,6 +215,22 @@ const cancelPay = () => {
 const toUserInfo = () => {
   router.push({ name: 'PersonalCenter' });
 }
+
+const transactionDeduct = () => {
+  axios.post("/transaction/addIn", {
+    uid: loginUser.uid,
+    transactionMoney: rechargeValue.value,
+    transactionType: '账户余额',
+    description: `为${rechargeElderlyName.value}的老人账户充值`,
+    inOrOut: 0
+  }).then(function (response) {
+    console.log(response);
+  }).catch(function (error) {
+    console.log(error);
+  })
+}
+
+
 onMounted(() => {
   fetchData()
   fetchUserBalance()

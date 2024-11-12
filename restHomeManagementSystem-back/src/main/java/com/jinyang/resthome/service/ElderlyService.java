@@ -1,8 +1,10 @@
 package com.jinyang.resthome.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jinyang.resthome.pojo.Elderly;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jinyang.resthome.pojo.Reserve;
+import com.jinyang.resthome.pojo.User;
 import com.jinyang.resthome.pojo.dto.ElderlyBalanceUpdateRequest;
 
 import java.util.List;
@@ -17,11 +19,17 @@ public interface ElderlyService extends IService<Elderly> {
     int addNewElderly(Elderly elderly);
 
     //根据uid获取当前用户预定成功的老人信息业务
-    List<Elderly> selectAllElderly(Long uid);
+    List<Elderly> selectAllElderlyByUid(Long uid);
 
     //搜索框模糊查询老人信息业务
     List<Elderly> selectForSearch(String searchValue);
 
     //为老人账户充值余额业务
     int rechargeElderlyBalance(long eid, Double money);
+
+    Page<Elderly> selectAllElderly(Page<Elderly> page);
+
+    int updateIsCheckined(long eid, Integer isCheckined);
+
+    Page<Elderly> selectBySearchValue(Page<Elderly> page, String searchValue);
 }

@@ -4,8 +4,8 @@
       <el-table-column label="老人姓名" prop="elderlyName" />
       <el-table-column label="是否入住">
         <template #default="{ row }">
-          <el-tag :type="row.isCheckined ? 'success' : 'warning'">{{ row.isCheckined ? '已入住' : '未入住'
-            }}</el-tag>
+          <el-tag :type="row.isCheckined ? 'success' : 'warning'">{{ row.isCheckined ? '已入住' : '未入住' }}</el-tag>
+          <el-switch v-model="row.isCheckined" @click="updateIsCheckined(row)" style="margin-left: 20px;" />
         </template>
       </el-table-column>
       <el-table-column label="老人账户余额(元)" prop="balance" />
@@ -14,40 +14,67 @@
           <el-input v-model="search" size="default" placeholder="输入老人姓名搜索" />
         </template>
         <template #default="scope">
-          <el-button size="default" @click="recharge(scope.$index, scope.row)">
-            充值
+          <el-button size="default">
+            删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog v-model="dialogVisible" title="充值">
-      <div>
-        <el-text class="mx-1" size="large">正在为{{ rechargeElderlyName }}充值</el-text> <el-text class="mx-1"
-          size="large">,{{
-            rechargeElderlyName }}账户余额：{{ ElderlyBalance }} 元</el-text><br>
-        <el-text class="mx-1" size="large">当前用户{{ loginUser.username }}账户余额：{{ userBalance }} 元</el-text>
+    <div id="pageChangeDiv">
+      <div id="countDiv">
+        <span>共{{ pageInfo.total }}条</span>
       </div>
-      <div class="pay-dialog" style="margin-top: 10px;">
-        <div class="pay-dialog-content" style="display: flex; align-items: center;justify-content: center; ">
-          <label style="margin-right: 30px;">请输入充值金额
-            <el-text class="mx-1" type="info">（将从账户余额扣除）</el-text>
-          </label>
-          <el-input-number v-model="rechargeValue" style="width: 240px" :min="0" type="number" placeholder="请输入支付金额" />
-          <label style="margin-left: 10px;">/元</label>
+      <div id="countDiv">
+        <span>共{{ pageInfo.pages }}页</span>
+      </div>
+      <el-dropdown trigger="click" id="sizeDiv">
+        <div>
+          <span>{{ pageInfo.pageSize }}条/页</span>
+          <el-icon>
+            <ArrowDownBold />
+          </el-icon>
+        </div>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item @click="changePageSize(7)">7条/页</el-dropdown-item>
+            <el-dropdown-item @click="changePageSize(10)">10条/页</el-dropdown-item>
+            <el-dropdown-item @click="changePageSize(12)">12条/页</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+      <div id="changePageDiv">
+        <el-icon style="cursor: pointer;" @click="changePrevPage">
+          <ArrowLeftBold />
+        </el-icon>
+        <div id="pageDiv">
+          <span class="pageNum" v-if="pageInfo.hasPrevious && pageInfo.currentPage > 2"
+            @click="gotoPageByNum(pageInfo.currentPage - 2)">{{ pageInfo.currentPage - 2 }}</span>
+          <span class="pageNum" v-if="pageInfo.hasPrevious" @click="gotoPageByNum(pageInfo.currentPage - 1)">{{
+            pageInfo.currentPage - 1 }}</span>
+          <span class="pageNum" @click="gotoPageByNum(pageInfo.currentPage)" style="color: #409EFF;">{{
+            pageInfo.currentPage }}</span>
+          <span class="pageNum" v-if="pageInfo.hasNext" @click="gotoPageByNum(pageInfo.currentPage + 1)">{{
+            pageInfo.currentPage + 1 }}</span>
+          <span class="pageNum" v-if="Number(pageInfo.pages) - pageInfo.currentPage >= 2"
+            @click="gotoPageByNum(pageInfo.currentPage + 2)">{{ pageInfo.currentPage + 2 }}</span>
+        </div>
 
+        <el-icon style="cursor: pointer;" @click="changeNextPage">
+          <ArrowRightBold />
+        </el-icon>
+      </div>
+      <div id="gotoPageNumDiv">
+        <div>
+          <span class="pageNumDiv_span">前往</span>
+        </div>
+        <div style="margin-left: 5px; margin-right: 5px;">
+          <el-input id="inputDiv" v-model="gotoPageNum" />
+        </div>
+        <div>
+          <span class="pageNumDiv_span">页</span>
         </div>
       </div>
-      <div>
-        <el-text class="mx-1" type="danger" v-if="rechargeValue > userBalance" size="large" @click="toUserInfo" style="cursor: pointer;">账户余额不足,请前往个人中心充值（点击前往）</el-text>
-      </div>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button type="danger" round @click="cancelPay">取消充值</el-button>
-
-          <el-button type="success" round @click="rechargeHandler" :disabled="disabledValue">确认充值</el-button>
-        </div>
-      </template>
-    </el-dialog>
+    </div>
   </div>
 
 </template>
@@ -56,6 +83,7 @@
 import axios from '../../api/request.js';
 
 import { computed, ref, onMounted, reactive, watch, } from 'vue'
+import { ArrowDownBold, ArrowLeftBold, ArrowRightBold, InfoFilled, User } from '@element-plus/icons-vue'
 import { definedUser } from '../../stores/index.js';
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router';
@@ -63,47 +91,67 @@ let router = useRouter();
 
 let loginUser = definedUser()
 //控制dialog是否打开
-const dialogVisible = ref(false)
 //老人信息接口
 interface Elderly {
-  bookerName: string;
-  bookerTime: string;
-  eid: number;
-  elderlyAddress: string;
-  elderlyBirth: string;
-  elderlyIdCard: string;
-  elderlyName: string;
-  elderlyPhone: string;
-  elderlySex: string;
-  isHealth: string;
-  isCheckined: number;
-  isVoluntaryOccupancy: number;
-  note: string;
-  uid: number;
-  balance: number;
+  bookerName: String,
+  bookerTime: String,
+  eid: number,
+  elderlyAddress: String,
+  elderlyBirth: String,
+  elderlyIdCard: String,
+  elderlyName: String,
+  elderlyPhone: String,
+  elderlySex: String,
+  isHealth: String,
+  isCheckined: Number,
+  isVoluntaryOccupancy: number,
+  note: String,
+  uid: number,
+  balance: number
 }
 const search = ref('')
-//充值按钮，单击打开充值框
-const recharge = (index: number, row: User) => {
-  //老人姓名赋值
-  rechargeElderlyName.value = row.elderlyName
-  //eid赋值
-  rechargeEid.value = row.eid
-  //老人账户余额赋值
-  ElderlyBalance.value = row.balance
-  dialogVisible.value = true;
-}
-
+//pageInfo 接收服务器响应的分页属性
+const pageInfo = reactive(
+  {
+    currentPage: 1,
+    pageSize: 10,
+    total: '',
+    pages: '',
+    hasPrevious: false,
+    hasNext: false,
+  }
+)
 const tableData = reactive<Elderly[]>([])
 //获取已经完成预定的老人信息
 const fetchData = () => {
-  axios.get(`/elderly/selectAllElderly/${loginUser.uid}`, {
+  axios.get(`/elderly/selectAllElderly`, {
+    params: {
+      //当前页
+      currentPage: pageInfo.currentPage,
+      //每页有几条数据
+      pageSize: pageInfo.pageSize,
+    }
   }).then(function (response) {
-    const convertedData: Elderly[] = response.data.data.map(item => ({
+    //表格数据
+    const convertedData: Elderly[] = response.data.data.records.map(item => ({
       ...item,
       isCheckined: item.isCheckined === 0 ? false : true
     }));
     tableData.splice(0, tableData.length, ...convertedData);
+
+    // 接收到的数据中共有几条数据
+    pageInfo.total = response.data.data.total;
+    // 当前为第几页
+    pageInfo.currentPage = response.data.data.currentPage;
+    // 接收到的数据中一页有几条数据
+    pageInfo.pageSize = response.data.data.pageSize;
+    // 接收到的数据中共有几页
+    pageInfo.pages = response.data.data.pages;
+    //是否有前一页
+    pageInfo.hasPrevious = response.data.data.hasPrevious
+    //是否有后一页
+    pageInfo.hasNext = response.data.data.hasNext;
+    console.log(response)
 
   }).catch(function (error) {
     console.log(error);
@@ -111,18 +159,27 @@ const fetchData = () => {
 }
 //封装搜索框模糊查询事件
 function searchTableData(searchValue) {
-  axios.get("/elderly/selectForSearch", {
+  axios.get("/elderly/selectForSearchManagement", {
     params: {
+      //当前页
+      currentPage: pageInfo.currentPage,
+      //页大小
+      pageSize: pageInfo.pageSize,
       //搜索框的值
       searchValue: searchValue
     }
   }).then(response => {
-    const convertedData: Elderly[] = response.data.data.map(item => ({
+    const convertedData: Elderly[] = response.data.data.records.map(item => ({
       ...item,
       isCheckined: item.isCheckined === 0 ? false : true
     }));
     tableData.splice(0, tableData.length, ...convertedData);
-
+    pageInfo.total = response.data.data.total;
+    pageInfo.currentPage = response.data.data.currentPage;
+    pageInfo.pageSize = response.data.data.pageSize;
+    pageInfo.pages = response.data.data.pages;
+    pageInfo.hasPrevious = response.data.data.hasPrevious
+    pageInfo.hasNext = response.data.data.hasNext;
   }).catch(error => {
     console.error('查询失败:', error);
   })
@@ -130,91 +187,80 @@ function searchTableData(searchValue) {
 //监听搜索框是否有输入
 watch(search, (newVal, oldVal) => {
   if (newVal != oldVal) {
-    console.log(newVal);
     searchTableData(newVal)
   }
 })
 
-const rechargeValue = ref(0) // 充值金额
-const rechargeElderlyName = ref() //充值的账户老人姓名
-const rechargeEid = ref() //充值的账户老人id
-const ElderlyBalance = ref() //充值的账户老人id
-const disabledValue = ref(true) //控制充值按钮是否能充值
-//侦听充值金额
-watch(rechargeValue, (newVal, oldVal) => {
-  //当充值金额大于0并且大于充值余额时，确认充值按钮才能点击
-  if (newVal <= 0 || userBalance.value < rechargeValue.value) {
-    disabledValue.value = true;
-  }
-  else {
-    disabledValue.value = false;
-  }
-});
-//存储账户余额的数据
-const userBalance = ref()
-//获取账户余额
-const fetchUserBalance = () => {
-  axios.get(`/user/selectBalance/${loginUser.uid}`, {
-  }).then(function (response) {
-    userBalance.value = response.data.data.balance;
-  }).catch(function (error) {
-    console.log(error);
-  })
-}
-//扣除账户余额
-const deductUserBalance = () => {
-  axios.put(`/user/deductBalance`, {
-    uid: loginUser.uid,
-    money: rechargeValue.value
-  }).then(function (response) {
-    console.log(response)
-  }).catch(function (error) {
-    console.log(error);
-  })
-}
-//为老人账户充值
-const rechargeElderlyBalance = () => {
-  axios.put(`/elderly/rechargeElderlyBalance`, {
-    eid: rechargeEid.value,
-    money: rechargeValue.value
-  }).then(function (response) {
-    console.log(response)
-  }).catch(function (error) {
-    console.log(error);
-  })
-}
-//确认充值事件
-const rechargeHandler = () => {
-  //关闭dialog框
-  dialogVisible.value = false
-  if (userBalance.value >= rechargeValue.value) {
-    deductUserBalance()
-    rechargeElderlyBalance()
-    ElMessage({
-      message: '充值成功',
-      type: 'success',
-    })
-    rechargeValue.value = 0
-  }
-  setTimeout = () => {
-    fetchData(), 0.1
-  }
-}
-//取消充值事件
-const cancelPay = () => {
-  dialogVisible.value = false
+//前往第几页的页数定义
+const gotoPageNum = ref(1)
 
-  ElMessage({
-    message: '充值已取消',
-    type: 'warning',
-  })
+//监听当输入框页数发送变化时，向服务器发送请求，将对应页码的记录显示
+watch(gotoPageNum, (newPage, oldPage) => {
+  if (newPage >= 1 && newPage <= Number(pageInfo.pages)) {
+    pageInfo.currentPage = newPage
+    if (search == null) {
+      fetchData()
+    } else {
+      searchTableData(search.value)
+    }
+  }
+})
+
+//页面下方单击页码数翻页的事件
+function gotoPageByNum(pageNum) {
+  pageInfo.currentPage = pageNum
+  if (search == null) {
+    fetchData()
+  } else {
+    searchTableData(search.value)
+  }
 }
-const toUserInfo = () => {
-  router.push({ name: 'PersonalCenter' });
+//页面下方选择每页有几条数据的事件
+function changePageSize(pageSize) {
+  pageInfo.pageSize = pageSize
+  if (search == null) {
+    fetchData()
+  } else {
+    searchTableData(search.value)
+  }
+}
+//页面下方'<'向前翻页的事件
+function changePrevPage() {
+  if (pageInfo.hasPrevious) {
+    pageInfo.currentPage--
+    if (search == null) {
+      fetchData()
+    } else {
+      searchTableData(search.value)
+    }
+  }
+}
+//页面下方'>'向后翻页的事件
+function changeNextPage() {
+  if (pageInfo.hasNext) {
+    pageInfo.currentPage++
+    if (search == null) {
+      fetchData()
+    } else {
+      searchTableData(search.value)
+    }
+  }
+}
+
+const updateIsCheckined = (row) => {
+  axios.put(`/elderly/updateIsCheckined`, {
+    eid: row.eid,
+    isCheckined: row.isCheckined === true ? 1 : 0
+  }).then(function (response) {
+    ElMessage.success('修改成功');
+    // fetchData()
+  }).catch(function (error) {
+    console.log(error);
+  }
+  )
 }
 onMounted(() => {
   fetchData()
-  fetchUserBalance()
 })
 </script>
 <style scoped>
@@ -225,17 +271,77 @@ onMounted(() => {
   flex-direction: column;
 }
 
-#paymentContainer {
-  margin-top: 30px;
+#pageChangeDiv {
+  margin-top: 20px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap;
 }
 
-.selected-payment {
-  border: 2px solid #409EFF;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+.example-showcase .el-dropdown-link {
+  cursor: pointer;
+  color: var(--el-color-primary);
+  display: flex;
+  align-items: center;
+}
+
+#countDiv {
+  height: 27px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--el-font-size-base);
+  color: var(--el-text-color-regular);
+  margin-right: 20px;
+}
+
+#sizeDiv {
+  height: 25px;
+  border: 1px solid var(--el-border-color);
+  width: 80px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  cursor: pointer;
+}
+
+#changePageDiv {
+  display: flex;
+  align-items: center;
+  width: auto;
+  height: 27px;
+  margin-left: 20px;
+  color: var(--el-text-color-regular);
+  margin-right: 20px;
+}
+
+.pageNum {
+  font-size: var(--el-font-size-base);
+  color: var(--el-text-color-regular);
+  margin-left: 15px;
+  margin-right: 15px;
+  cursor: pointer;
+
+}
+
+#gotoPageNumDiv {
+  display: flex;
+  align-items: center;
+  width: auto;
+  height: 27px;
+  color: var(--el-text-color-regular);
+}
+
+#inputDiv {
+  height: 25px;
+  width: 15px;
+  text-align: center;
+  font-size: var(--el-font-size-base);
+  color: var(--el-text-color-regular);
+
+}
+
+.pageNumDiv_span {
+  font-size: var(--el-font-size-base);
+  color: var(--el-text-color-regular);
 }
 </style>

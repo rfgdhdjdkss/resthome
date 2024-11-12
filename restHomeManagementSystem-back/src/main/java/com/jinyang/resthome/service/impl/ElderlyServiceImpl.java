@@ -1,9 +1,12 @@
 package com.jinyang.resthome.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jinyang.resthome.pojo.Elderly;
+import com.jinyang.resthome.pojo.User;
 import com.jinyang.resthome.pojo.dto.ElderlyBalanceUpdateRequest;
 import com.jinyang.resthome.service.ElderlyService;
 import com.jinyang.resthome.mapper.ElderlyMapper;
@@ -43,7 +46,7 @@ public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
      * @return
      */
     @Override
-    public List<Elderly> selectAllElderly(Long uid) {
+    public List<Elderly> selectAllElderlyByUid(Long uid) {
         QueryWrapper<Elderly> queryWrapper = new QueryWrapper();
         queryWrapper.eq("uid", uid);
         List<Elderly> elderlyList = elderlyMapper.selectList(queryWrapper);
@@ -78,6 +81,30 @@ public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
         int update = elderlyMapper.update(updateWrapper);
         return update;
     }
+
+    @Override
+    public Page<Elderly> selectAllElderly(Page<Elderly> page) {
+        Page<Elderly> elderlyList = elderlyMapper.selectPage(page, null);
+        return elderlyList;
+    }
+
+    @Override
+    public int updateIsCheckined(long eid, Integer isCheckined) {
+        UpdateWrapper<Elderly> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("eid", eid);
+        updateWrapper.set("isCheckined",isCheckined);
+        int update = elderlyMapper.update(updateWrapper);
+        return update;
+    }
+
+    @Override
+    public Page<Elderly> selectBySearchValue(Page<Elderly> page, String searchValue) {
+        LambdaQueryWrapper<Elderly> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(Elderly::getElderlyName, searchValue);
+        Page<Elderly> elderlyList = elderlyMapper.selectPage(page, wrapper);
+        return elderlyList;
+    }
+
 
 }
 
