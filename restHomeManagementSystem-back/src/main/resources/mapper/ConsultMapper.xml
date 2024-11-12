@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinyang.resthome.mapper.ConsultMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinyang.resthome.pojo.Consult">
+        <id property="chatid" column="chatid" jdbcType="BIGINT"/>
+        <result property="uid" column="uid" jdbcType="BIGINT"/>
+        <result property="chatContent" column="chatContent" jdbcType="VARCHAR"/>
+        <result property="sendTime" column="sendTime" jdbcType="TIMESTAMP"/>
+        <result property="isUser" column="isUser" jdbcType="VARCHAR"/>
+        <result property="permission" column="permission" jdbcType="VARCHAR"/>
+        <result property="whichUidConsult" column="whichUidConsult" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        chatid
+        ,uid,chatContent,sendTime,isUser,permission,whichUidConsult,isRead
+    </sql>
+    <select id="selectWhichUidConsult" resultType="com.jinyang.resthome.pojo.vo.ConsultUserVo">
+        WITH LatestMessages AS (
+            SELECT
+                c.whichUidConsult,
+                c.uid,
+                u.nickname,
+                c.chatcontent,
+                c.sendTime,
+                c.isReply,
+                ROW_NUMBER() OVER (PARTITION BY c.whichUidConsult ORDER BY c.sendTime DESC) AS rn
+            FROM
+                consult c
+                    JOIN
+                user u ON c.uid = u.uid
+            WHERE
+                u.permission = '普通用户'
+        )
+        SELECT
+            lm.whichUidConsult,
+            lm.nickname,
+            lm.chatcontent,
+            lm.sendTime,
+            lm.isReply
+        FROM
+            LatestMessages lm
+        WHERE
+            lm.rn = 1;
+    </select>
+
+
+</mapper>

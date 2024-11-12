@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinyang.resthome.mapper.ElderlyMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinyang.resthome.pojo.Elderly">
+            <id property="eid" column="eid" jdbcType="INTEGER"/>
+            <result property="elderlyName" column="elderlyName" jdbcType="VARCHAR"/>
+            <result property="elderlySex" column="elderlySex" jdbcType="VARCHAR"/>
+            <result property="elderlyBirth" column="elderlyBirth" jdbcType="TIMESTAMP"/>
+            <result property="elderlyIdCard" column="elderlyIdCard" jdbcType="VARCHAR"/>
+            <result property="elderlyPhone" column="elderlyPhone" jdbcType="VARCHAR"/>
+            <result property="elderlyAddress" column="elderlyAddress" jdbcType="VARCHAR"/>
+            <result property="isHealth" column="isHealth" jdbcType="VARCHAR"/>
+            <result property="bookerName" column="bookerName" jdbcType="VARCHAR"/>
+            <result property="bookerTime" column="bookerTime" jdbcType="TIMESTAMP"/>
+            <result property="isVoluntaryOccupancy" column="isVoluntaryOccupancy" jdbcType="TINYINT"/>
+            <result property="isCheckined" column="isCheckined" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        eid,elderlyName,elderlySex,
+        elderlyBirth,elderlyIdCard,elderlyPhone,
+        elderlyAddress,isHealth,bookerName,
+        bookerTime,isVoluntaryOccupancy,isCheckined
+    </sql>
+</mapper>

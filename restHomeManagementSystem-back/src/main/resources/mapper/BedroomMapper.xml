@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinyang.resthome.mapper.BedroomMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinyang.resthome.pojo.Bedroom">
+            <id property="bedId" column="bedId" jdbcType="BIGINT"/>
+            <result property="type" column="type" jdbcType="VARCHAR"/>
+            <result property="isCheckin" column="isCheckin" jdbcType="TINYINT"/>
+            <result property="eid" column="eid" jdbcType="BIGINT"/>
+            <result property="uid" column="uid" jdbcType="BIGINT"/>
+            <result property="bedPrice" column="bedPrice" jdbcType="DOUBLE"/>
+            <result property="roomNumber" column="roomNumber" jdbcType="INTEGER"/>
+            <result property="bedNumber" column="bedNumber" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        bedId,type,isCheckin,
+        eid,uid,bedPrice,
+        roomNumber,bedNumber
+    </sql>
+    <select id="selectBedInfo" resultType="com.jinyang.resthome.pojo.vo.BedRoomVo">
+        SELECT count(*) as spaceBedNumber,type,bedPrice from bedroom
+        WHERE isCheckin =0
+        GROUP BY type,bedPrice
+    </select>
+</mapper>
