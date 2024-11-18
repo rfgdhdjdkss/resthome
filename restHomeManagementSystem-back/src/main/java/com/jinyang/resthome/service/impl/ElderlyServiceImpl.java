@@ -105,6 +105,22 @@ public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
         return elderlyList;
     }
 
+    @Override
+    public int deleteByEid(Long eid) {
+        int result = elderlyMapper.deleteById(eid);
+        return result;
+    }
+
+    @Override
+    public List<Elderly> selectIsCheckinElderlyByUid(Long uid) {
+        QueryWrapper<Elderly> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("uid", uid);
+        queryWrapper.eq("isCheckined", 1);
+        List<Elderly> elderlyList = elderlyMapper.selectList(queryWrapper);
+        System.out.println(elderlyList);
+        return elderlyList;
+    }
+
 
 }
 

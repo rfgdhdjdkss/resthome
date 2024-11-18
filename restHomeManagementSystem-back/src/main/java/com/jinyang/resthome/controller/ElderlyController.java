@@ -104,7 +104,7 @@ public class ElderlyController {
     @GetMapping("/selectForSearchManagement")
     public Result selectForSearchManagement(@RequestParam(value = "currentPage") long currentPage,
                                             @RequestParam(value = "pageSize") long pageSize,
-                                            @RequestParam(value = "searchValue") String searchValue ){
+                                            @RequestParam(value = "searchValue") String searchValue) {
         Page<Elderly> page = new Page<>(currentPage, pageSize);
         Page<Elderly> elderlyPage = elderlyService.selectBySearchValue(page, searchValue);
         Map<String, Object> data = new HashMap<>();
@@ -116,6 +116,18 @@ public class ElderlyController {
         data.put("hasNext", elderlyPage.hasNext());
         data.put("hasPrevious", elderlyPage.hasPrevious());
         return Result.ok(data);
+    }
+
+    @DeleteMapping("/delete/{eid}")
+    public Result delete(@PathVariable("eid") Long eid) {
+        int result = elderlyService.deleteByEid(eid);
+        return Result.ok(result);
+    }
+
+    @GetMapping("/selectIsCheckinElderlyByUid/{uid}")
+    public Result selectIsCheckinElderlyByUid(@PathVariable("uid") Long uid) {
+        List<Elderly> elderlyList = elderlyService.selectIsCheckinElderlyByUid(uid);
+        return Result.ok(elderlyList);
     }
 }
 

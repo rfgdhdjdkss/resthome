@@ -199,7 +199,7 @@ function reserve() {
         bookerTime: ruleForm.bookerTime,
         isVoluntaryOccupancy: ruleForm.isVoluntaryOccupancy === true ? 1 : 0,
         note: ruleForm.note,
-        uid:loginUser.uid,
+        uid: loginUser.uid,
     }).then(function (response) {
         console.log(response);
         //响应成功弹出提交成功

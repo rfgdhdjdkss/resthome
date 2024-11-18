@@ -26,6 +26,15 @@ const router = createRouter({
             component: () => import('../pages/Home.vue'),
 
         },
+        //我的申请路由
+        {
+            path: '/myApplication',
+            component: () => import('../pages/Person/MyApplication.vue'),
+            name: 'MyApplication',
+            meta: {
+                title: '我的申请'
+            }
+        },
         // 营销管理
         {
             path: '/marketing',
@@ -250,6 +259,7 @@ const router = createRouter({
                 },
             ]
         },
+
     ]
 })
 

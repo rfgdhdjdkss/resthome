@@ -50,7 +50,6 @@ public class ReserveController {
     ) {
         Page<Reserve> page = new Page<>(currentPage, pageSize);
         Page<Reserve> userPage = reserveService.selectAllReserve(page);
-        System.out.println(userPage.getRecords());
         Map<String, Object> data = new HashMap<>();
         data.put("records", userPage.getRecords());
         data.put("total", userPage.getTotal());

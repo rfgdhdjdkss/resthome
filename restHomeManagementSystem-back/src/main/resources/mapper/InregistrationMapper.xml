@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinyang.resthome.mapper.InregistrationMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinyang.resthome.pojo.Inregistration">
+            <id property="outId" column="outId" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="sex" column="sex" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="bookerName" column="bookerName" jdbcType="VARCHAR"/>
+            <result property="outTime" column="outTime" jdbcType="TIMESTAMP"/>
+            <result property="returnTime" column="returnTime" jdbcType="TIMESTAMP"/>
+            <result property="note" column="note" jdbcType="VARCHAR"/>
+            <result property="uid" column="uid" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        outId,name,sex,
+        phone,bookerName,outTime,
+        returnTime,note,uid
+    </sql>
+</mapper>

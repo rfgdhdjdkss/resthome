@@ -28,8 +28,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="Transactionrecord" />
-                  <option name="tableName" value="transactionRecord" />
+                  <option name="className" value="Outregistration" />
+                  <option name="tableName" value="outRegistration" />
                 </TableUIInfo>
               </list>
             </option>

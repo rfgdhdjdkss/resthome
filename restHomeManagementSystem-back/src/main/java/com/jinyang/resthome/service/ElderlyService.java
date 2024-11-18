@@ -32,4 +32,8 @@ public interface ElderlyService extends IService<Elderly> {
     int updateIsCheckined(long eid, Integer isCheckined);
 
     Page<Elderly> selectBySearchValue(Page<Elderly> page, String searchValue);
+
+    int deleteByEid(Long eid);
+
+    List<Elderly> selectIsCheckinElderlyByUid(Long uid);
 }

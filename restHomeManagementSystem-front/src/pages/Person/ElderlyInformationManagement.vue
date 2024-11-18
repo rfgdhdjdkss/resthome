@@ -14,9 +14,15 @@
           <el-input v-model="search" size="default" placeholder="输入老人姓名搜索" />
         </template>
         <template #default="scope">
-          <el-button size="default">
-            删除
-          </el-button>
+          <el-popconfirm confirm-button-text="确定" cancel-button-text="取消" :icon="InfoFilled" icon-color="#626AEF"
+            title="您确定要删除这条记录吗?" @confirm="confirmEvent(scope.$index, scope.row)" @cancel="ElMessage({
+              message: '取消删除，未成功删除数据',
+              type: 'warning',
+            })">
+            <template #reference>
+              <el-button type="danger">删除</el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -259,6 +265,28 @@ const updateIsCheckined = (row) => {
   }
   )
 }
+
+// 删除事件
+const handleDelete = (index: number, row: User) => {
+  // if (window.confirm('您确定要删除用户 ' + row.username + ' 吗？')) {
+  // 用户点击了确定按钮
+  axios.delete(`/elderly/delete/${row.eid}`)
+    .then(response => {
+      // 服务器成功响应删除请求
+      // 从本地数组中移除用户
+      tableData.splice(index, 1);
+      fetchData()
+    })
+    .catch(error => {
+      console.error('删除失败:', error);
+    });
+
+}
+//点击删除后确认，触发事件，删除老人信息
+const confirmEvent = (index: number, row: User) => {
+  handleDelete(index, row)
+}
+
 onMounted(() => {
   fetchData()
 })

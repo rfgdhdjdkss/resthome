@@ -4,7 +4,6 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: item.path }" v-for="item in breadcrumbList" :key="item.path">
           {{ item.meta.title }}
-
         </el-breadcrumb-item>
       </el-breadcrumb>
 
@@ -21,6 +20,9 @@
             <el-dropdown-menu>
               <el-dropdown-item @click="toUserInfo">
                 个人信息
+              </el-dropdown-item>
+              <el-dropdown-item @click="toMyApplication">
+                我的申请
               </el-dropdown-item>
               <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
@@ -76,6 +78,10 @@ function logout() {
 const toUserInfo = () => {
   router.push({ name: 'PersonalCenter' });
 }
+const toMyApplication = () => {
+  router.push({ name: 'MyApplication' });
+}
+
 </script>
 
 <style>

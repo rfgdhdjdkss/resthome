@@ -115,7 +115,7 @@
                             <el-menu-item index="6-2">餐饮套餐</el-menu-item>
                         </router-link>
                         <router-link to="/catering/order">
-                            <el-menu-item index="6-2">点餐</el-menu-item>
+                            <el-menu-item index="6-3">点餐</el-menu-item>
                         </router-link>
                     </el-sub-menu>
                     <!-- 费用管理 -->
@@ -133,7 +133,7 @@
                             <el-menu-item index="7-2">消费记录</el-menu-item>
                         </router-link>
                         <router-link to="/cost/costAudit">
-                            <el-menu-item index="7-2">退住费用审核</el-menu-item>
+                            <el-menu-item index="7-3">退住费用审核</el-menu-item>
                         </router-link>
 
                     </el-sub-menu>
