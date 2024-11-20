@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinyang.resthome.mapper.BedsMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinyang.resthome.pojo.Beds">
+            <id property="bed_id" column="bed_id" jdbcType="BIGINT"/>
+            <result property="room_number" column="room_number" jdbcType="BIGINT"/>
+            <result property="bed_number" column="bed_number" jdbcType="INTEGER"/>
+            <result property="eid" column="eid" jdbcType="BIGINT"/>
+            <result property="is_occupied" column="is_occupied" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        bed_id,room_number,bed_number,
+        eid,is_occupied
+    </sql>
+    <select id="selectSpaceBedNumber" resultType="java.lang.Integer">
+        SELECT COUNT(*) AS spaceBedNumber
+        FROM beds
+        WHERE is_occupied = 0;
+    </select>
+</mapper>

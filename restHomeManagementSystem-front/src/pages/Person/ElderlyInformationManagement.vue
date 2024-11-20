@@ -8,6 +8,7 @@
           <el-switch v-model="row.isCheckined" @click="updateIsCheckined(row)" style="margin-left: 20px;" />
         </template>
       </el-table-column>
+      <el-table-column label="房间号-床位" prop="bedroom" />
       <el-table-column label="老人账户余额(元)" prop="balance" />
       <el-table-column align="right">
         <template #header>
@@ -113,7 +114,8 @@ interface Elderly {
   isVoluntaryOccupancy: number,
   note: String,
   uid: number,
-  balance: number
+  balance: number,
+  bedroom:String
 }
 const search = ref('')
 //pageInfo 接收服务器响应的分页属性

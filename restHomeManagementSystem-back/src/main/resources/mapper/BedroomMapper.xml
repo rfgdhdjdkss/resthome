@@ -14,15 +14,16 @@
             <result property="roomNumber" column="roomNumber" jdbcType="INTEGER"/>
             <result property="bedNumber" column="bedNumber" jdbcType="INTEGER"/>
     </resultMap>
-
-    <sql id="Base_Column_List">
-        bedId,type,isCheckin,
-        eid,uid,bedPrice,
-        roomNumber,bedNumber
-    </sql>
     <select id="selectBedInfo" resultType="com.jinyang.resthome.pojo.vo.BedRoomVo">
-        SELECT count(*) as spaceBedNumber,type,bedPrice from bedroom
-        WHERE isCheckin =0
-        GROUP BY type,bedPrice
+        SELECT r.room_type,
+               r.price,
+               COUNT(CASE WHEN b.is_occupied = 0 THEN 1 END) AS spaceBedNumber
+        FROM rooms r
+                 LEFT JOIN
+             beds b ON r.room_number = b.room_number
+        GROUP BY r.room_type,
+                 r.price;
     </select>
+
+
 </mapper>

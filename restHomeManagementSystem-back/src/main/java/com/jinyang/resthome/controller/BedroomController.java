@@ -4,6 +4,8 @@ import com.jinyang.resthome.common.Result;
 import com.jinyang.resthome.pojo.Bedroom;
 import com.jinyang.resthome.pojo.vo.BedRoomVo;
 import com.jinyang.resthome.service.BedroomService;
+import com.jinyang.resthome.service.BedsService;
+import com.jinyang.resthome.service.RoomsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +27,6 @@ import java.util.Map;
 public class BedroomController {
     @Autowired
     private BedroomService bedroomService;
-
     /**
      * 获取所有房间床位信息
      * @return

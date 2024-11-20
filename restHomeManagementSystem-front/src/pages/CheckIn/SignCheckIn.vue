@@ -152,32 +152,31 @@
                         <el-card style="max-width: 365px;cursor: pointer; height: 650px; margin-left: 20px;float: left;"
                             shadow="hover" id="card" v-for=" (item, index) in bedInfo" class="roomCard"
                             :class="{ 'selected-card': selectedCardIndex === index }" @click="selectCard(index)">
-                            <template #header v-if="item.type === 'singleRoom'">单人间</template>
-                            <template #header v-if="item.type === 'doubleRoom'">双人间</template>
-                            <template #header v-if="item.type === 'trioRoom'">多人间</template>
-                            <img src="../../images/singleRoom.png" style="width: 100%"
-                                v-if="item.type === 'singleRoom'" />
-                            <img src="../../images/doubleRoom.png" style="width: 100%"
-                                v-if="item.type === 'doubleRoom'" />
-                            <img src="../../images/trioRoom.png" style="width: 100%" v-if="item.type === 'trioRoom'" />
+                            <template #header v-if="item.roomType === '单人间'">单人间</template>
+                            <template #header v-if="item.roomType === '双人间'">双人间</template>
+                            <template #header v-if="item.roomType === '多人间'">多人间</template>
+                            <img src="../../images/singleRoom.png" style="width: 100%" v-if="item.roomType === '单人间'" />
+                            <img src="../../images/doubleRoom.png" style="width: 100%" v-if="item.roomType === '双人间'" />
+                            <img src="../../images/trioRoom.png" style="width: 100%" v-if="item.roomType === '多人间'" />
 
                             <template #footer>
                                 <label class="footer_info1">房间描述:</label>
-                                <p style="text-indent: 2em;" class="footer_info1" v-if="item.type === 'singleRoom'">
+                                <p style="text-indent: 2em;" class="footer_info1" v-if="item.roomType === '单人间'">
                                     单人间为老人提供了独立的居住空间，避免了与其他人共享房间的尴尬和不便，
                                     从而保护了老人的个人隐私。单人间拥有足够的面积，为老人提供了宽敞的生活和休息空间。
                                 </p>
-                                <p style="text-indent: 2em;" class="footer_info2" v-if="item.type === 'doubleRoom'">
+                                <p style="text-indent: 2em;" class="footer_info2" v-if="item.roomType === '双人间'">
                                     双人间有助于增进老人之间的社交互动，让他们在日常生活中相互照应，减少孤独感。
                                     老人可以与同伴共享居住空间，一起观看电视、聊天、下棋等，享受愉快的晚年生活。
                                 </p>
-                                <p style="text-indent: 2em; " class="footer_info3" v-if="item.type === 'trioRoom'">
+                                <p style="text-indent: 2em; " class="footer_info3" v-if="item.roomType === '多人间'">
                                     相比单人间或双人间，多人间的费用通常更为经济，择多人间可以在一定程度上减轻经济负担。
                                     在多人间中，老人可以相互照应，共同解决生活中的一些难题。
                                 </p>
-                                <label class="footer_info1">价格:¥{{ item.bedPrice }}元/月</label>
+                                <label class="footer_info1" style="font-weight: 900;">价格:¥{{ item.price }}元/月</label>
                                 <br>
-                                <label class="footer_info1">剩余床位数:{{ item.spaceBedNumber }}</label>
+                                <label class="footer_info1" style="font-weight: 900;">剩余床位数:{{ item.spaceBedNumber
+                                    }}</label>
                             </template>
                         </el-card>
 
@@ -288,9 +287,16 @@ const next = () => {
     }
 }
 const handelPerform = () => {
-    active.value = 3
+    if (balance.value < earnest.value) {
+        ElMessage({
+            message: '余额不足，请先充值',
+            type: 'error',
+        })
+    }
     //当余额大于预缴金额
     if (active.value >= 2 && balance.value >= earnest.value) {
+        active.value = 3
+
         //成功签约
         signCheckIn()
 
@@ -514,15 +520,9 @@ const openDeal = () => {
 
 //定义Bed接口，接收床位信息的基本数据
 interface Bed {
-    bedId: number,
-    type: string,
-    isCheckin: boolean,
-    eid: string,
-    uid: string,
-    bedPrice: number,
-    roomNumber: number,
-    bedNumber: number,
+    roomType: string,
     spaceBedNumber: number,
+    price: number,
 }
 //定义 bedInfo，接收床位信息的 reactive 数组
 const bedInfo = reactive<Bed[]>([])
@@ -531,12 +531,14 @@ function fetchBedInfo() {
     axios.get(`/bedroom/selectBedInfo`, {
     })
         .then(function (response) {
+            console.log(response);
             //表格数据
             const convertedBedInfo: Bed[] = response.data.data.bedroomList.map(item => ({
                 ...item,
             }));
             //清空原数组，加入响应回的数组
             bedInfo.splice(0, bedInfo.length, ...convertedBedInfo);
+            console.log(bedInfo);
         }
         ).catch(function (error) {
             console.log(error);
@@ -661,7 +663,7 @@ interface Elderly {
     uid: number;
 }
 const elderly = reactive<Elderly>({})
-console.log(typeof (routeEid));
+console.log(selectedBedType);
 
 function signCheckIn() {
     //发送put请求，更新reserve表中预定老人是否已经完成签约
@@ -692,7 +694,7 @@ function signCheckIn() {
         })
         //记录扣除当前用户余额的交易记录
         transactionDeduct()
-        //发送put请求向elderly表新增老人信息
+        //发送post请求向elderly表新增老人信息
         axios.post(`/elderly/addNewElderly`, {
             eid: routeEid,
             elderlyName: elderly.elderlyName,
@@ -709,6 +711,7 @@ function signCheckIn() {
             isReserved: elderly.isReserved,
             balance: earnest.value,
             uid: loginUser.uid,
+            roomType: selectedBedType.value
         }).then(function (response) {
             console.log(response)
         }).catch(function (error) {
@@ -725,20 +728,20 @@ const addIn = () => {
         transactionMoney: recharge.value,
         transactionType: rechargeType.value,
         description: `为${loginUser.nickname}账户充值`,
-        inOrOut:1
+        inOrOut: 1
     }).then(function (response) {
         console.log(response);
     }).catch(function (error) {
         console.log(error);
     })
 }
-const transactionDeduct=()=>{
+const transactionDeduct = () => {
     axios.post("/transaction/addIn", {
         uid: loginUser.uid,
         transactionMoney: earnest.value,
         transactionType: '账户余额',
         description: `为${elderly.elderlyName}的老人账户充值`,
-        inOrOut:0
+        inOrOut: 0
     }).then(function (response) {
         console.log(response);
     }).catch(function (error) {

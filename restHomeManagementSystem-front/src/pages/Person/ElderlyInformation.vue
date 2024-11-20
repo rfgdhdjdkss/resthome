@@ -8,6 +8,7 @@
             }}</el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="房间号-床位" prop="bedroom" />
       <el-table-column label="老人账户余额(元)" prop="balance" />
       <el-table-column align="right">
         <template #header>
@@ -83,6 +84,7 @@ interface Elderly {
   note: string;
   uid: number;
   balance: number;
+  bedroom: string
 }
 const search = ref('')
 //充值按钮，单击打开充值框
@@ -101,11 +103,13 @@ const tableData = reactive<Elderly[]>([])
 const fetchData = () => {
   axios.get(`/elderly/selectAllElderlyByUid/${loginUser.uid}`, {
   }).then(function (response) {
+
     const convertedData: Elderly[] = response.data.data.map(item => ({
       ...item,
       isCheckined: item.isCheckined === 0 ? false : true
     }));
     tableData.splice(0, tableData.length, ...convertedData);
+    console.log(tableData);
 
   }).catch(function (error) {
     console.log(error);

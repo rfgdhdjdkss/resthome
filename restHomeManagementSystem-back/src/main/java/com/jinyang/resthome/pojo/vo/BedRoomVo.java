@@ -16,51 +16,31 @@ import lombok.Data;
 
 @Data
 public class BedRoomVo {
-    /**
-     * 床位id
-     */
-    private Long bedId;
 
     /**
      * 床位类型：单人间/双人间/多人间
      */
-    private String type;
-
-    /**
-     * 是否已经入住,1:入住，0:未入住
-     */
-    private Integer isCheckin;
-
-    /**
-     * 哪位老人入住
-     */
-    private Long eid;
-
-    /**
-     * 哪个用户选择该床位
-     */
-    private Long uid;
-
+    private String roomType;
     /**
      * 床位价格
      */
-    private Double bedPrice;
-
+    private Double price;
+    /**
+     * 未入住的床位数量
+     */
+    private Integer spaceBedNumber;
     /**
      * 房间号
      */
-    private Integer roomNumber;
-
+    private String roomNumber;
     /**
      * 床位号
      */
-    private Integer bedNumber;
+    private String bedNumber;
     /**
-     * 床位号
+     * 床位标识
      */
-    private Integer spaceBedNumber;
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
+    private Long bedId;
 
     @Override
     public boolean equals(Object that) {
@@ -74,31 +54,24 @@ public class BedRoomVo {
             return false;
         }
         BedRoomVo other = (BedRoomVo) that;
-        return (this.getBedId() == null ? other.getBedId() == null : this.getBedId().equals(other.getBedId()))
-                && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
-                && (this.getIsCheckin() == null ? other.getIsCheckin() == null : this.getIsCheckin().equals(other.getIsCheckin()))
-                && (this.getEid() == null ? other.getEid() == null : this.getEid().equals(other.getEid()))
-                && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
-                && (this.getBedPrice() == null ? other.getBedPrice() == null : this.getBedPrice().equals(other.getBedPrice()))
-                && (this.getRoomNumber() == null ? other.getRoomNumber() == null : this.getRoomNumber().equals(other.getRoomNumber()))
-                && (this.getBedNumber() == null ? other.getBedNumber() == null : this.getBedNumber().equals(other.getBedNumber())
+        return (this.getRoomType() == null ? other.getRoomType() == null : this.getRoomType().equals(other.getRoomType()))
+                && (this.getPrice() == null ? other.getPrice() == null : this.getPrice().equals(other.getPrice()))
                 && (this.getSpaceBedNumber() == null ? other.getSpaceBedNumber() == null : this.getSpaceBedNumber().equals(other.getSpaceBedNumber()))
-        );
+                && (this.getRoomNumber() == null ? other.getRoomNumber() == null : this.getRoomNumber().equals(other.getRoomNumber()))
+                && (this.getBedNumber() == null ? other.getBedNumber() == null : this.getBedNumber().equals(other.getBedNumber()))
+                && (this.getBedId() == null ? other.getBedId() == null : this.getBedId().equals(other.getBedId()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getBedId() == null) ? 0 : getBedId().hashCode());
-        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
-        result = prime * result + ((getIsCheckin() == null) ? 0 : getIsCheckin().hashCode());
-        result = prime * result + ((getEid() == null) ? 0 : getEid().hashCode());
-        result = prime * result + ((getUid() == null) ? 0 : getUid().hashCode());
-        result = prime * result + ((getBedPrice() == null) ? 0 : getBedPrice().hashCode());
+        result = prime * result + ((getRoomType() == null) ? 0 : getRoomType().hashCode());
+        result = prime * result + ((getPrice() == null) ? 0 : getPrice().hashCode());
+        result = prime * result + ((getSpaceBedNumber() == null) ? 0 : getSpaceBedNumber().hashCode());
         result = prime * result + ((getRoomNumber() == null) ? 0 : getRoomNumber().hashCode());
         result = prime * result + ((getBedNumber() == null) ? 0 : getBedNumber().hashCode());
-        result = prime * result + ((getSpaceBedNumber() == null) ? 0 : getSpaceBedNumber().hashCode());
+        result = prime * result + ((getBedId() == null) ? 0 : getBedId().hashCode());
         return result;
     }
 
@@ -108,16 +81,12 @@ public class BedRoomVo {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", bedId=").append(bedId);
-        sb.append(", type=").append(type);
-        sb.append(", isCheckin=").append(isCheckin);
-        sb.append(", eid=").append(eid);
-        sb.append(", uid=").append(uid);
-        sb.append(", bedPrice=").append(bedPrice);
+        sb.append(", roomType=").append(roomType);
+        sb.append(", price=").append(price);
+        sb.append(", spaceBedNumber=").append(spaceBedNumber);
         sb.append(", roomNumber=").append(roomNumber);
         sb.append(", bedNumber=").append(bedNumber);
-        sb.append(", spaceBedNumber=").append(spaceBedNumber);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
+        sb.append(", bedId=").append(bedId);
         sb.append("]");
         return sb.toString();
     }

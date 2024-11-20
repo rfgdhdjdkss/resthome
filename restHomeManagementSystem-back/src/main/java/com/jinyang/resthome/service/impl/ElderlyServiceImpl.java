@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jinyang.resthome.mapper.BedsMapper;
+import com.jinyang.resthome.mapper.RoomsMapper;
+import com.jinyang.resthome.pojo.Beds;
 import com.jinyang.resthome.pojo.Elderly;
-import com.jinyang.resthome.pojo.User;
-import com.jinyang.resthome.pojo.dto.ElderlyBalanceUpdateRequest;
+import com.jinyang.resthome.pojo.vo.BedRoomVo;
 import com.jinyang.resthome.service.ElderlyService;
 import com.jinyang.resthome.mapper.ElderlyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,10 @@ public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
 
     @Autowired
     private ElderlyMapper elderlyMapper;
+    @Autowired
+    private RoomsMapper roomsMapper;
+    @Autowired
+    private BedsMapper bedsMapper;
 
     /**
      * 新增老人信息业务实现代码
@@ -35,6 +41,11 @@ public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
      */
     @Override
     public int addNewElderly(Elderly elderly) {
+        BedRoomVo rooms = roomsMapper.selectForBedRoom(elderly.getRoomType());
+        elderly.setBedroom(rooms.getRoomNumber() + "-" + rooms.getBedNumber());
+        UpdateWrapper<Beds> bedsQueryWrapper = new UpdateWrapper<>();
+        bedsQueryWrapper.eq("bed_id", rooms.getBedId()).set("is_occupied", 1);
+        bedsMapper.update(bedsQueryWrapper);
         int result = elderlyMapper.insert(elderly);
         return result;
     }
@@ -92,7 +103,7 @@ public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
     public int updateIsCheckined(long eid, Integer isCheckined) {
         UpdateWrapper<Elderly> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("eid", eid);
-        updateWrapper.set("isCheckined",isCheckined);
+        updateWrapper.set("isCheckined", isCheckined);
         int update = elderlyMapper.update(updateWrapper);
         return update;
     }

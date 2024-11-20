@@ -5,7 +5,7 @@
 <mapper namespace="com.jinyang.resthome.mapper.ElderlyMapper">
 
     <resultMap id="BaseResultMap" type="com.jinyang.resthome.pojo.Elderly">
-            <id property="eid" column="eid" jdbcType="INTEGER"/>
+            <id property="eid" column="eid" jdbcType="BIGINT"/>
             <result property="elderlyName" column="elderlyName" jdbcType="VARCHAR"/>
             <result property="elderlySex" column="elderlySex" jdbcType="VARCHAR"/>
             <result property="elderlyBirth" column="elderlyBirth" jdbcType="TIMESTAMP"/>
@@ -17,12 +17,18 @@
             <result property="bookerTime" column="bookerTime" jdbcType="TIMESTAMP"/>
             <result property="isVoluntaryOccupancy" column="isVoluntaryOccupancy" jdbcType="TINYINT"/>
             <result property="isCheckined" column="isCheckined" jdbcType="TINYINT"/>
+            <result property="balance" column="balance" jdbcType="DOUBLE"/>
+            <result property="uid" column="uid" jdbcType="BIGINT"/>
+            <result property="bedroom" column="bedroom" jdbcType="VARCHAR"/>
+            <result property="roomType" column="bedType" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         eid,elderlyName,elderlySex,
         elderlyBirth,elderlyIdCard,elderlyPhone,
         elderlyAddress,isHealth,bookerName,
-        bookerTime,isVoluntaryOccupancy,isCheckined
+        bookerTime,isVoluntaryOccupancy,isCheckined,
+        balance,uid,bedroom,
+        bedType
     </sql>
 </mapper>

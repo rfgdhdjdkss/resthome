@@ -87,15 +87,14 @@
         <h3 style="margin-bottom: 10px; margin-left: 10px;">可售床位</h3>
         <div id="bed_div">
             <div class="bed_box">
-                <p class="bed_num">4</p>
+                <p class="bed_num">{{ spaceRoomNumber }}</p>
                 <p class="bed_title">空闲房间</p>
             </div>
             <div class="bed_box">
-                <p class="bed_num">4</p>
+                <p class="bed_num">{{ spaceBedNumber }}</p>
                 <p class="bed_title">空闲床位</p>
             </div>
         </div>
-        
     </div>
 </template>
 
@@ -104,12 +103,36 @@
 import {
     Message
 } from '@element-plus/icons-vue'
-import { ref } from 'vue';
+import axios from '../api/request.js';
+
+import { ref, onMounted } from 'vue';
 const itemPath = ref([
     '/src/images/carousel_1.JPG',
     '/src/images/carousel_2.JPG',
     '/src/images/carousel_3.JPG',
 ])
+const spaceRoomNumber = ref()
+const spaceBedNumber = ref()
+const getSpaceRoomNumber = () => {
+    axios.get("/rooms/getSpaceRoomNumber").then(function (response) {
+        spaceRoomNumber.value = response.data.data
+    }).catch(function (error) {
+        console.log(error);
+    }
+    )
+}
+const getSpaceBedNumber = () => {
+    axios.get("/beds/getSpaceBedNumber").then(function (response) {
+        spaceBedNumber.value = response.data.data
+    }).catch(function (error) {
+        console.log(error);
+    }
+    )
+}
+onMounted(() => {
+    getSpaceRoomNumber()
+    getSpaceBedNumber()
+})
 </script>
 <style scoped>
 /* start --- 轮播图 */
@@ -211,7 +234,7 @@ const itemPath = ref([
     margin: 10px;
 }
 
-#bed_div{
+#bed_div {
     width: 98%;
     height: 130px;
     display: flex;
@@ -219,9 +242,10 @@ const itemPath = ref([
     position: relative;
     background-color: white;
     margin: 10px;
-    
+
 }
-.bed_box{
+
+.bed_box {
     margin-left: 10px;
     margin-right: 10px;
     width: 500px;
@@ -232,19 +256,21 @@ const itemPath = ref([
     border: 1px solid #909399;
 
 }
-.bed_num{
+
+.bed_num {
     font-size: 26px;
     color: #409EFF;
     font-weight: 900;
     margin-top: 10px;
 }
-.bed_title{
+
+.bed_title {
     font-size: 22px;
     color: black;
     margin-top: 15px;
     font-weight: 900;
     margin-bottom: 0;
 }
-/* end --- 可售床位 */
 
+/* end --- 可售床位 */
 </style>

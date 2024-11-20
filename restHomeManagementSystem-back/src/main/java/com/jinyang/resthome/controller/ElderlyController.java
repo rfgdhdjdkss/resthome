@@ -3,7 +3,6 @@ package com.jinyang.resthome.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jinyang.resthome.common.Result;
 import com.jinyang.resthome.pojo.Elderly;
-import com.jinyang.resthome.pojo.User;
 import com.jinyang.resthome.pojo.dto.ElderlyBalanceUpdateRequest;
 import com.jinyang.resthome.pojo.dto.ElderlyIsCheckinedUpdateRequest;
 import com.jinyang.resthome.service.ElderlyService;
@@ -35,7 +34,6 @@ public class ElderlyController {
      */
     @PostMapping("/addNewElderly")
     public Result addNewElderly(@RequestBody Elderly elderly) {
-        System.out.println(elderly.toString());
         int result = elderlyService.addNewElderly(elderly);
         return Result.ok(result);
     }

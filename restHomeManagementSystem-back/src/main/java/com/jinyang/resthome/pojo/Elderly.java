@@ -99,6 +99,18 @@ public class Elderly implements Serializable {
     @TableField(value = "uid")
     private Long uid;
 
+    /**
+     * 房间床位号
+     */
+    @TableField(value = "bedroom")
+    private String bedroom;
+
+    /**
+     * 房间类型
+     */
+    @TableField(value = "roomType")
+    private String roomType;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
@@ -127,7 +139,9 @@ public class Elderly implements Serializable {
             && (this.getIsVoluntaryOccupancy() == null ? other.getIsVoluntaryOccupancy() == null : this.getIsVoluntaryOccupancy().equals(other.getIsVoluntaryOccupancy()))
             && (this.getIsCheckined() == null ? other.getIsCheckined() == null : this.getIsCheckined().equals(other.getIsCheckined()))
             && (this.getBalance() == null ? other.getBalance() == null : this.getBalance().equals(other.getBalance()))
-            && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()));
+            && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
+            && (this.getBedroom() == null ? other.getBedroom() == null : this.getBedroom().equals(other.getBedroom()))
+            && (this.getRoomType() == null ? other.getRoomType() == null : this.getRoomType().equals(other.getRoomType()));
     }
 
     @Override
@@ -148,6 +162,8 @@ public class Elderly implements Serializable {
         result = prime * result + ((getIsCheckined() == null) ? 0 : getIsCheckined().hashCode());
         result = prime * result + ((getBalance() == null) ? 0 : getBalance().hashCode());
         result = prime * result + ((getUid() == null) ? 0 : getUid().hashCode());
+        result = prime * result + ((getBedroom() == null) ? 0 : getBedroom().hashCode());
+        result = prime * result + ((getRoomType() == null) ? 0 : getRoomType().hashCode());
         return result;
     }
 
@@ -171,6 +187,8 @@ public class Elderly implements Serializable {
         sb.append(", isCheckined=").append(isCheckined);
         sb.append(", balance=").append(balance);
         sb.append(", uid=").append(uid);
+        sb.append(", bedroom=").append(bedroom);
+        sb.append(", roomType=").append(roomType);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

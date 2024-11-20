@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 /**
 * @author jinyang
 * @description 针对表【elderly】的数据库操作Mapper
-* @createDate 2024-10-02 20:32:09
+* @createDate 2024-11-20 20:04:09
 * @Entity com.jinyang.resthome.pojo.Elderly
 */
 public interface ElderlyMapper extends BaseMapper<Elderly> {
