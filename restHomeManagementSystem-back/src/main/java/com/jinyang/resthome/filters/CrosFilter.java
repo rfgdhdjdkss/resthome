@@ -28,14 +28,24 @@ public class CrosFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        // 跨域解决
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        response.setHeader("Access-Control-Allow-Origin", "*");
+
+        // 处理OPTIONS请求预校验
+        if (request.getMethod().equalsIgnoreCase("OPTIONS")) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+            response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE,PUT");
+            response.setHeader("Access-Control-Max-Age", "3600");
+            response.setHeader("Access-Control-Allow-Headers", "x-requested-with,content-type,Authorization");
+            return;
+        }
+
+        // 正常请求处理
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE,PUT");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "x-requested-with,content-type");
-
-        // 放行函数
+        response.setHeader("Access-Control-Allow-Headers", "x-requested-with,content-type,Authorization");
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

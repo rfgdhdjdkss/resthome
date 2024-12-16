@@ -3,7 +3,6 @@ package com.jinyang.resthome.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jinyang.resthome.common.Result;
@@ -34,6 +33,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Autowired
     private UserMapper userMapper;
 
+
     /**
      * 登录业务实现代码
      *
@@ -55,7 +55,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             if (!users.isEmpty()) {
                 //判断查询记录的密码字段的值与参数user加密后的密码是否相同
                 if (users.get(0).getPassword().equals(MD5Util.encrypt(user.getPassword()))) {
-                    String token = JwtHelper.createToken(user.getUid(), user.getUsername());
+                    String token = JwtHelper.createToken(users.get(0).getUid(), user.getPassword());
                     //登录成功后将登录时间写入数据库
                     Date date = new Date();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -156,7 +156,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public Result updateUserByUsername(User user) {
         UpdateWrapper<User> wrapper = new UpdateWrapper<>();
         wrapper.eq("uid", user.getUid());
-        int update = userMapper.update(user,wrapper);
+        int update = userMapper.update(user, wrapper);
         return Result.ok(null);
     }
 
@@ -211,6 +211,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     /**
      * 根据uid查找用户信息业务实现代码
+     *
      * @param uid
      * @return
      */
@@ -228,12 +229,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 user.setPassword(MD5Util.encrypt(newPassword1));
                 int result = userMapper.updateById(user);
                 return Result.ok(result);
-            }
-            else {
-                return Result.build(null,510,"两次输入的密码不一致");
+            } else {
+                return Result.build(null, 510, "两次输入的密码不一致");
             }
         }
-        return Result.build(null,511,"原密码错误");
+        return Result.build(null, 511, "原密码错误");
 
     }
 

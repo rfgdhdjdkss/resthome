@@ -29,7 +29,7 @@
                             </el-icon>
                             <span>营销管理</span>
                         </template>
-                        <router-link to="/marketing/consult/{{ loginUser.uid }}" v-if="loginUser.permission==='普通用户'"> <el-menu-item
+                        <router-link :to="{ name: 'Consult', params: { whichUidConsult: loginUser.uid } }" v-if="loginUser.permission==='普通用户'"> <el-menu-item
                                 index="2-1">咨询管理</el-menu-item></router-link>
                         <router-link to="/marketing/consultCollection" v-else> <el-menu-item
                                 index="2-1">咨询管理</el-menu-item></router-link>

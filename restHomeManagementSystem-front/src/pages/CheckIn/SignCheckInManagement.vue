@@ -54,12 +54,11 @@ const tableData = reactive<Reserve[]>([])
 const fetchData = () => {
     axios.get(`/reserve/selectReserveByUid/${loginUser.uid}`)
         .then(function (response) {
-            console.log(response.data.data[0]);
-            console.log(typeof (response.data.data[0].bookerTime));
+            console.log(response.data.data);
             //表格数据
             const convertedData: Reserve[] = response.data.data.map(item => ({
                 ...item,
-                bookerTime: item.bookerTime.split('T')[0],
+                bookerTime: formatBookerTime(new Date(item.bookerTime)),
                 //三元表达式，isReply为true时返回已回复
                 elderlySex: item.elderlySex === 'male' ? '男' : '女',
                 isReserved: item.isReserved === 0 ? false : true,
@@ -72,7 +71,11 @@ const fetchData = () => {
             console.log(error);
         });
 }
-
+// 封装格式化预定时间
+function formatBookerTime(time) {
+    const bookerTime = new Date(time);
+    return bookerTime.getFullYear() + "-" + bookerTime.getMonth() + "-" + bookerTime.getDate()
+}
 // 删除事件
 const handleDelete = (index: number, row: User) => {
     // 用户点击了确定按钮

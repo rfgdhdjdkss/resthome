@@ -120,7 +120,7 @@ async function register() {
 }
 
 function toLogin() {
-    router.push('/login');
+    router.push({name:'Login'});
 }
 const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return

@@ -104,6 +104,8 @@ import {
     Message
 } from '@element-plus/icons-vue'
 import axios from '../api/request.js';
+import { definedUser } from '../stores/index.js';
+let loginUser = definedUser()
 
 import { ref, onMounted } from 'vue';
 const itemPath = ref([
@@ -114,7 +116,13 @@ const itemPath = ref([
 const spaceRoomNumber = ref()
 const spaceBedNumber = ref()
 const getSpaceRoomNumber = () => {
-    axios.get("/rooms/getSpaceRoomNumber").then(function (response) {
+    axios.get("/rooms/getSpaceRoomNumber", {
+        // headers: {
+        //     token: loginUser.token,
+        // }
+    }
+    ).then(function (response) {
+
         spaceRoomNumber.value = response.data.data
     }).catch(function (error) {
         console.log(error);

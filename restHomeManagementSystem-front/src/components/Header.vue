@@ -52,18 +52,21 @@ const breadcrumbList = computed(() => {
 });
 const nickname = ref(loginUser.nickname)
 const headImgUrl = ref(loginUser.headImgUrl)
-const avatarUrl = ref(`http://localhost:8999/images/upload/${loginUser.headImgUrl}`)
+const avatarUrl = ref(`http://localhost:8999/images/upload/headPortrait/${loginUser.headImgUrl}`)
 
 watch(loginUser, () => {
-  axios.get(`/user/findUser/${loginUser.uid}`).
-    then(function (response) {
-      nickname.value = response.data.data.nickname;
-      headImgUrl.value = response.data.data.headImgUrl
-      avatarUrl.value = `http://localhost:8999/images/upload/` + headImgUrl.value
-    }).catch(function (error) {
-      console.log(error);
+  if (loginUser.token != "") {
+    axios.get(`/user/findUser/${loginUser.uid}`).
+      then(function (response) {
+        nickname.value = response.data.data.nickname;
+        headImgUrl.value = response.data.data.headImgUrl
+        avatarUrl.value = `http://localhost:8999/images/upload/headPortrait/` + headImgUrl.value
+      }).catch(function (error) {
+        console.log(error);
 
-    });
+      });
+  }
+
 },
   { deep: true })
 
@@ -71,6 +74,8 @@ function logout() {
 
   // 销毁token
   loginUser.$reset();
+  localStorage.removeItem('token')
+
   // 跳转到登录页
   router.push({ name: 'Login' });
 

@@ -94,7 +94,7 @@ async function login() {
             })
         }
         else {
-            console.log(response.data.data.token);
+            localStorage.setItem('token', response.data.data.token);
             loginUser.uid = response.data.data.uid;
             loginUser.token = response.data.data.token;
             loginUser.username = response.data.data.username;

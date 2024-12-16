@@ -103,6 +103,7 @@ public class ReserveServiceImpl extends ServiceImpl<ReserveMapper, Reserve>
         QueryWrapper<Reserve> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uid", uid);
         List<Reserve> reserveList = reserveMapper.selectList(queryWrapper);
+        System.out.println(reserveList);
         return reserveList;
     }
 

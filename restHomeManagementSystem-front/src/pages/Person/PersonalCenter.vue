@@ -424,9 +424,10 @@ const confirmModifyPwd = () => {
 }
 
 
-const headImgUrl = ref(`http://localhost:8999/images/upload/${loginUser.headImgUrl}`)
+const headImgUrl = ref(`http://localhost:8999/images/upload/headPortrait/${loginUser.headImgUrl}`)
 const handleAvatarSuccess = (response) => {
-    headImgUrl.value = "http://localhost:8999/images/upload/" + response
+    
+    headImgUrl.value = "http://localhost:8999/images/upload/headPortrait/" + response
     loginUser.headImgUrl = response
 }
 
@@ -473,6 +474,7 @@ const fetchTransactionRecordList = () => {
 const logout = () => {
     // 销毁token
     loginUser.$reset();
+    localStorage.removeItem('token')
     // 跳转到登录页
     router.push({ name: 'Login' });
 };

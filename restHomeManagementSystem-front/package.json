@@ -10,11 +10,12 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
-    "axios": "^1.7.7",
+    "axios": "^1.7.8",
     "element-plus": "^2.8.3",
+    "jwt-decode": "^4.0.0",
     "long": "^5.2.3",
     "nprogress": "^0.2.0",
-    "pinia": "^2.2.4",
+    "pinia": "^2.2.8",
     "pinia-plugin-persistedstate": "^4.1.1",
     "vue": "^3.4.37",
     "vue-router": "^4.4.5"

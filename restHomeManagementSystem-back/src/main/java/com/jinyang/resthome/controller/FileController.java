@@ -1,6 +1,7 @@
 package com.jinyang.resthome.controller;
 
 import com.jinyang.resthome.common.Result;
+import com.jinyang.resthome.service.DishesService;
 import com.jinyang.resthome.service.UserService;
 import com.jinyang.resthome.util.FileUtil;
 import org.apache.commons.io.FileUtils;
@@ -24,8 +25,10 @@ public class FileController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private DishesService dishesService;
     //文件上传存储路径
-    private static final String filePath = System.getProperty("user.dir") + "/upload";
+//    private static final String filePath = System.getProperty("user.dir") + "/upload";
 
     /**
      * 上传文件
@@ -36,8 +39,7 @@ public class FileController {
     @PostMapping("/upload/{uid}")
     public String getFileName(MultipartFile file, @PathVariable Long uid) {
         String oldFileName = file.getOriginalFilename();
-        System.out.println(oldFileName);
-        String filePath = FileUtil.getUpLoadFilePath();
+        String filePath = FileUtil.getUpLoadFilePath()+"/headPortrait";
         String newFileName = System.currentTimeMillis() + oldFileName;
         try {
             FileUtil.uploadFile(file.getBytes(), filePath, newFileName);
@@ -48,5 +50,18 @@ public class FileController {
         return newFileName;
     }
 
+    @PostMapping("/upload/addNewDish/{dishId}")
+    public String getDishFileName(MultipartFile file, @PathVariable Long dishId) {
+        String oldFileName = file.getOriginalFilename();
+        String filePath = FileUtil.getUpLoadFilePath()+"/dishImg";
+        String newFileName = System.currentTimeMillis() + oldFileName;
+        try {
+            FileUtil.uploadFile(file.getBytes(), filePath, newFileName);
+            dishesService.updateDishImgByDishId(newFileName, dishId);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return newFileName;
 
+    }
 }

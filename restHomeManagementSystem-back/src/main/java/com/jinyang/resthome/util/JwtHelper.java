@@ -15,8 +15,6 @@ import java.util.Date;
  */
 
 
-
-
 public class JwtHelper {
 
     // token 过期时间
@@ -70,5 +68,19 @@ public class JwtHelper {
         //jwttoken无需删除，客户端扔掉即可。
     }
 
+    // 验证token是否过期
+    public static boolean isTokenExpired(String token) {
+        try {
+            if (StringUtils.isEmpty(token)) return true;
+
+            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token);
+            Claims claims = claimsJws.getBody();
+            Date expirationDate = claims.getExpiration();
+            Date now = new Date();
+            return now.after(expirationDate);
+        } catch (Exception e) {
+            return true;
+        }
+    }
 
 }

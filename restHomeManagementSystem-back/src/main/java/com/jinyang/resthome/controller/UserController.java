@@ -34,7 +34,6 @@ public class UserController {
      */
     @PostMapping("/login")
     public Result login(@RequestBody User user) {
-        System.out.println(user);
         Result result = userService.login(user);
         return result;
     }
@@ -47,7 +46,6 @@ public class UserController {
      */
     @PostMapping("/register")
     public Result register(@RequestBody User user) {
-        System.out.println(user);
         Result result = userService.register(user);
         return result;
     }
