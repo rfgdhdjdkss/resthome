@@ -11,17 +11,20 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
     "axios": "^1.7.8",
+    "dayjs": "^1.11.13",
     "element-plus": "^2.8.3",
     "jwt-decode": "^4.0.0",
     "long": "^5.2.3",
     "nprogress": "^0.2.0",
     "pinia": "^2.2.8",
     "pinia-plugin-persistedstate": "^4.1.1",
+    "vant": "^4.9.16",
     "vue": "^3.4.37",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",
+    "less": "^4.2.2",
     "vite": "^5.4.1"
   }
 }

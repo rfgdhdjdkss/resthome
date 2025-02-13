@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jinyang.resthome.common.Result;
 import com.jinyang.resthome.common.ResultCodeEnum;
 import com.jinyang.resthome.pojo.User;
+import com.jinyang.resthome.pojo.dto.loginByUsernameRequest;
 import com.jinyang.resthome.service.UserService;
 import com.jinyang.resthome.mapper.UserMapper;
 import com.jinyang.resthome.util.JwtHelper;
@@ -15,7 +16,9 @@ import com.jinyang.resthome.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +63,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                     Date date = new Date();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     users.get(0).setLastLoginTime(sdf.format(date.getTime()));
+                    UpdateWrapper updateWrapper = new UpdateWrapper<>();
+                    updateWrapper.eq("uid", users.get(0).getUid());
+                    userMapper.update(users.get(0), updateWrapper);
                     Map<String, Object> data = new HashMap<>();
                     data.put("uid", users.get(0).getUid());
                     data.put("token", token);
@@ -245,7 +251,86 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         userMapper.update(updateWrapper);
     }
 
+    @Override
+    public Result loginByUsername(loginByUsernameRequest user) {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("username", user.getUsername());
+        List<User> users = userMapper.selectList(wrapper);
+        if (!users.isEmpty()) {
+            if (users.get(0).getPassword().equals(MD5Util.encrypt(user.getPassword()))) {
+                System.out.println(users.get(0));
+                String token = JwtHelper.createToken(users.get(0).getUid(), user.getPassword());
+                //登录成功后将登录时间写入数据库
+                Date date = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                users.get(0).setLastLoginTime(sdf.format(date.getTime()));
+                UpdateWrapper updateWrapper = new UpdateWrapper<>();
+                updateWrapper.eq("uid", users.get(0).getUid());
+                userMapper.update(users.get(0), updateWrapper);
+                Map<String, Object> data = new HashMap<>();
+                data.put("uid", users.get(0).getUid());
+                data.put("token", token);
+                data.put("username", users.get(0).getUsername());
+                data.put("nickname", users.get(0).getNickname());
+                data.put("permission", users.get(0).getPermission());
+                data.put("balance", users.get(0).getBalance());
+                data.put("headImgUrl", users.get(0).getHeadImgUrl());
+                return Result.ok(data);
+            }
+        }
+        return Result.build(null, ResultCodeEnum.USERNAME_NOT_FOUND);
+    }
 
+    @Override
+    public Result loginByPhone(loginByUsernameRequest user) {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("phone", user.getPhone());
+        List<User> users = userMapper.selectList(wrapper);
+        if (!users.isEmpty()) {
+            String token = JwtHelper.createToken(users.get(0).getUid(), users.get(0).getPassword());
+            //登录成功后将登录时间写入数据库
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            users.get(0).setLastLoginTime(sdf.format(date.getTime()));
+
+            UpdateWrapper updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("uid", users.get(0).getUid());
+            userMapper.update(users.get(0), updateWrapper);
+            Map<String, Object> data = new HashMap<>();
+            data.put("uid", users.get(0).getUid());
+            data.put("token", token);
+            data.put("username", users.get(0).getUsername());
+            data.put("nickname", users.get(0).getNickname());
+            data.put("permission", users.get(0).getPermission());
+            data.put("balance", users.get(0).getBalance());
+            data.put("headImgUrl", users.get(0).getHeadImgUrl());
+            return Result.ok(data);
+        }
+        return Result.build(null, ResultCodeEnum.USERNAME_NOT_FOUND);
+    }
+
+    @Override
+    public Result registerWithApp(User user) {
+        System.out.println(user);
+        QueryWrapper queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", user.getUsername());
+        List<User> users = userMapper.selectList(queryWrapper);
+        if (!users.isEmpty()) {
+            return Result.build(null, ResultCodeEnum.USERNAME_USED);
+        }
+        queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("phone", user.getPhone());
+        users = userMapper.selectList(queryWrapper);
+        if (!users.isEmpty()) {
+            return Result.build(null, ResultCodeEnum.Phone_USED);
+        } else {
+            user.setPassword(MD5Util.encrypt(user.getPassword()));
+            //将用户名作为昵称传入，后续用户可根据自身情况修改
+            user.setNickname(user.getUsername());
+            int result = userMapper.insert(user);
+            return Result.ok(result);
+        }
+    }
 }
 
 

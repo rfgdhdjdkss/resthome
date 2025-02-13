@@ -4,16 +4,15 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
 import java.io.Serializable;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Date;
 import lombok.Data;
 
 /**
+ * 
  * @TableName user
  */
-@TableName(value = "user")
+@TableName(value ="user")
 @Data
 public class User implements Serializable {
     /**
@@ -64,12 +63,17 @@ public class User implements Serializable {
     @TableField(value = "balance")
     private Double balance;
 
-
     /**
      * 用户头像
      */
     @TableField(value = "headImgUrl")
     private String headImgUrl;
+
+    /**
+     * 用户手机号
+     */
+    @TableField(value = "phone")
+    private String phone;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
@@ -87,14 +91,15 @@ public class User implements Serializable {
         }
         User other = (User) that;
         return (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
-                && (this.getUsername() == null ? other.getUsername() == null : this.getUsername().equals(other.getUsername()))
-                && (this.getPassword() == null ? other.getPassword() == null : this.getPassword().equals(other.getPassword()))
-                && (this.getNickname() == null ? other.getNickname() == null : this.getNickname().equals(other.getNickname()))
-                && (this.getPermission() == null ? other.getPermission() == null : this.getPermission().equals(other.getPermission()))
-                && (this.getSex() == null ? other.getSex() == null : this.getSex().equals(other.getSex()))
-                && (this.getLastLoginTime() == null ? other.getLastLoginTime() == null : this.getLastLoginTime().equals(other.getLastLoginTime()))
-                && (this.getBalance() == null ? other.getBalance() == null : this.getBalance().equals(other.getBalance()))
-                && (this.getHeadImgUrl() == null ? other.getHeadImgUrl() == null : this.getHeadImgUrl().equals(other.getHeadImgUrl()));
+            && (this.getUsername() == null ? other.getUsername() == null : this.getUsername().equals(other.getUsername()))
+            && (this.getPassword() == null ? other.getPassword() == null : this.getPassword().equals(other.getPassword()))
+            && (this.getNickname() == null ? other.getNickname() == null : this.getNickname().equals(other.getNickname()))
+            && (this.getPermission() == null ? other.getPermission() == null : this.getPermission().equals(other.getPermission()))
+            && (this.getSex() == null ? other.getSex() == null : this.getSex().equals(other.getSex()))
+            && (this.getLastLoginTime() == null ? other.getLastLoginTime() == null : this.getLastLoginTime().equals(other.getLastLoginTime()))
+            && (this.getBalance() == null ? other.getBalance() == null : this.getBalance().equals(other.getBalance()))
+            && (this.getHeadImgUrl() == null ? other.getHeadImgUrl() == null : this.getHeadImgUrl().equals(other.getHeadImgUrl()))
+            && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()));
     }
 
     @Override
@@ -110,7 +115,7 @@ public class User implements Serializable {
         result = prime * result + ((getLastLoginTime() == null) ? 0 : getLastLoginTime().hashCode());
         result = prime * result + ((getBalance() == null) ? 0 : getBalance().hashCode());
         result = prime * result + ((getHeadImgUrl() == null) ? 0 : getHeadImgUrl().hashCode());
-        result = prime * result + ((getLastLoginTime() == null) ? 0 : getLastLoginTime().hashCode());
+        result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
         return result;
     }
 
@@ -129,6 +134,7 @@ public class User implements Serializable {
         sb.append(", lastLoginTime=").append(lastLoginTime);
         sb.append(", balance=").append(balance);
         sb.append(", headImgUrl=").append(headImgUrl);
+        sb.append(", phone=").append(phone);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

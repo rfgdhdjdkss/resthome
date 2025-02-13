@@ -26,7 +26,7 @@ const showRegister = computed(() => {
 </script>
 
 <template>
-  <Menu id="menu" v-show="showMain"></Menu>
+  <!-- <Menu id="menu" v-show="showMain"></Menu>
   <Header id="header" v-show="showMain"></Header>
   <div id="main" v-show="showMain">
     <router-view></router-view>
@@ -37,12 +37,13 @@ const showRegister = computed(() => {
   </div>
   <div v-show="showRegister">
     <router-view></router-view>
-  </div>
+  </div> -->
+<router-view></router-view>
 
 </template>
 
 <style scoped>
-#menu {
+/* #menu {
   display: flex;
   float: left;
   flex-direction: column;
@@ -51,9 +52,9 @@ const showRegister = computed(() => {
   position: fixed;
   border-right: 1px solid var(--el-menu-border-color);
   background-color: rgb(58, 61, 72);
-}
+} */
 
-#header {
+/* #header {
   display: flex;
   float: right;
   height: 70px;
@@ -94,5 +95,5 @@ const showRegister = computed(() => {
   justify-items: center;
   align-items: center;
   background-color: rgb(238, 238, 238);
-}
+} */
 </style>

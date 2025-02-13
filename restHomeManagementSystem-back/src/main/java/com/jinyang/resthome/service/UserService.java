@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jinyang.resthome.common.Result;
 import com.jinyang.resthome.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jinyang.resthome.pojo.dto.loginByUsernameRequest;
 
 import java.util.List;
 
@@ -49,4 +50,10 @@ public interface UserService extends IService<User> {
     Result updatePassword(Long uid, String originalPassword, String newPassword1, String newPassword2);
 
     void updateHeadImgUrlByUid(String newFileName, Long uid);
+
+    Result loginByUsername(loginByUsernameRequest user);
+
+    Result loginByPhone(loginByUsernameRequest user);
+
+    Result registerWithApp(User user);
 }

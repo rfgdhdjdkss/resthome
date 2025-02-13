@@ -20,8 +20,8 @@ public class InterceptorConfig extends WebMvcConfigurationSupport {
         registry.addInterceptor(new JwtInterceptor())
                 .addPathPatterns("/**")
                 .excludePathPatterns(
-                        "/user/login",
-                        "/user/register",
+                        "/user/login**",
+                        "/user/register**",
                         "/images/*" // 假设头像相关图片处理路径是 /images/upload/ 开头，可细化，
                 );
         super.addInterceptors(registry);

@@ -5,6 +5,7 @@ import com.jinyang.resthome.common.Result;
 import com.jinyang.resthome.pojo.User;
 import com.jinyang.resthome.pojo.dto.UserBalanceUpdateRequest;
 import com.jinyang.resthome.pojo.dto.UserPasswordRequest;
+import com.jinyang.resthome.pojo.dto.loginByUsernameRequest;
 import com.jinyang.resthome.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,32 @@ public class UserController {
     }
 
     /**
-     * 注册功能
+     * app端登录功能----账号密码登录
+     * @param user
+     * @return
+     */
+    @PostMapping("/loginByUsername")
+    public Result loginByUsername(@RequestBody loginByUsernameRequest user) {
+        System.out.println(user.toString());
+
+        Result result =userService.loginByUsername(user);
+        return result;
+    }
+
+    /**
+     * app端登录功能----手机号验证码方式登录
+     * @param user
+     * @return
+     */
+    @PostMapping("/loginByPhone")
+    public Result loginByPhone(@RequestBody loginByUsernameRequest user) {
+        System.out.println(user.toString());
+        Result result =userService.loginByPhone(user);
+        return result;
+    }
+
+    /**
+     * web管理端注册功能
      *
      * @param user
      * @return 状态码+data
@@ -50,6 +76,16 @@ public class UserController {
         return result;
     }
 
+    /**
+     * app端注册功能
+     * @param user
+     * @return
+     */
+    @PostMapping("/registerWithApp")
+    public Result registerWithApp(@RequestBody User user) {
+        Result result = userService.registerWithApp(user);
+        return result;
+    }
     /**
      * 用户管理页，查询用户信息
      *

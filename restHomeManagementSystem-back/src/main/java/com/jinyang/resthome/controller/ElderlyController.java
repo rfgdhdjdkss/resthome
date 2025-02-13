@@ -37,7 +37,6 @@ public class ElderlyController {
         int result = elderlyService.addNewElderly(elderly);
         return Result.ok(result);
     }
-
     /**
      * 根据uid获取当前用户预定成功的老人信息
      *

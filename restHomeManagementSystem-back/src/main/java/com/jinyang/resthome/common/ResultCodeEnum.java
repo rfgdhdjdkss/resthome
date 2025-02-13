@@ -14,8 +14,9 @@ public enum ResultCodeEnum {
     USERNAME_ERROR(501,"usernameError"),
     PASSWORD_ERROR(503,"passwordError"),
     NOTLOGIN(504,"notLogin"),
-    USERNAME_USED(505,"userNameUsed")
-    ;
+    USERNAME_USED(505,"用户名被占用"),
+    USERNAME_NOT_FOUND(506,"用户名未找到"),
+    Phone_USED(507,"手机号已注册，可使用手机号登录" );
 
     private Integer code;
     private String message;
