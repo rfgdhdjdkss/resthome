@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinyang.resthome.mapper.ElderlyhealthMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinyang.resthome.pojo.Elderlyhealth">
+            <id property="hid" column="hid" jdbcType="BIGINT"/>
+            <result property="eid" column="eid" jdbcType="BIGINT"/>
+            <result property="uid" column="uid" jdbcType="BIGINT"/>
+            <result property="heartRate" column="heartRate" jdbcType="VARCHAR"/>
+            <result property="bloodPressure" column="bloodPressure" jdbcType="VARCHAR"/>
+            <result property="temperature" column="temperature" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        hid,eid,uid,
+        heartRate,bloodPressure,temperature
+    </sql>
+</mapper>
