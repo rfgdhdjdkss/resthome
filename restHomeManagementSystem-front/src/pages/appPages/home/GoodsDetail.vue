@@ -195,11 +195,12 @@ const gotoShippingCartPage = () => {
 }
 
 const goToSubmitOrder = () => {
-    
+
     router.push({
         name: 'SubmitOrder_app',
         query: {
-            gidList: JSON.stringify(goodsInfo.value.gid)
+            gidList: JSON.stringify([goodsInfo.value.gid]),
+            quantity: 1
         }
     })
 }

@@ -21,13 +21,15 @@ public class GoodsController {
 
     /**
      * 获取全部商品信息
+     *
      * @return
      */
     @GetMapping("/getGoodsList")
     public Result getGoodsList() {
-        Result result= goodsService.selectGoodsList();
+        Result result = goodsService.selectGoodsList();
         return result;
     }
+
     /**
      * 获取某个商品的全部信息
      *
@@ -39,9 +41,11 @@ public class GoodsController {
         Result result = goodsService.selectGoodsDetailByGid(gid);
         return result;
     }
-    @GetMapping("/getGoodsInfoByGidList")
+
+    @PostMapping("/getGoodsInfoByGidList")
     public Result getGoodsInfoByGidList(@RequestBody GetGoodsInfoByGidListRequest request) {
         System.out.println(request.toString());
-        return null;
+        Result result = goodsService.selectGoodsListByGidList(request.getGidList(), request.getUid());
+        return result;
     }
 }

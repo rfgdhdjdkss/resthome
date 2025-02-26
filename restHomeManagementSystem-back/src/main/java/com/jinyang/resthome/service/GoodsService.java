@@ -4,6 +4,8 @@ import com.jinyang.resthome.common.Result;
 import com.jinyang.resthome.pojo.Goods;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
 * @author jinyang
 * @description 针对表【goods】的数据库操作Service
@@ -14,4 +16,6 @@ public interface GoodsService extends IService<Goods> {
     Result selectGoodsList();
 
     Result selectGoodsDetailByGid(Long gid);
+
+    Result selectGoodsListByGidList(List<Long> gidList, Long uid);
 }

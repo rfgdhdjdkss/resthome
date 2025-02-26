@@ -44,13 +44,14 @@
                     <div class="goods-quantitiy-button">
                         <button @click="minusGoodsQuantity(item)" class="minusButton"
                             v-if="item.quantity > 1">-</button>
-                        <div class="goods-quantity-value">{{ item.quantity }}</div>
+                        <div class="goods-quantity-value">{{ goodsDetailQuantity ? goodsDetailQuantity : item.quantity }}
+                        </div>
                         <button @click="addGoodsQuantity(item)" class="addButton">+</button>
                     </div>
                 </div>
                 <div class="summary-item">
                     <span>运费</span>
-                    <span>免运费</span>
+                    <span>{{ item.fee }}</span>
                 </div>
                 <div class="summary-item total">
                     <span>小计</span>
@@ -84,6 +85,8 @@ import { useRouter, useRoute } from 'vue-router';
 import { definedUser } from '@/stores';
 let route = useRoute()
 const gidList = JSON.parse(route.query.gidList)
+const goodsDetailQuantity = route.query.quantity
+console.log(goodsDetailQuantity);
 
 let loginUser = definedUser()
 let router = useRouter()
@@ -98,24 +101,20 @@ interface CartInfo {
 }
 const cartInfo = ref<CartInfo[]>([])
 
-const fetchCartInfo = async () => {
-    const response = await axios.get(`/cart/getCartInfoByUid/${loginUser.uid}`)
-    cartInfo.value = response.data.data
-}
+
 const fetchOrderInfo = async () => {
     console.log(gidList);
 
-    const response = await axios.get("/goods/getGoodsInfoByGidList", {
-        data: {
-            gidList: gidList,
-            uid: loginUser.uid
-        }
+    const response = await axios.post("/goods/getGoodsInfoByGidList", {
+        gidList: gidList,
+        uid: loginUser.uid
     })
+    cartInfo.value = response.data.data
+    console.log(cartInfo.value);
 
 
 }
 onMounted(() => {
-    fetchCartInfo()
     fetchOrderInfo()
 })
 </script>

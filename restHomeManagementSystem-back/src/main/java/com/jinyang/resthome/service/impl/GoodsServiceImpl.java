@@ -1,5 +1,6 @@
 package com.jinyang.resthome.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jinyang.resthome.common.Result;
 import com.jinyang.resthome.common.ResultCodeEnum;
@@ -37,9 +38,17 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods>
         Goods goods = goodsMapper.selectById(gid);
         if (goods != null) {
             return Result.ok(goods);
-        }else {
+        } else {
             return Result.build(null, ResultCodeEnum.SELECT_EMPTY);
         }
+    }
+
+    @Override
+    public Result selectGoodsListByGidList(List<Long> gidList, Long uid) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.in("gid", gidList);
+        List list = goodsMapper.selectList(queryWrapper);
+        return Result.ok(list);
     }
 }
 
