@@ -12,6 +12,8 @@ export const definedUser = defineStore(
                 permission: '',
                 balance: '',
                 headImgUrl: '',
+                sex: '',
+                phone: '',
             }
         },
         // 让这个token保持持久化

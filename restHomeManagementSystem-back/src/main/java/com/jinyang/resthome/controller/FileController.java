@@ -39,7 +39,7 @@ public class FileController {
     @PostMapping("/upload/{uid}")
     public String getFileName(MultipartFile file, @PathVariable Long uid) {
         String oldFileName = file.getOriginalFilename();
-        String filePath = FileUtil.getUpLoadFilePath()+"/headPortrait";
+        String filePath = FileUtil.getUpLoadFilePath() + "/headPortrait";
         String newFileName = System.currentTimeMillis() + oldFileName;
         try {
             FileUtil.uploadFile(file.getBytes(), filePath, newFileName);
@@ -53,7 +53,7 @@ public class FileController {
     @PostMapping("/upload/addNewDish/{dishId}")
     public String getDishFileName(MultipartFile file, @PathVariable Long dishId) {
         String oldFileName = file.getOriginalFilename();
-        String filePath = FileUtil.getUpLoadFilePath()+"/dishImg";
+        String filePath = FileUtil.getUpLoadFilePath() + "/dishImg";
         String newFileName = System.currentTimeMillis() + oldFileName;
         try {
             FileUtil.uploadFile(file.getBytes(), filePath, newFileName);
@@ -63,5 +63,25 @@ public class FileController {
         }
         return newFileName;
 
+    }
+
+    /**
+     * 上传文件
+     *
+     * @param file
+     * @return
+     */
+    @PostMapping("/upload/addNewGoods/{gid}")
+    public String getGoodsImgName(MultipartFile file, @PathVariable Long gid) {
+        String oldFileName = file.getOriginalFilename();
+        String filePath = FileUtil.getUpLoadFilePath() + "/goodsImg";
+        String newFileName = System.currentTimeMillis() + oldFileName;
+        try {
+            FileUtil.uploadFile(file.getBytes(), filePath, newFileName);
+            userService.updateHeadImgUrlByUid(newFileName, gid);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return newFileName;
     }
 }

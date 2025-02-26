@@ -14,8 +14,8 @@ const _axios = axios.create({
 // 请求拦截器
 _axios.interceptors.request.use((config) => {
     const requestPath = config.url;
-    const isLoginRequest = requestPath === '/user/login';
-    const isRegisterRequest = requestPath === '/user/register';
+    const isLoginRequest = requestPath.startsWith('/user/login');
+    const isRegisterRequest = requestPath.startsWith('/user/register');
     let loginUser = definedUser();
 
     if (!isLoginRequest && !isRegisterRequest) {
@@ -32,7 +32,7 @@ _axios.interceptors.request.use((config) => {
                     type: 'error',
                 });
                 hasShownLoginExpiredMessage = true
-                router.push({ name: 'Login' });
+                router.push({ name: 'Login_app' });
             }
         }
     }

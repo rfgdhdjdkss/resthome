@@ -39,7 +39,7 @@
             <p>其他登录方式</p>
             <div class="quick-login">
                 <div class="huojian">
-                    <img src="../../assets/images/huojian.png" alt="" width="30px" height="30px">
+                    <img src="@/assets/images/huojian.png" alt="" width="30px" height="30px">
                 </div>
                 <p class="quick-login-p">快捷登录</p>
             </div>
@@ -49,7 +49,7 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { ElMessage } from 'element-plus'
-import axios from '../../../../api/request.js';
+import axios from '@/api/request.js';
 import { useRouter } from 'vue-router';
 let router = useRouter()
 const registerUser=ref({

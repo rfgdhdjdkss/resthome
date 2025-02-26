@@ -73,6 +73,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                     data.put("nickname", users.get(0).getNickname());
                     data.put("permission", users.get(0).getPermission());
                     data.put("balance", users.get(0).getBalance());
+                    data.put("sex", users.get(0).getSex());
+                    data.put("phone", users.get(0).getPhone());
                     data.put("headImgUrl", users.get(0).getHeadImgUrl());
                     return Result.ok(data);
                 }
@@ -129,6 +131,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      */
     @Override
     public Result deleteUserByUid(Long uid) {
+        System.out.println(uid);
         int result = userMapper.deleteById(uid);
         if (result != 1) {
             return Result.build(null, ResultCodeEnum.USERNAME_ERROR);
@@ -274,8 +277,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 data.put("nickname", users.get(0).getNickname());
                 data.put("permission", users.get(0).getPermission());
                 data.put("balance", users.get(0).getBalance());
+                data.put("phone", users.get(0).getPhone());
                 data.put("headImgUrl", users.get(0).getHeadImgUrl());
+                data.put("sex", users.get(0).getSex());
                 return Result.ok(data);
+            }
+            else {
+                return  Result.build(null,ResultCodeEnum.PASSWORD_ERROR);
             }
         }
         return Result.build(null, ResultCodeEnum.USERNAME_NOT_FOUND);
@@ -303,10 +311,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             data.put("nickname", users.get(0).getNickname());
             data.put("permission", users.get(0).getPermission());
             data.put("balance", users.get(0).getBalance());
+            data.put("phone", users.get(0).getPhone());
             data.put("headImgUrl", users.get(0).getHeadImgUrl());
+            data.put("sex", users.get(0).getSex());
             return Result.ok(data);
+
         }
-        return Result.build(null, ResultCodeEnum.USERNAME_NOT_FOUND);
+        else {
+            return  Result.build(null,ResultCodeEnum.PASSWORD_ERROR);
+        }
+
     }
 
     @Override
@@ -322,13 +336,58 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         queryWrapper.eq("phone", user.getPhone());
         users = userMapper.selectList(queryWrapper);
         if (!users.isEmpty()) {
-            return Result.build(null, ResultCodeEnum.Phone_USED);
+            return Result.build(null, ResultCodeEnum.PHONE_USED);
         } else {
             user.setPassword(MD5Util.encrypt(user.getPassword()));
             //将用户名作为昵称传入，后续用户可根据自身情况修改
             user.setNickname(user.getUsername());
             int result = userMapper.insert(user);
             return Result.ok(result);
+        }
+    }
+
+    @Override
+    public Result updatePhone(Long uid, String phone) {
+        QueryWrapper queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("phone", phone);
+        List list = userMapper.selectList(queryWrapper);
+        if (!list.isEmpty()) {
+            return Result.build(null, ResultCodeEnum.PHONE_OCCUPIED);
+        } else {
+            queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("uid", uid);
+            User user = userMapper.selectById(uid);
+            user.setPhone(phone);
+            UpdateWrapper updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("uid", uid);
+            userMapper.update(user, updateWrapper);
+            return Result.ok(user);
+        }
+    }
+
+    @Override
+    public Result updateNickname(Long uid, String nickname) {
+        UpdateWrapper updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("uid", uid);
+        updateWrapper.set("nickname", nickname);
+        int result = userMapper.update(updateWrapper);
+        if (result != 1) {
+            return Result.build(null, ResultCodeEnum.UPDATE_ERROR);
+        } else {
+            return Result.ok(null);
+        }
+    }
+
+    @Override
+    public Result updateSex(Long uid, String sex) {
+        UpdateWrapper updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("uid", uid);
+        updateWrapper.set("sex", sex);
+        int result = userMapper.update(updateWrapper);
+        if (result != 1) {
+            return Result.build(null, ResultCodeEnum.UPDATE_ERROR);
+        } else {
+            return Result.ok(sex);
         }
     }
 }

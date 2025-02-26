@@ -3,9 +3,7 @@ package com.jinyang.resthome.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jinyang.resthome.common.Result;
 import com.jinyang.resthome.pojo.User;
-import com.jinyang.resthome.pojo.dto.UserBalanceUpdateRequest;
-import com.jinyang.resthome.pojo.dto.UserPasswordRequest;
-import com.jinyang.resthome.pojo.dto.loginByUsernameRequest;
+import com.jinyang.resthome.pojo.dto.*;
 import com.jinyang.resthome.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +39,7 @@ public class UserController {
 
     /**
      * app端登录功能----账号密码登录
+     *
      * @param user
      * @return
      */
@@ -48,19 +47,20 @@ public class UserController {
     public Result loginByUsername(@RequestBody loginByUsernameRequest user) {
         System.out.println(user.toString());
 
-        Result result =userService.loginByUsername(user);
+        Result result = userService.loginByUsername(user);
         return result;
     }
 
     /**
      * app端登录功能----手机号验证码方式登录
+     *
      * @param user
      * @return
      */
     @PostMapping("/loginByPhone")
     public Result loginByPhone(@RequestBody loginByUsernameRequest user) {
         System.out.println(user.toString());
-        Result result =userService.loginByPhone(user);
+        Result result = userService.loginByPhone(user);
         return result;
     }
 
@@ -78,6 +78,7 @@ public class UserController {
 
     /**
      * app端注册功能
+     *
      * @param user
      * @return
      */
@@ -86,6 +87,7 @@ public class UserController {
         Result result = userService.registerWithApp(user);
         return result;
     }
+
     /**
      * 用户管理页，查询用户信息
      *
@@ -118,7 +120,6 @@ public class UserController {
      */
     @DeleteMapping("/deleteUser/{uid}")
     public Result deleteUser(@PathVariable("uid") Long uid) {
-
         Result result = userService.deleteUserByUid(uid);
         return result;
     }
@@ -213,13 +214,50 @@ public class UserController {
         return Result.ok(user);
     }
 
+    /**
+     * 修改密码---app端
+     *
+     * @param request
+     * @return
+     */
     @PutMapping("/modifyPwd")
     public Result<Object> updatePassword(@RequestBody UserPasswordRequest request) {
         Result result = userService.updatePassword(request.getUid(), request.getOriginalPassword(), request.getNewPassword1(), request.getNewPassword2());
         return result;
     }
-    @GetMapping("/test")
-    public String test() {
-        return "test";
+
+    /**
+     * 修改手机号---app端
+     *
+     * @param request
+     * @return
+     */
+    @PutMapping("/modifyPhone")
+    public Result<Object> updatePhone(@RequestBody UserPhoneUpdateRequest request) {
+        Result result = userService.updatePhone(request.getUid(), request.getPhone());
+        return result;
+    }
+
+    /**
+     * 修改昵称---app端
+     *
+     * @param request
+     * @return
+     */
+    @PutMapping("/modifyNickname")
+    public Result<Object> updateNickname(@RequestBody UserNicknameUpdateRequest request) {
+        Result result = userService.updateNickname(request.getUid(), request.getNickname());
+        return result;
+    }
+    /**
+     * 修改昵称---app端
+     *
+     * @param request
+     * @return
+     */
+    @PutMapping("/modifySex")
+    public Result<Object> updateSex(@RequestBody UserSexUpdateRequest request) {
+        Result result = userService.updateSex(request.getUid(), request.getSex());
+        return result;
     }
 }

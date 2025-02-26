@@ -57,7 +57,7 @@
             <p>其他登录方式</p>
             <div class="quick-login">
                 <div class="huojian">
-                    <img src="../../assets/images/huojian.png" alt="" width="30px" height="30px">
+                    <img src="@/assets/images/huojian.png" alt="" width="30px" height="30px">
                 </div>
                 <p class="quick-login-p">快捷登录</p>
             </div>
@@ -137,15 +137,23 @@ const loginWithCode = () => {
             code: phoneLoginUser.value.code,
         }).then(function (response) {
             console.log(response);
-            ElMessage.success('登录成功');
-            localStorage.setItem('token', response.data.data.token);
-            loginUser.uid = response.data.data.uid;
-            loginUser.token = response.data.data.token;
-            loginUser.username = response.data.data.username;
-            loginUser.nickname = response.data.data.nickname;
-            loginUser.permission = response.data.data.permission;
-            loginUser.balance = response.data.data.balance;
-            loginUser.headImgUrl = response.data.data.headImgUrl;
+            if (response.data.code == 200) {
+                ElMessage.success('登录成功');
+                localStorage.setItem('token', response.data.data.token);
+                loginUser.uid = response.data.data.uid;
+                loginUser.token = response.data.data.token;
+                loginUser.username = response.data.data.username;
+                loginUser.nickname = response.data.data.nickname;
+                loginUser.permission = response.data.data.permission;
+                loginUser.balance = response.data.data.balance;
+                loginUser.headImgUrl = response.data.data.headImgUrl;
+                loginUser.phone = response.data.data.phone;
+                loginUser.sex = response.data.data.sex;
+                router.push({ name: 'Mine_app' })
+            }
+            else if (response.code = 506) {
+                ElMessage.error(response.data.message);
+            }
         }).catch(function (error) {
             ElMessage.error('登录失败');
         })
@@ -174,16 +182,23 @@ const login = () => {
         password: usernameLoginUser.value.password,
     }).then(function (response) {
         console.log(response);
-        ElMessage.success('登录成功')
-        localStorage.setItem('token', response.data.data.token);
-        loginUser.uid = response.data.data.uid;
-        loginUser.token = response.data.data.token;
-        loginUser.username = response.data.data.username;
-        loginUser.nickname = response.data.data.nickname;
-        loginUser.permission = response.data.data.permission;
-        loginUser.balance = response.data.data.balance;
-        loginUser.headImgUrl = response.data.data.headImgUrl;
-        router.push({name:'Mine_app'})
+        if (response.data.code == 200) {
+            ElMessage.success('登录成功');
+            localStorage.setItem('token', response.data.data.token);
+            loginUser.uid = response.data.data.uid;
+            loginUser.token = response.data.data.token;
+            loginUser.username = response.data.data.username;
+            loginUser.nickname = response.data.data.nickname;
+            loginUser.permission = response.data.data.permission;
+            loginUser.balance = response.data.data.balance;
+            loginUser.headImgUrl = response.data.data.headImgUrl;
+            loginUser.phone = response.data.data.phone;
+            loginUser.sex = response.data.data.sex;
+            router.push({ name: 'Mine_app' })
+        }
+        else if (response.code = 506) {
+            ElMessage.error(response.data.message);
+        }
     }).catch(function (error) {
         ElMessage.error('登录失败')
     })

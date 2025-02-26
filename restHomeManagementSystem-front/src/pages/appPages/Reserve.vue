@@ -1,9 +1,10 @@
 <template>
+    <div class="header">
+        <span class="back-arrow" @click="router.go(-1)">←</span>
+        <h4>预定入住</h4>
+    </div>
     <div class="reserve-container">
-        <div class="header">
-            <span class="back-arrow" @click="router.go(-1)">←</span>
-            <h2>预定入住</h2>
-        </div>
+
         <div class="form-wrapper">
             <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" class="reserve-form" :size="formSize"
                 status-icon>
@@ -247,21 +248,24 @@ const resetForm = (formEl: FormInstance | undefined) => {
 
 <style scoped>
 .reserve-container {
-    min-height: 100vh;
+    min-height: 90vh;
     background-color: #fff;
 }
 
 .header {
-    background-color: #56b4b0;
-    padding: 15px;
+    justify-content: center;
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 20px;
+    top: 0;
+    z-index: 10;
+    background-image: url(@/assets/images/home_app_background.jpg);
+    color: #fff;
 }
 
 .back-arrow {
-    font-size: 24px;
-    cursor: pointer;
+    position: absolute;
+    left: 16px;
 }
 
 .header h2 {

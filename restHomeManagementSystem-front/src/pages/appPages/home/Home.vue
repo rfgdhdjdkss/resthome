@@ -56,7 +56,7 @@
                 </div>
                 <span>老人档案</span>
             </div>
-            <div class="feature-item">
+            <div class="feature-item" @click="router.push({ name: 'HealthList_app' })">
                 <div class="icon">
                     <svg t="1739264440592" class="icon" viewBox="0 0 1024 1024" version="1.1"
                         xmlns="http://www.w3.org/2000/svg" p-id="41443" width="50" height="50">
@@ -93,7 +93,7 @@
         <!-- 功能图标区域 -->
         <div class="icon-grid">
             <div class="icon-row">
-                <div class="icon-item" @click="router.push({name:'Reserve_app'})" >
+                <div class="icon-item" @click="router.push({ name: 'Reserve_app' })">
                     <div class="icon-bg ">
                         <svg t="1739350906144" class="icon" viewBox="0 0 1024 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="47462" width="30" height="30">
@@ -110,7 +110,7 @@
                     </div>
                     <span>预订</span>
                 </div>
-                <div class="icon-item">
+                <div class="icon-item" @click="router.push({ name: 'SignCheckInList_app' })">
                     <div class="icon-bg">
                         <svg t="1739350967734" class="icon" viewBox="0 0 1024 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="48601" width="30" height="30">
@@ -124,7 +124,7 @@
                     </div>
                     <span>签约</span>
                 </div>
-                <div class="icon-item">
+                <div class="icon-item" @click="router.push({ name: 'Recharge_app' })">
                     <div class="icon-bg"><svg t="1739350992521" class="icon" viewBox="0 0 1024 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="49787" width="30" height="30">
                             <path
@@ -145,11 +145,8 @@
                         </svg></div>
                     <span>充值</span>
                 </div>
-            </div>
 
-            <div class="icon-row">
-
-                <div class="icon-item">
+                <div class="icon-item" @click="gotoRegistrationApplicationPage">
                     <div class="icon-bg">
                         <svg t="1739351031052" class="icon" viewBox="0 0 1024 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="50918" width="30" height="30">
@@ -184,18 +181,19 @@
                         </svg></div>
                     <span>服务</span>
                 </div>
-            </div>
 
+            </div>
 
         </div>
 
         <div class="recommended">
-            <h2 style="margin: 0;" >养老优选</h2>
+            <h2 style="margin: 0;">养老优选</h2>
             <div class="underline"></div>
 
             <div class="recommended-grid">
-                <div v-for="item in recommendedItems" :key="item.id" class="product-item">
-                    <img :src="item.image" :alt="item.title">
+                <div v-for="item in goodsList" :key="item.gid" class="product-item"
+                    @click="gotoGoodsDetailPage(item.gid)">
+                    <img :src="`http://localhost:8999/images/upload/goodsImg/${item.image}`" :alt="item.title">
                     <div class="product-info">
                         <h4>{{ item.title }}</h4>
                         <p class="description">{{ item.description }}</p>
@@ -204,13 +202,16 @@
                 </div>
             </div>
         </div>
+        <div v-if="isLoading" class="loading">加载中...</div>
+        <div v-else-if="goodsList.length === allGoods.length" class="loading">已经加载完全部商品</div>
     </div>
     <Footer :menuType="menuType" />
 </template>
 
 <script setup>
-import Footer from './components/Footer.vue';
-import { ref } from 'vue'
+import axios from '@/api/request';
+import Footer from '../components/Footer.vue';
+import { onMounted, ref, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router';
 let router = useRouter()
 const menuType = ref("home")
@@ -219,43 +220,85 @@ const itemPath = ref([
     '/src/images/carousel_2.JPG',
     '/src/images/carousel_3.JPG',
 ])
-const recommendedItems = ref([
-    {
-        id: 1,
-        title: "老年人专用按摩椅",
-        description: "智能按摩，舒适养生",
-        price: "2999",
-        image: "/src/images/product1.jpg"
-    },
-    {
-        id: 2,
-        title: "智能血压计",
-        description: "24小时健康监测",
-        price: "299",
-        image: "/src/images/product2.jpg"
-    },
-    {
-        id: 3,
-        title: "老年人保健枕",
-        description: "护颈助眠好帮手",
-        price: "199",
-        image: "/src/images/product3.jpg"
-    },
-    {
-        id: 4,
-        title: "中老年营养奶粉",
-        description: "补钙健骨配方",
-        price: "168",
-        image: "/src/images/product4.jpg"
+const goodsList = ref([])
+const allGoods = ref([{}])
+const fetchGoodsList = async () => {
+    try {
+        const response = await axios.get('/goods/getGoodsList')
+        allGoods.value = response.data.data
+        // 初始加载四个商品
+        loadMore();
+    } catch (error) {
+        console.error('获取商品数据失败:', error);
     }
-])
+}
+
+
+const isLoading = ref(false);
+// 当前加载的索引
+let currentIndex = 0;
+// 每次加载的商品数量
+const perPage = 2;
+
+
+// 加载更多商品的函数
+function loadMore() {
+    if (currentIndex >= allGoods.value.length) {
+        return; // 没有更多商品可加载
+    }
+    // 从 allGoods 中取出接下来的四个商品
+    const newData = allGoods.value.slice(currentIndex, currentIndex + perPage);
+    // 将新数据添加到商品列表中
+    goodsList.value = [...goodsList.value, ...newData];
+    // 更新当前加载的索引
+    currentIndex += perPage;
+}
+onMounted(() => {
+    fetchGoodsList()
+    window.addEventListener('scroll', handleScroll);
+})
+function handleScroll() {
+    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+    // 判断是否滚动到接近页面底部
+    if (scrollTop + clientHeight >= scrollHeight - 10) {
+        // 如果当前没有在加载中
+        if (!isLoading.value) {
+            // 设置加载状态为 true
+            isLoading.value = true;
+            // 调用加载更多函数
+            loadMore();
+            // 模拟加载延迟，1 秒后将加载状态设为 false
+            setTimeout(() => {
+                isLoading.value = false;
+            }, 1000);
+        }
+    }
+}
+
+onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll);
+});
+
+const gotoGoodsDetailPage = (goods_gid) => {
+    console.log(goodsList.value);
+
+    router.push({
+        name: 'GoodsDetail_app', params: {
+            gid: goods_gid
+        }
+    })
+}
+
+const gotoRegistrationApplicationPage = () => {
+    router.push({ name: 'RegistrationApplication_app' })
+}
 </script>
 
 <style scoped>
 .home-container {
     padding: 20px;
     padding-bottom: 60px;
-    background-image: url(../../assets/images/home_app_background.jpg);
+    background-image: url(@/assets/images/home_app_background.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -318,26 +361,27 @@ const recommendedItems = ref([
 .icon-grid {
     background: white;
     border-radius: 15px;
-    padding: 20px;
+    padding: 10px;
     margin-bottom: 20px;
 }
 
 .icon-row {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+    flex-wrap: wrap;
+    padding: 5px;
+    gap: 20px;
 }
 
 .icon-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 50%;
+    width: 20%;
 }
 
 .icon-bg {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border-radius: 15px;
     display: flex;
     align-items: center;
@@ -385,12 +429,14 @@ const recommendedItems = ref([
     background: #f8f8f8;
     border-radius: 10px;
     overflow: hidden;
+    padding: 10px;
 }
 
 .product-item img {
     width: 100%;
-    height: 120px;
-    object-fit: cover;
+    height: 152.5px;
+    object-fit: contain;
+    background-color: #fff;
 }
 
 .product-info {
@@ -415,6 +461,7 @@ const recommendedItems = ref([
     font-weight: bold;
     margin: 5px 0 0 0;
 }
+
 .underline {
     width: 70px;
     height: 5px;
@@ -423,4 +470,9 @@ const recommendedItems = ref([
     margin-bottom: 10px;
 }
 
+.loading {
+    text-align: center;
+    color: #008080;
+
+}
 </style>

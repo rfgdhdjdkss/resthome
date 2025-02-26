@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinyang.resthome.mapper.ReceiveaddressMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinyang.resthome.pojo.Receiveaddress">
+            <id property="receive_address_id" column="receive_address_id" jdbcType="BIGINT"/>
+            <result property="uid" column="uid" jdbcType="BIGINT"/>
+            <result property="receive_name" column="receive_name" jdbcType="VARCHAR"/>
+            <result property="receive_phone" column="receive_phone" jdbcType="VARCHAR"/>
+            <result property="receive_address" column="receive_address" jdbcType="VARCHAR"/>
+            <result property="receive_tag" column="receive_tag" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        receive_address_id,uid,receive_name,
+        receive_phone,receive_address,receive_tag
+    </sql>
+</mapper>

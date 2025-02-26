@@ -56,4 +56,10 @@ public interface UserService extends IService<User> {
     Result loginByPhone(loginByUsernameRequest user);
 
     Result registerWithApp(User user);
+
+    Result updatePhone(Long uid, String phone);
+
+    Result updateNickname(Long uid, String nickname);
+
+    Result updateSex(Long uid, String sex);
 }

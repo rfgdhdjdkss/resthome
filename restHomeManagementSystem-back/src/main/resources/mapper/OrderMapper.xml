@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinyang.resthome.mapper.OrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinyang.resthome.pojo.Order">
+            <id property="oid" column="oid" jdbcType="BIGINT"/>
+            <result property="uid" column="uid" jdbcType="BIGINT"/>
+            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="order_number" column="order_number" jdbcType="VARCHAR"/>
+            <result property="order_status" column="order_status" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        oid,uid,createTime,
+        order_number,order_status
+    </sql>
+</mapper>

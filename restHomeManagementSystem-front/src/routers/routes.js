@@ -29,8 +29,7 @@ const router = createRouter({
                         name: 'PrivacyPolicy',
                         meta: { title: ' 养老隐私政策' },
                         component: () => import('../pages/appPages/loginAndRegister/PrivacyPolicy.vue'),
-                    },
-                    {
+                    }, {
                         path: '/layout',
                         name: 'Layout',
                         meta: { title: ' 布局' },
@@ -39,34 +38,48 @@ const router = createRouter({
                         path: '/home_app',
                         name: 'Home_app',
                         meta: { title: ' 首页' },
-                        component: () => import('../pages/appPages/Home.vue'),
+                        component: () => import('../pages/appPages/home/Home.vue'),
+                    }, {
+                        path: '/goodsDetail_app/:gid',
+                        name: 'GoodsDetail_app',
+                        meta: { title: ' 商品详情页' },
+                        component: () => import('../pages/appPages/home/GoodsDetail.vue'),
                     }, {
                         path: '/healthList_app',
                         name: 'HealthList_app',
                         meta: { title: ' 健康' },
                         component: () => import('../pages/appPages/health/HealthList.vue'),
-                        children: []
-                    },{
+                    }, {
                         path: '/healthList_app/healthDetail_app/:eid',
                         name: 'HealthDetail_app',
+                        meta: { title: ' 健康详情' },
                         component: () => import('../pages/appPages/health/HealthDetail.vue'),
-                    },{
+                    }, {
                         path: '/healthRecordMore_app',
                         name: 'HealthRecordMore_app',
                         meta: { title: '查看更多健康记录' },
                         component: () => import('../pages/appPages/health/HealthRecordMore.vue'),
-                    }
-                    , {
+                    }, {
                         path: '/mine_app',
                         name: 'Mine_app',
                         meta: { title: ' 我的' },
-                        component: () => import('../pages/appPages/Mine.vue'),
-                    },
-                    {
+                        component: () => import('../pages/appPages/mine/Mine.vue'),
+                    }, {
                         path: '/reserve_app',
                         name: 'Reserve_app',
                         meta: { title: ' 预订' },
                         component: () => import('../pages/appPages/Reserve.vue'),
+                    }, {
+                        path: '/signCheckInList_app',
+                        name: 'SignCheckInList_app',
+                        meta: { title: ' 入住签约列表' },
+                        component: () => import('@/pages/appPages/signCheckIn/SignCheckInList.vue'),
+
+                    }, {
+                        path: '/signCheckInDetail_app/:eid',
+                        name: 'SignCheckInDetail_app',
+                        meta: { title: ' 入住签约列表' },
+                        component: () => import('@/pages/appPages/signCheckIn/SignCheckInDetail.vue'),
                     },
                     {
                         path: '/chat_app',
@@ -74,6 +87,88 @@ const router = createRouter({
                         meta: { title: '聊天' },
                         component: () => import('../pages/appPages/chat/Chat.vue'),
                     },
+                    {
+                        path: '/personalCenter_app',
+                        name: 'PersonalCenter_app',
+                        meta: { title: '个人中心' },
+                        component: () => import('../pages/appPages/mine/PersonalCenter.vue'),
+                    },
+                    {
+                        path: '/setting_app',
+                        name: 'Setting_app',
+                        meta: { title: '设置' },
+                        component: () => import('../pages/appPages/mine/Setting.vue'),
+                    }, {
+                        path: '/modifyPhone_app',
+                        name: 'ModifyPhone_app',
+                        meta: { title: '修改手机号' },
+                        component: () => import('../pages/appPages/mine/ModifyPhone.vue'),
+                    }, {
+                        path: '/modifyPassword_app',
+                        name: 'ModifyPassword_app',
+                        meta: { title: '修改密码' },
+                        component: () => import('../pages/appPages/mine/ModifyPassword.vue'),
+                    }, {
+                        path: '/aboutResthome_app',
+                        name: 'AboutResthome_app',
+                        meta: { title: '关于养老生活' },
+                        component: () => import('../pages/appPages/mine/AboutResthome.vue'),
+                    }, {
+                        path: '/shippingAddressList_app',
+                        name: 'ShippingAddressList_app',
+                        meta: { title: '收货地址' },
+                        component: () => import('../pages/appPages/mine/ShippingAddressList.vue'),
+                    }, {
+                        path: '/createNewAddress_app',
+                        name: 'CreateNewAddress_app',
+                        meta: { title: '新增收货地址' },
+                        component: () => import('../pages/appPages/mine/CreateNewAddress.vue'),
+                    },
+                    {
+                        path: '/shippingAddressDetail_app/:raid',
+                        name: 'ShippingAddressDetail_app',
+                        meta: { title: '编辑收货地址' },
+                        component: () => import('../pages/appPages/mine/ShippingAddressDetail.vue'),
+                    }, {
+                        path: '/shippingCart_app',
+                        name: 'ShippingCart_app',
+                        meta: { title: '编辑收货地址' },
+                        component: () => import('../pages/appPages/home/ShippingCart.vue'),
+                    },
+                    {
+                        path: '/registrationApplication_app',
+                        name: 'RegistrationApplication_app',
+                        meta: { title: '申请：来访/外出' },
+                        component: () => import('@/pages/appPages/registration/RegistrationApplication.vue'),
+                    }, {
+                        path: '/inRegistration_app',
+                        name: 'InRegistration_app',
+                        meta: { title: '来访登记' },
+                        component: () => import('../pages/appPages/registration/InRegistration.vue'),
+                    }, {
+                        path: '/outRegistration_app',
+                        name: 'OutRegistration_app',
+                        meta: { title: '外出登记' },
+                        component: () => import('../pages/appPages/registration/OutRegistration.vue'),
+                    }, {
+                        path: '/myApplication_app',
+                        name: 'MyApplication_app',
+                        meta: { title: '我的申请' },
+                        component: () => import('../pages/appPages/registration/MyApplication.vue'),
+                    },
+                    {
+                        path: '/recharge_app',
+                        name: 'Recharge_app',
+                        meta: { title: '充值' },
+                        component: () => import('../pages/appPages/recharge/Recharge.vue'),
+                    }, {
+                        path: '/submitOrder_app',
+                        name: 'SubmitOrder_app',
+                        meta: { title: '提交订单' },
+                        component: () => import('../pages/appPages/order/SubmitOrder.vue'),
+                    },
+
+
                 ]
         },
         // 后台管理路由

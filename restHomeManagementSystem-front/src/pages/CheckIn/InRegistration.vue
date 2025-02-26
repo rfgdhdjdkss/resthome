@@ -165,10 +165,93 @@ const resetForm = (formEl: FormInstance | undefined) => {
 </script>
 
 <style scoped>
-#box {
-    background-color: white;
+.reserve-container {
+    min-height: 90vh;
+    background-color: #fff;
+}
+
+.header {
+    justify-content: center;
+    position: relative;
     display: flex;
     align-items: center;
-    flex-direction: column;
+    top: 0;
+    z-index: 10;
+    background-image: url(@/assets/images/home_app_background.jpg);
+    color: #fff;
+}
+
+.back-arrow {
+    position: absolute;
+    left: 16px;
+}
+
+.header h4 {
+    margin: 0;
+    font-size: 18px;
+    color: #000;
+}
+
+.form-wrapper {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.reserve-form {
+    width: 100%;
+}
+
+.reserve-form :deep(.el-form-item) {
+    margin-bottom: 15px;
+}
+
+.reserve-form :deep(.el-input__wrapper) {
+    border-radius: 8px;
+}
+
+.reserve-form :deep(.el-select) {
+    width: 100%;
+}
+
+.reserve-form :deep(.el-date-picker) {
+    width: 100%;
+}
+
+.button-group {
+    display: flex;
+    margin-top: 20px;
+    justify-content: space-between;
+}
+
+.button-group :deep(.el-button) {
+    min-width: 120px;
+    border-radius: 20px;
+    margin-left: 50px;
+}
+
+.button-group :deep(.el-button--primary) {
+    background-color: #56b4b0;
+    border-color: #56b4b0;
+}
+
+.button-group :deep(.el-button--primary:hover) {
+    background-color: #4ca19d;
+    border-color: #4ca19d;
+}
+
+@media screen and (max-width: 768px) {
+    .reserve-form :deep(.el-form-item__label) {
+        float: none;
+        display: block;
+        text-align: left;
+        margin-bottom: 8px;
+        margin-top: 10px;
+    }
+
+    .reserve-form :deep(.el-form-item__content) {
+        margin-left: 0 !important;
+        margin-top: 10px;
+    }
 }
 </style>

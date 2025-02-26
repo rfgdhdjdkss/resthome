@@ -89,7 +89,7 @@ const toMyApplication = () => {
 
 </script>
 
-<style>
+<style scoped>
 #breadcrumb {
   width: 300px;
   display: flex;
