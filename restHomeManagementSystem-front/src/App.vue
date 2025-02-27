@@ -26,8 +26,8 @@ const showRegister = computed(() => {
 </script>
 
 <template>
-  <!-- <Menu id="menu" v-show="showMain"></Menu>
-  <Header id="header" v-show="showMain"></Header>
+  <!-- <Menu id="menu" v-show="showMain"></Menu> -->
+  <!-- <Header id="header" v-show="showMain"></Header>
   <div id="main" v-show="showMain">
     <router-view></router-view>
   </div>

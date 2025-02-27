@@ -21,6 +21,21 @@ public class elderlyHealthVo {
     private String bedroom;
     private String status;
 
+    public elderlyHealthVo(Long hid, Long eid, String elderlyName, String elderlyAge, String heartRate, String bloodPressure, String temperature, String bedroom, String status, String image) {
+        this.hid = hid;
+        this.eid = eid;
+        this.elderlyName = elderlyName;
+        this.elderlyAge = elderlyAge;
+        this.heartRate = heartRate;
+        this.bloodPressure = bloodPressure;
+        this.temperature = temperature;
+        this.bedroom = bedroom;
+        this.status = status;
+        this.image = image;
+    }
+
+    private String image;
+
     public elderlyHealthVo(Long hid, Long eid, String elderlyName, String elderlyAge, String heartRate, String bloodPressure, String temperature, String bedroom, String status) {
         this.hid = hid;
         this.eid = eid;

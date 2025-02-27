@@ -117,18 +117,23 @@ const router = createRouter({
                         path: '/shippingAddressList_app',
                         name: 'ShippingAddressList_app',
                         meta: { title: '收货地址' },
-                        component: () => import('../pages/appPages/mine/ShippingAddressList.vue'),
+                        component: () => import('../pages/appPages/mine/shippingAddress/ShippingAddressList.vue'),
+                    }, {
+                        path: '/selectShippingAddressList_app',
+                        name: 'SelectShippingAddressList_app',
+                        meta: { title: '收货地址' },
+                        component: () => import('../pages/appPages/mine/shippingAddress/SelectShippingAddressList.vue'),
                     }, {
                         path: '/createNewAddress_app',
                         name: 'CreateNewAddress_app',
                         meta: { title: '新增收货地址' },
-                        component: () => import('../pages/appPages/mine/CreateNewAddress.vue'),
+                        component: () => import('../pages/appPages/mine/shippingAddress/CreateNewAddress.vue'),
                     },
                     {
                         path: '/shippingAddressDetail_app/:raid',
                         name: 'ShippingAddressDetail_app',
                         meta: { title: '编辑收货地址' },
-                        component: () => import('../pages/appPages/mine/ShippingAddressDetail.vue'),
+                        component: () => import('../pages/appPages/mine/shippingAddress/ShippingAddressDetail.vue'),
                     }, {
                         path: '/shippingCart_app',
                         name: 'ShippingCart_app',
@@ -167,7 +172,17 @@ const router = createRouter({
                         meta: { title: '提交订单' },
                         component: () => import('../pages/appPages/order/SubmitOrder.vue'),
                     },
-
+                    {
+                        path: '/checkOut_app',
+                        name: 'CheckOut_app',
+                        meta: { title: '退住' },
+                        component: () => import('../pages/appPages/home/CheckOut.vue'),
+                    }, {
+                        path: '/elderlyDocumentList_app',
+                        name: 'ElderlyDocumentList_app',
+                        meta: { title: '老人档案' },
+                        component: () => import('../pages/appPages/home/elderlyDocument/ElderlyDocumentList.vue'),
+                    },
 
                 ]
         },

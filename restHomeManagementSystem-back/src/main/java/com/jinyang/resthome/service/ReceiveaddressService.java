@@ -20,4 +20,6 @@ public interface ReceiveaddressService extends IService<Receiveaddress> {
     Result UpdateReceiveAddress(Receiveaddress receiveaddress);
 
     Result deleteReceiveAddressByRaid(Long raid);
+
+    Result selectReceiveAddressListByRaid(Long raid);
 }

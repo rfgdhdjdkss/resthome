@@ -43,13 +43,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods>
         }
     }
 
-    @Override
-    public Result selectGoodsListByGidList(List<Long> gidList, Long uid) {
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.in("gid", gidList);
-        List list = goodsMapper.selectList(queryWrapper);
-        return Result.ok(list);
-    }
+
 }
 
 

@@ -82,7 +82,6 @@ public class ImagesController {
     }
 
 
-
     @GetMapping("/upload/addNewDish/dishImg/{dishImg}")
     public void getDishImages(@PathVariable String dishImg, HttpServletResponse response) {
         // 构建图片文件在静态资源目录下的完整路径
@@ -126,7 +125,6 @@ public class ImagesController {
     }
 
 
-
     @GetMapping("/upload/goodsImg/{goodsImg}")
     public void getGoodsImages(@PathVariable String goodsImg, HttpServletResponse response) {
         // 构建图片文件在静态资源目录下的完整路径
@@ -168,4 +166,47 @@ public class ImagesController {
             }
         }
     }
+
+    @GetMapping("/upload/elderlyImages/{image}")
+    public void getElderlyImages(@PathVariable String image, HttpServletResponse response) {
+        // 构建图片文件在静态资源目录下的完整路径
+        String filePath = "static/images/upload/elderlyImages/" + image;
+        System.out.println(filePath);
+        try {
+            // 使用Spring的ClassPathResource来加载资源
+            Resource resource = new ClassPathResource(filePath);
+            if (resource.exists()) {
+                // 获取文件的输入流
+                InputStream inputStream = resource.getInputStream();
+                // 设置响应头信息，指定返回的内容类型为图片类型（根据实际图片格式调整）
+                String contentType = getContentType(image);
+                response.setContentType(contentType);
+                response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + image);
+                // 获取输出流，将图片数据写入响应输出流，返回给客户端
+                ServletOutputStream outputStream = response.getOutputStream();
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, length);
+                }
+                outputStream.flush();
+                inputStream.close();
+                outputStream.close();
+            } else {
+                // 如果文件不存在，设置相应的错误状态码和提示信息（这里简单设置404）
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().write("图片资源不存在");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 如果出现IO异常，设置服务器内部错误状态码（这里简单设置500）
+            try {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().write("服务器内部错误");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
 }

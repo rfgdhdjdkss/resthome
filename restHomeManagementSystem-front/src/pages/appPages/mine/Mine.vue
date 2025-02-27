@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div class="services">
-                <div class="service-item" id="service-item-1">
+                <div class="service-item" id="service-item-1" @click="router.push({name:'ElderlyDocumentList_app'})">
                     <div class="service-text">
                         <p>老人档案</p>
                         <span>数字化档案管理</span>
@@ -52,7 +52,7 @@
                         </svg>
                     </i>
                 </div>
-                <div class="service-item" id="service-item-2">
+                <div class="service-item" id="service-item-2" @click="router.push({name:'HealthList_app'})">
                     <div class="service-text">
                         <p>健康评估</p>
                         <span>定制化健康评估</span>

@@ -88,6 +88,19 @@ public class ReceiveaddressServiceImpl extends ServiceImpl<ReceiveaddressMapper,
             return Result.build(null, ResultCodeEnum.DELETE_ERROR);
         }
     }
+
+    @Override
+    public Result selectReceiveAddressListByRaid(Long raid) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("receiveAddressId", raid);
+        List<Receiveaddress> result = receiveaddressMapper.selectList(queryWrapper);
+        if (result.size() > 0) {
+            return Result.ok(result);
+        }
+        return Result.build(null, ResultCodeEnum.SELECT_EMPTY);
+    }
+
+
 }
 
 

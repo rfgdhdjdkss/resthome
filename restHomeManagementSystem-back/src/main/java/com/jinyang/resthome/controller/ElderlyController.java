@@ -92,12 +92,24 @@ public class ElderlyController {
         return Result.ok(data);
     }
 
+    /**
+     * 更新入住状态
+     * @param request
+     * @return
+     */
     @PutMapping("/updateIsCheckined")
     public Result updateIsCheckined(@RequestBody ElderlyIsCheckinedUpdateRequest request) {
         int result = elderlyService.updateIsCheckined(request.getEid(), request.getIsCheckined());
         return Result.ok(result);
     }
 
+    /**
+     * 实现模糊查询
+     * @param currentPage
+     * @param pageSize
+     * @param searchValue
+     * @return
+     */
     @GetMapping("/selectForSearchManagement")
     public Result selectForSearchManagement(@RequestParam(value = "currentPage") long currentPage,
                                             @RequestParam(value = "pageSize") long pageSize,
@@ -115,16 +127,38 @@ public class ElderlyController {
         return Result.ok(data);
     }
 
+    /**
+     * 根据eid删除老人信息
+     * @param eid
+     * @return
+     */
     @DeleteMapping("/delete/{eid}")
     public Result delete(@PathVariable("eid") Long eid) {
         int result = elderlyService.deleteByEid(eid);
         return Result.ok(result);
     }
 
+    /**
+     * 查询当前用户下已入住的老人信息
+     * @param uid
+     * @return
+     */
     @GetMapping("/selectIsCheckinElderlyByUid/{uid}")
     public Result selectIsCheckinElderlyByUid(@PathVariable("uid") Long uid) {
         List<Elderly> elderlyList = elderlyService.selectIsCheckinElderlyByUid(uid);
         return Result.ok(elderlyList);
     }
+
+    /**
+     * 退住申请
+     * @param eid
+     * @return
+     */
+    @PutMapping("/checkOut/{eid}")
+    public Result checkOut(@PathVariable("eid") Long eid) {
+        Result result= elderlyService.checkOutByEid(eid);
+        return result;
+    }
+
 }
 

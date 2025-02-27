@@ -55,15 +55,39 @@ public class ReceiveAddressController {
         return result;
     }
 
+    /**
+     * 修改地址
+     *
+     * @param receiveaddress
+     * @return
+     */
     @PutMapping("/modifyReceiveAddress")
     public Result modifyReceiveAddress(@RequestBody Receiveaddress receiveaddress) {
         Result result = receiveaddressService.UpdateReceiveAddress(receiveaddress);
         return result;
     }
 
+    /**
+     * 删除地址
+     *
+     * @param raid
+     * @return
+     */
     @DeleteMapping("/deleteReceiveAddress/{raid}")
     public Result deleteReceiveAddress(@PathVariable Long raid) {
         Result result = receiveaddressService.deleteReceiveAddressByRaid(raid);
         return result;
     }
+    /**
+     * 获取某个地址的全部信息 返回数组
+     *
+     * @param raid
+     * @return
+     */
+    @GetMapping("/getReceiveAddressListByRaid/{raid}")
+    public Result getReceiveAddressListByRaid(@PathVariable Long raid) {
+        Result result = receiveaddressService.selectReceiveAddressListByRaid(raid);
+        return result;
+    }
+
 }

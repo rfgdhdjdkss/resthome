@@ -17,5 +17,4 @@ public interface GoodsService extends IService<Goods> {
 
     Result selectGoodsDetailByGid(Long gid);
 
-    Result selectGoodsListByGidList(List<Long> gidList, Long uid);
 }

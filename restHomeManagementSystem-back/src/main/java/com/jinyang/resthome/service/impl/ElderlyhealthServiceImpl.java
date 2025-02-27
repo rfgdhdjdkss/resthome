@@ -56,12 +56,14 @@ public class ElderlyhealthServiceImpl extends ServiceImpl<ElderlyhealthMapper, E
             Long eid = health.getEid();
             String elderlyName = elderlyMap.get(eid).getElderlyName();
             String elderlyAge = IdCardAgeCalculator.calculateAge(elderlyMap.get(eid).getElderlyIdCard());
+            String image = elderlyMap.get(eid).getImage();
+
             String heartRate = health.getHeartRate();
             String bloodPressure = health.getBloodPressure();
             String temperature = health.getTemperature();
             String bedroom = elderlyMap.get(eid).getBedroom();
             String status = health.getStatus() == 1 ? "正常" : "需要关注";
-            result.add(new elderlyHealthVo(hid, eid, elderlyName, elderlyAge, heartRate, bloodPressure, temperature, bedroom, status));
+            result.add(new elderlyHealthVo(hid, eid, elderlyName, elderlyAge, heartRate, bloodPressure, temperature, bedroom, status,image));
         }
 
         return Result.ok(result);

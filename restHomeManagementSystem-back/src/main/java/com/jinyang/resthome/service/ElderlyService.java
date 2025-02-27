@@ -1,6 +1,7 @@
 package com.jinyang.resthome.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jinyang.resthome.common.Result;
 import com.jinyang.resthome.pojo.Elderly;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -33,4 +34,8 @@ public interface ElderlyService extends IService<Elderly> {
     int deleteByEid(Long eid);
 
     List<Elderly> selectIsCheckinElderlyByUid(Long uid);
+
+    Result checkOutByEid(Long eid);
+
+
 }

@@ -84,4 +84,23 @@ public class FileController {
         }
         return newFileName;
     }
+    /**
+     * 上传文件
+     *
+     * @param file
+     * @return
+     */
+    @PostMapping("/upload/addElderly/{eid}")
+    public String getElderlyImgName(MultipartFile file, @PathVariable Long eid) {
+        String oldFileName = file.getOriginalFilename();
+        String filePath = FileUtil.getUpLoadFilePath() + "/elderlyImages";
+        String newFileName = System.currentTimeMillis() + oldFileName;
+        try {
+            FileUtil.uploadFile(file.getBytes(), filePath, newFileName);
+            userService.updateHeadImgUrlByUid(newFileName, eid);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return newFileName;
+    }
 }

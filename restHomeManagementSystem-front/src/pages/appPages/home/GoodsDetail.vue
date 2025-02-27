@@ -200,7 +200,6 @@ const goToSubmitOrder = () => {
         name: 'SubmitOrder_app',
         query: {
             gidList: JSON.stringify([goodsInfo.value.gid]),
-            quantity: 1
         }
     })
 }

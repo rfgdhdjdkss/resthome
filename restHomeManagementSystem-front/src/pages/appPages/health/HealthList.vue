@@ -10,7 +10,7 @@
             <el-card v-for="elder in filteredElders" :key="elder.hid" class="elder-card"
                 @click="goToHealthDetail(elder.eid)">
                 <div class="elder-info">
-                    <el-avatar :size="60" :src="elder.avatar" />
+                    <el-avatar :size="60" :src="`http://localhost:8999/images/upload/elderlyImages/${elder.image}`" />
                     <div class="info-content">
                         <div class="name-age">
                             <span class="name">{{ elder.elderlyName }}</span>

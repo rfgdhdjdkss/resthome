@@ -9,6 +9,7 @@ import com.jinyang.resthome.mapper.GoodsMapper;
 import com.jinyang.resthome.pojo.Cart;
 import com.jinyang.resthome.pojo.Goods;
 import com.jinyang.resthome.pojo.dto.AddNewCartRequest;
+import com.jinyang.resthome.pojo.vo.UserOrderInfoVo;
 import com.jinyang.resthome.pojo.vo.userCartInfoVo;
 import com.jinyang.resthome.service.CartService;
 import com.jinyang.resthome.mapper.CartMapper;
@@ -143,6 +144,28 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart>
             return Result.ok(gids);
         }
         return Result.build(null, ResultCodeEnum.DELETE_ERROR);
+    }
+
+    @Override
+    public Result selectGoodsListByGidList(List<Long> gidList, Long uid) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.in("gid", gidList);
+        //商品信息，获取商品名，商品价格，商品运费等信息
+        List<Goods> goodsInfoList = goodsMapper.selectList(queryWrapper);
+        //获取购物车中，商品的数量
+        List<Cart> cartList = cartMapper.selectList(queryWrapper);
+        Map<Long, Goods> goodsMap = goodsInfoList.stream().collect(Collectors.toMap(Goods::getGid, goods -> goods));
+        List<UserOrderInfoVo> result = new ArrayList<>();
+        for (Cart cart : cartList) {
+            Long gid = cart.getGid();
+            String image = goodsMap.get(gid).getImage();
+            String title = goodsMap.get(gid).getTitle();
+            Double price = goodsMap.get(gid).getPrice();
+            String fee = goodsMap.get(gid).getFee();
+            Integer quantity = cart.getQuantity();
+            result.add(new UserOrderInfoVo(gid, uid, title, image, price, quantity, fee));
+        }
+        return Result.ok(result);
     }
 }
 

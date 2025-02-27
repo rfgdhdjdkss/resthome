@@ -36,7 +36,7 @@
                 </div>
                 <span>扫一扫</span>
             </div>
-            <div class="feature-item">
+            <div class="feature-item" @click="router.push({name:'ElderlyDocumentList_app'})">
                 <div class="icon">
                     <svg t="1739264352502" class="icon" viewBox="0 0 1024 1024" version="1.1"
                         xmlns="http://www.w3.org/2000/svg" p-id="40194" width="50" height="50">
@@ -160,7 +160,7 @@
                     </div>
                     <span>申请</span>
                 </div>
-                <div class="icon-item">
+                <div class="icon-item" @click="router.push({ name:'CheckOut_app'})">
                     <div class="icon-bg"><svg t="1739351057311" class="icon" viewBox="0 0 1088 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="52019" width="30" height="30">
                             <path

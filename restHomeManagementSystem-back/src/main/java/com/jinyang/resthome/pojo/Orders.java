@@ -5,16 +5,17 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import lombok.Data;
 
 /**
  * 
- * @TableName order
+ * @TableName orders
  */
-@TableName(value ="order")
+@TableName(value ="orders")
 @Data
-public class Order implements Serializable {
+public class Orders implements Serializable {
     /**
      * 商品订单id
      */
@@ -31,19 +32,19 @@ public class Order implements Serializable {
      * 订单创建时间
      */
     @TableField(value = "createTime")
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 订单号
      */
-    @TableField(value = "order_number")
-    private String order_number;
+    @TableField(value = "orderNumber")
+    private String orderNumber;
 
     /**
      * 订单状态
      */
-    @TableField(value = "order_status")
-    private String order_status;
+    @TableField(value = "orderStatus")
+    private String orderStatus;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
@@ -59,12 +60,12 @@ public class Order implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        Order other = (Order) that;
+        Orders other = (Orders) that;
         return (this.getOid() == null ? other.getOid() == null : this.getOid().equals(other.getOid()))
             && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getOrder_number() == null ? other.getOrder_number() == null : this.getOrder_number().equals(other.getOrder_number()))
-            && (this.getOrder_status() == null ? other.getOrder_status() == null : this.getOrder_status().equals(other.getOrder_status()));
+            && (this.getOrderNumber() == null ? other.getOrderNumber() == null : this.getOrderNumber().equals(other.getOrderNumber()))
+            && (this.getOrderStatus() == null ? other.getOrderStatus() == null : this.getOrderStatus().equals(other.getOrderStatus()));
     }
 
     @Override
@@ -74,8 +75,8 @@ public class Order implements Serializable {
         result = prime * result + ((getOid() == null) ? 0 : getOid().hashCode());
         result = prime * result + ((getUid() == null) ? 0 : getUid().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getOrder_number() == null) ? 0 : getOrder_number().hashCode());
-        result = prime * result + ((getOrder_status() == null) ? 0 : getOrder_status().hashCode());
+        result = prime * result + ((getOrderNumber() == null) ? 0 : getOrderNumber().hashCode());
+        result = prime * result + ((getOrderStatus() == null) ? 0 : getOrderStatus().hashCode());
         return result;
     }
 
@@ -88,8 +89,8 @@ public class Order implements Serializable {
         sb.append(", oid=").append(oid);
         sb.append(", uid=").append(uid);
         sb.append(", createTime=").append(createTime);
-        sb.append(", order_number=").append(order_number);
-        sb.append(", order_status=").append(order_status);
+        sb.append(", orderNumber=").append(orderNumber);
+        sb.append(", orderStatus=").append(orderStatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

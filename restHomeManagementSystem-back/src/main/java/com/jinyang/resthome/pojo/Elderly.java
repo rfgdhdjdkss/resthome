@@ -111,6 +111,12 @@ public class Elderly implements Serializable {
     @TableField(value = "roomType")
     private String roomType;
 
+    /**
+     * 老人照片
+     */
+    @TableField(value = "image")
+    private String image;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
@@ -141,7 +147,8 @@ public class Elderly implements Serializable {
             && (this.getBalance() == null ? other.getBalance() == null : this.getBalance().equals(other.getBalance()))
             && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
             && (this.getBedroom() == null ? other.getBedroom() == null : this.getBedroom().equals(other.getBedroom()))
-            && (this.getRoomType() == null ? other.getRoomType() == null : this.getRoomType().equals(other.getRoomType()));
+            && (this.getRoomType() == null ? other.getRoomType() == null : this.getRoomType().equals(other.getRoomType()))
+            && (this.getImage() == null ? other.getImage() == null : this.getImage().equals(other.getImage()));
     }
 
     @Override
@@ -164,6 +171,7 @@ public class Elderly implements Serializable {
         result = prime * result + ((getUid() == null) ? 0 : getUid().hashCode());
         result = prime * result + ((getBedroom() == null) ? 0 : getBedroom().hashCode());
         result = prime * result + ((getRoomType() == null) ? 0 : getRoomType().hashCode());
+        result = prime * result + ((getImage() == null) ? 0 : getImage().hashCode());
         return result;
     }
 
@@ -189,6 +197,7 @@ public class Elderly implements Serializable {
         sb.append(", uid=").append(uid);
         sb.append(", bedroom=").append(bedroom);
         sb.append(", roomType=").append(roomType);
+        sb.append(", image=").append(image);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

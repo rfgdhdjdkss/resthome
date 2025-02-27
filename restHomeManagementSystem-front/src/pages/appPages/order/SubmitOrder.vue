@@ -4,7 +4,7 @@
         <h4>提交订单</h4>
     </div>
     <div class="submit-order">
-        <div class="address">
+        <div class="no-address" v-if="!addressInfo" @click="gotoShippingAddressListPage">
             <div>
                 <i>
                     <svg t="1740477801844" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -22,7 +22,42 @@
                 <span>点击添加收货地址</span>
             </div>
         </div>
-        <div class="goods" v-for="item in cartInfo" :key="item.gid">
+        <div class="have-address" v-else @click="gotoShippingAddressListPage">
+            <i>
+                <svg t="1740553270934" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg" p-id="11644"
+                    data-spm-anchor-id="a313x.search_index.0.i12.68f53a81hzCoT3" width="40" height="40">
+                    <path
+                        d="M512 1024a512 512 0 1 1 512-512 512 512 0 0 1-512 512z m0-435.2a128 128 0 1 0-128-128 128 128 0 0 0 128 128z m0-51.2a76.8 76.8 0 1 1 76.8-76.8 76.8 76.8 0 0 1-76.8 76.8z m17.664 302.848q94.08-89.6 157.696-148.48C763.264 618.752 806.4 540.416 806.4 454.4a288 288 0 0 0-576 0c0 83.2 45.312 169.216 110.592 236.8q53.888 58.88 153.6 149.504L512 856.832zM378.368 656.384C320.896 596.736 281.6 522.112 281.6 454.4a236.8 236.8 0 0 1 473.6 0c0 69.888-36.608 136.32-102.4 200.32q-57.344 53.376-140.8 132.224-85.76-78.08-133.632-130.56z"
+                        fill="#e69e3a" p-id="11645" data-spm-anchor-id="a313x.search_index.0.i11.68f53a81hzCoT3"
+                        class=""></path>
+                </svg>
+            </i>
+            <div style="display: flex; flex-direction: column; justify-content: center; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="address-name">
+                        <span>{{ addressInfo[selectedAddressid].receiveName }}</span>
+                    </div>
+                    <div class="address-phone">
+                        <span>{{ addressInfo[selectedAddressid].receivePhone }}</span>
+                    </div>
+                </div>
+                <div class="address-address">
+                    <span>{{ addressInfo[selectedAddressid].receiveAddress }}</span>
+                </div>
+                <div v-if="addressInfo[selectedAddressid].receiveTag">
+                    <el-tag type="success" effect="dark"> {{ addressInfo[selectedAddressid].receiveTag }}
+                    </el-tag>
+                </div>
+
+            </div>
+            <div style="padding-left: 80px;">
+                <el-icon>
+                    <ArrowRight />
+                </el-icon>
+            </div>
+        </div>
+        <div class="goods" v-for="(item, index) in cartInfo" :key="item.gid">
             <div class="goods-item">
                 <div class="goods-image">
                     <img :src="`http://localhost:8999/images/upload/goodsImg/${item.image}`" :alt="item.title">
@@ -44,7 +79,7 @@
                     <div class="goods-quantitiy-button">
                         <button @click="minusGoodsQuantity(item)" class="minusButton"
                             v-if="item.quantity > 1">-</button>
-                        <div class="goods-quantity-value">{{ goodsDetailQuantity ? goodsDetailQuantity : item.quantity }}
+                        <div class="goods-quantity-value">{{ item.quantity }}
                         </div>
                         <button @click="addGoodsQuantity(item)" class="addButton">+</button>
                     </div>
@@ -55,7 +90,7 @@
                 </div>
                 <div class="summary-item total">
                     <span>小计</span>
-                    <span>¥{{ cartInfo.reduce((total, item) => total + item.price * item.quantity, 0) }}</span>
+                    <span>¥{{ (item.quantity * item.price).toFixed(2) }}</span>
                 </div>
             </div>
         </div>
@@ -68,25 +103,26 @@
                 </div>
                 <div>
                     <span style="color: #e15241;font-size: 20px; font-weight: 900;">
-                        ¥</span>
+                        ¥{{ totalPrice.toFixed(2) }}</span>
                 </div>
 
             </div>
         </div>
         <div class="cart-button">
-            <button class="buy-button">提交订单</button>
+            <button class="buy-button" @click="submitOrder">提交订单</button>
         </div>
     </div>
 </template>
 <script lang="ts" setup>
 import axios from '@/api/request';
-import { onMounted, ref } from 'vue'
+import { ArrowRight, Plus } from '@element-plus/icons-vue'
+
+import { onMounted, ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router';
 import { definedUser } from '@/stores';
 let route = useRoute()
+//路由传参---商品id数组
 const gidList = JSON.parse(route.query.gidList)
-const goodsDetailQuantity = route.query.quantity
-console.log(goodsDetailQuantity);
 
 let loginUser = definedUser()
 let router = useRouter()
@@ -100,22 +136,81 @@ interface CartInfo {
     checked: boolean
 }
 const cartInfo = ref<CartInfo[]>([])
-
-
 const fetchOrderInfo = async () => {
-    console.log(gidList);
-
-    const response = await axios.post("/goods/getGoodsInfoByGidList", {
+    const response = await axios.post("/cart/getGoodsInfoByGidList", {
         gidList: gidList,
         uid: loginUser.uid
     })
     cartInfo.value = response.data.data
-    console.log(cartInfo.value);
+}
+const totalPrice = computed(() => {
+    return cartInfo.value.reduce((sum, item) => {
+        return sum + item.price * item.quantity;
+    }, 0);
+});
+const addressInfo = ref()
+const fetchAddressInfo = async () => {
+    const response = await axios.get(`/receiveAddress/getReceiveAddressList/${loginUser.uid}`)
+    addressInfo.value = response.data.data
+    console.log(addressInfo.value);
 
+}
+const selectedAddressid = 0
+const gotoShippingAddressListPage = () => {
+    router.push({ name: 'SelectShippingAddressList_app' })
+}
+// 修改默认地址后重新获取地址信息
+const fetchAddressInfoByLocalStorage = async () => {
+    if (localStorage.getItem('receiveAddressId')) {
+        const raid = localStorage.getItem('receiveAddressId')
+        const response = await axios.get(`/receiveAddress/getReceiveAddressListByRaid/${raid}`)
+        addressInfo.value = response.data.data
+    }
+    else {
+        fetchAddressInfo()
+    }
+}
 
+//商品数量+1
+const addGoodsQuantity = async (goods) => {
+    const response = await axios.put('/cart/addGoodsQuantity', {
+        gid: goods.gid,
+        uid: goods.uid
+    })
+    goods.quantity += 1
+}
+//商品数量-1
+const minusGoodsQuantity = async (goods) => {
+    const response = await axios.put('/cart/minusGoodsQuantity', {
+        gid: goods.gid,
+        uid: goods.uid
+    })
+    goods.quantity -= 1
+}
+// 提取gid和quantity组成goodsOrders
+const goodsOrders = ref([]);
+
+//提交订单
+const submitOrder = async () => {
+
+    cartInfo.value.forEach(item => {
+        goodsOrders.value.push({
+            gid: item.gid,
+            quantity: parseInt(item.quantity)
+        });
+        console.log(goodsOrders.value);
+
+    });
+    axios.post("/order/addOrder",
+        {
+            uid: loginUser.uid,
+            goodsOrders: goodsOrders.value
+
+        })
 }
 onMounted(() => {
     fetchOrderInfo()
+    fetchAddressInfoByLocalStorage()
 })
 </script>
 <style scoped>
@@ -147,11 +242,11 @@ onMounted(() => {
     padding-top: 78px;
 }
 
-.address {
+.no-address {
     background-color: #fff;
     padding: 16px;
     width: 92%;
-    height: 100px;
+    height: 80px;
     border-radius: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     display: flex;
@@ -160,6 +255,32 @@ onMounted(() => {
     justify-content: center;
     color: #e69e3a;
 
+}
+
+.have-address {
+    background-color: #fff;
+    padding: 16px;
+    width: 92%;
+    height: 80px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.address-name {
+    font-weight: 900;
+}
+
+.address-phone {
+    color: #6d6d6d;
+    font-size: 14px;
+}
+
+.address-address {
+    color: #6d6d6d;
+    font-size: 14px;
 }
 
 .goods {

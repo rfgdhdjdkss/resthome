@@ -3,6 +3,7 @@ package com.jinyang.resthome.controller;
 import com.jinyang.resthome.common.Result;
 import com.jinyang.resthome.pojo.Cart;
 import com.jinyang.resthome.pojo.dto.DeleteCartGoodsRequest;
+import com.jinyang.resthome.pojo.dto.GetGoodsInfoByGidListRequest;
 import com.jinyang.resthome.pojo.dto.UpdateCartQuantityRequest;
 import com.jinyang.resthome.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,12 @@ public class CartController {
         Result result= cartService.minusGoodsQuantity(request.getGid(),request.getUid());
         return null;
     }
+
+    /**
+     * 删除购物车商品
+     * @param request
+     * @return
+     */
     @DeleteMapping("/deleteGoods")
     public Result deleteGoods(@RequestBody DeleteCartGoodsRequest request){
         System.out.println(request.toString());
@@ -85,4 +92,15 @@ public class CartController {
 
     }
 
+    /**
+     * 获取商品信息根据商品id列表
+     * @param request
+     * @return
+     */
+    @PostMapping("/getGoodsInfoByGidList")
+    public Result getGoodsInfoByGidList(@RequestBody GetGoodsInfoByGidListRequest request) {
+        System.out.println(request.toString());
+        Result result = cartService.selectGoodsListByGidList(request.getGidList(), request.getUid());
+        return result;
+    }
 }

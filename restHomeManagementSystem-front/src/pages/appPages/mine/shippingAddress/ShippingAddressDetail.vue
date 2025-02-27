@@ -1,6 +1,5 @@
 <template>
     <div class="header">
-        <span class="back-arrow" @click="router.push({ name: 'ShippingAddressList_app' })">←</span>
         <h4>编辑地址</h4>
     </div>
     <div class="create-new-address-page">
@@ -170,6 +169,7 @@ const deleteAddress = async () => {
         ElMessage.error(response.data.message)
     }
 }
+
 </script>
 <style scoped>
 .create-new-address-page {

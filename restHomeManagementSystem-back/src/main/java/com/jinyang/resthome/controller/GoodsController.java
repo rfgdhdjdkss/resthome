@@ -42,10 +42,5 @@ public class GoodsController {
         return result;
     }
 
-    @PostMapping("/getGoodsInfoByGidList")
-    public Result getGoodsInfoByGidList(@RequestBody GetGoodsInfoByGidListRequest request) {
-        System.out.println(request.toString());
-        Result result = goodsService.selectGoodsListByGidList(request.getGidList(), request.getUid());
-        return result;
-    }
+
 }

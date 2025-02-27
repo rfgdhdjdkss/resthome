@@ -9,31 +9,31 @@ import lombok.Data;
 
 /**
  * 
- * @TableName goods_order
+ * @TableName goodsOrder
  */
-@TableName(value ="goods_order")
+@TableName(value ="goodsOrder")
 @Data
 public class GoodsOrder implements Serializable {
     /**
-     * 关联商品和订单记录的唯一标识符，自增主键
+     * 
      */
-    @TableId(value = "goodsOrderid")
+    @TableId(value = "goodsOrderid", type = IdType.AUTO)
     private Long goodsOrderid;
 
     /**
-     * 订单id
+     * 
      */
     @TableField(value = "oid")
     private Long oid;
 
     /**
-     * 商品id
+     * 
      */
     @TableField(value = "gid")
     private Long gid;
 
     /**
-     * 数量
+     * 
      */
     @TableField(value = "quantity")
     private Integer quantity;

@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jinyang.resthome.common.Result;
+import com.jinyang.resthome.common.ResultCodeEnum;
 import com.jinyang.resthome.mapper.BedsMapper;
 import com.jinyang.resthome.mapper.RoomsMapper;
 import com.jinyang.resthome.pojo.Beds;
@@ -15,7 +17,9 @@ import com.jinyang.resthome.mapper.ElderlyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author jinyang
@@ -63,7 +67,6 @@ public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
         List<Elderly> elderlyList = elderlyMapper.selectList(queryWrapper);
         return elderlyList;
     }
-
     /**
      * 搜索框模糊查询老人信息业务实现代码
      *
@@ -131,6 +134,19 @@ public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
         System.out.println(elderlyList);
         return elderlyList;
     }
+
+    @Override
+    public Result checkOutByEid(Long eid) {
+        UpdateWrapper updateWrapper = new UpdateWrapper();
+        updateWrapper.eq("eid", eid);
+        updateWrapper.set("isCheckined", 0);
+        int update = elderlyMapper.update(updateWrapper);
+        if (update > 0) {
+            return Result.ok(update);
+        }
+        return Result.build(null, ResultCodeEnum.UPDATE_ERROR);
+    }
+
 
 
 }

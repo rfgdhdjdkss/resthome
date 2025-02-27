@@ -163,12 +163,13 @@ const cartInfoLength = computed(() => {
 const goToSubmitOrder = () => {
     // 跳转到提交订单页面，并传递 gidList
     const selectedGids = cartInfo.value.filter(item => item.checked).map(item => item.gid);
+    const quantityList = cartInfo.value.filter(item => item.checked).map(item => item.quantity);
     console.log(selectedGids);
-    
+
     router.push({
         name: 'SubmitOrder_app',
         query: {
-            gidList: JSON.stringify(selectedGids)
+            gidList: JSON.stringify(selectedGids),
         }
     });
 };
