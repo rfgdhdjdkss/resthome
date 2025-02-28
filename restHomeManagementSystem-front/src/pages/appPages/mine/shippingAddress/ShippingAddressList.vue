@@ -110,6 +110,8 @@ onMounted(() => {
     color: #000;
     height: 55px;
     background-color: #f5f5f5;
+  border-bottom: 1px solid #ebeef5;
+
 }
 
 .back-arrow {

@@ -17,6 +17,9 @@ import com.jinyang.resthome.mapper.ElderlyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +70,7 @@ public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
         List<Elderly> elderlyList = elderlyMapper.selectList(queryWrapper);
         return elderlyList;
     }
+
     /**
      * 搜索框模糊查询老人信息业务实现代码
      *
@@ -147,6 +151,15 @@ public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
         return Result.build(null, ResultCodeEnum.UPDATE_ERROR);
     }
 
+    @Override
+    public Result insertElderlyByUid(Elderly elderly) {
+        elderly.setBalance(0.00);
+        int result = elderlyMapper.insert(elderly);
+        if (result > 0) {
+            return Result.ok(result);
+        }
+        return Result.build(null, ResultCodeEnum.INSERT_FAIL);
+    }
 
 
 }

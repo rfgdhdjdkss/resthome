@@ -13,8 +13,6 @@
             <el-card v-for="elder in filteredElders.notReserved" :key="elder.hid" class="elder-card"
                 @click="goToSignCheckInDetail(elder.eid)">
                 <div class="elder-info">
-                    <el-avatar :size="60" :src="elder.avatar" />
-
                     <div class="info-content">
                         <div class="name-age">
                             <span class="name">{{ elder.elderlyName }}</span>
@@ -30,10 +28,12 @@
                     </el-icon>
                 </div>
                 <div class="vital-signs">
-                    <div class="sign-item">
-                        <span class="label">家庭住址</span>
-                        <span class="value">{{ elder.elderlyAddress }}</span>
+                    <div class="sign-item" style="max-width: 100px;">
+                            <span class="label">家庭住址</span>
+                            <span class="value" style="font-size: 13px;">{{ elder.elderlyAddress }}</span>
+
                     </div>
+
                     <div class="sign-item">
                         <span class="label">预定人姓名</span>
                         <span class="value">{{ elder.bookerName }}</span>
@@ -48,7 +48,6 @@
             <h3>已签约老人</h3>
             <el-card v-for="elder in filteredElders.reserved" :key="elder.hid" class="elder-card" @click="showMessage">
                 <div class="elder-info">
-                    <el-avatar :size="60" :src="elder.avatar" />
                     <div class="info-content">
                         <div class="name-age">
                             <span class="name">{{ elder.elderlyName }}</span>
@@ -64,9 +63,10 @@
                     </el-icon>
                 </div>
                 <div class="vital-signs">
-                    <div class="sign-item">
+                    <div class="sign-item" style="max-width: 100px;">
+
                         <span class="label">家庭住址</span>
-                        <span class="value">{{ elder.elderlyAddress }}</span>
+                        <span class="value" style="font-size: 13px;">{{ elder.elderlyAddress }}</span>
                     </div>
                     <div class="sign-item">
                         <span class="label">预定人姓名</span>
@@ -253,7 +253,7 @@ onMounted(() => {
 
 .vital-signs {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     margin-top: 15px;
 }
 

@@ -6,8 +6,7 @@
     <div class="edit-profile-container">
 
         <div v-if="receiveAddressList">
-            <div class="address-item" v-for="item in receiveAddressList" 
-            @click="goBack(item.receiveAddressId)">
+            <div class="address-item" v-for="item in receiveAddressList" @click="goBack(item.receiveAddressId)">
                 <div class="name-phone-item">
                     <div class="receive-name">
                         {{ item.receiveName }}
@@ -115,6 +114,8 @@ onMounted(() => {
     color: #000;
     height: 55px;
     background-color: #f5f5f5;
+    border-bottom: 1px solid #ebeef5;
+
 }
 
 .back-arrow {

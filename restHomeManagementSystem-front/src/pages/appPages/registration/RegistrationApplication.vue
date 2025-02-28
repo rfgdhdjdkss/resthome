@@ -1,9 +1,10 @@
 <template>
-    <div class="edit-profile-container">
-        <div class="header">
-            <span class="back-arrow" @click="router.push('Mine_app')">←</span>
+    <div class="header">
+            <span class="back-arrow" @click="router.go(-1)">←</span>
             <h4>申请</h4>
         </div>
+    <div class="edit-profile-container">
+        
         <div class="profile-item">
             <div class="p-i" @click="gotoInRegistrationPage">
                 <span>来访登记申请</span>
@@ -70,22 +71,38 @@ const gotoMyApplicationPage = () => {
 
 <style scoped>
 .edit-profile-container {
-    background-color: #f5f5f5;
-    min-height: 100vh;
+    padding: 16px;
+  background-color: #f5f5f5;
+  min-height: 91vh;
+  padding-top: 70px;
 }
 
 .header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  z-index: 10;
+  color: #000;
+  height: 55px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ebeef5;
 }
 
 .back-arrow {
-    position: absolute;
-    left: 16px;
+  position: absolute;
+  left: 15px;
+  margin: 10px;
+  top: 10px;
 }
 
+.header h4 {
+  margin: 0;
+  font-size: 15px;
+}
 .profile-item {
     background-color: white;
     padding: 16px;

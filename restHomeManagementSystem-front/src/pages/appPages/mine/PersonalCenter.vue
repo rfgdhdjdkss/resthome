@@ -1,9 +1,10 @@
 <template>
+    <div class="header">
+        <span class="back-arrow" @click="router.push('Mine_app')">←</span>
+        <h4>编辑资料</h4>
+    </div>
     <div class="edit-profile-container">
-        <div class="header">
-            <span class="back-arrow" @click="router.push('Mine_app')">←</span>
-            <h4>编辑资料</h4>
-        </div>
+
         <div class="avatar-item" @click="editAvatar">
             <span>头像</span>
             <div class="item-container">
@@ -148,8 +149,8 @@ const confirmGender = async (updateSex) => {
         ElMessage.success('修改成功')
         showModifySex.value = false;
         showOverlay.value = false
-        sex.value=response.data.data
-        loginUser.sex=response.data.data
+        sex.value = response.data.data
+        loginUser.sex = response.data.data
     }
     else {
         ElMessage.error(response.data.message)
@@ -160,12 +161,12 @@ const editBirthday = () => {
 };
 
 const gotoShippingAddressListPage = () => {
-    router.push({name:'ShippingAddressList_app'})
+    router.push({ name: 'ShippingAddressList_app' })
 };
 const closeOverlay = () => {
     showOverlay.value = false;
     showModifyNickname.value = false
-    showModifySex.value=false
+    showModifySex.value = false
 }
 
 
@@ -196,20 +197,36 @@ const getActionUrl = () => {
 <style scoped>
 .edit-profile-container {
     padding: 16px;
-    background-color: #f5f5f5;
-    min-height: 100vh;
+  background-color: #f5f5f5;
+  min-height: 91vh;
+  padding-top: 70px;
 }
 
 .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    justify-content: center;
     display: flex;
     align-items: center;
-    justify-content: center;
-    position: relative;
+    z-index: 10;
+    color: #000;
+    height: 55px;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ebeef5;
 }
 
 .back-arrow {
     position: absolute;
-    left: 16px;
+    left: 15px;
+    margin: 10px;
+    top: 10px;
+}
+
+.header h4 {
+    margin: 0;
+    font-size: 15px;
 }
 
 .profile-item {

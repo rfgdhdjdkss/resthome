@@ -182,6 +182,11 @@ const router = createRouter({
                         name: 'ElderlyDocumentList_app',
                         meta: { title: '老人档案' },
                         component: () => import('../pages/appPages/home/elderlyDocument/ElderlyDocumentList.vue'),
+                    },{
+                        path: '/createNewDocument_app',
+                        name: 'CreateNewDocument_app',
+                        meta: { title: '新建老人档案' },
+                        component: () => import('../pages/appPages/home/elderlyDocument/CreateNewDocument.vue'),
                     },
 
                 ]

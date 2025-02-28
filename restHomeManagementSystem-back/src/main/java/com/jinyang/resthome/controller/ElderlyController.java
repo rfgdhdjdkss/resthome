@@ -159,6 +159,12 @@ public class ElderlyController {
         Result result= elderlyService.checkOutByEid(eid);
         return result;
     }
+    @PostMapping("/addElderlyByUid/{uid}")
+    public Result addElderlyByUid(@PathVariable("uid") Long uid, @RequestBody Elderly elderly) {
+        elderly.setUid(uid);
+        Result result= elderlyService.insertElderlyByUid(elderly);
+        return result;
+    }
 
 }
 

@@ -8,7 +8,8 @@
 
         </div>
         <h3>来访申请</h3>
-        <div v-for="application in effectiveVisitingApplications" class="application-card">
+        <div v-for="application in effectiveVisitingApplications" class="application-card"
+            v-if="effectiveVisitingApplications.length != 0">
             <div class="application-info">
                 <p><strong class="mar-right">老人姓名:</strong> {{ application.name }}</p>
                 <p><strong class="mar-right">联系电话:</strong> {{ application.phone }}</p>
@@ -23,11 +24,11 @@
                     </el-tag>
                 </p>
             </div>
-
         </div>
+        <div v-else style="color: #F56C6C; font-weight: 900;"><span>暂无来访申请</span></div>
         <div class="elder-cards">
             <h3>外出登记</h3>
-            <div v-for="application in effectiveOutgoingApplications" class="application-card">
+            <div v-for="application in effectiveOutgoingApplications" class="application-card" v-if="effectiveOutgoingApplications.length!=0">
                 <div class="application-info">
                     <p><strong class="mar-right">老人姓名:</strong> {{ application.name }}</p>
                     <p><strong class="mar-right">联系电话:</strong> {{ application.phone }}</p>
@@ -44,6 +45,8 @@
                     </p>
                 </div>
             </div>
+        <div v-else style="color: #F56C6C; font-weight: 900;"><span>暂无外出登记</span></div>
+
         </div>
     </div>
     <div class="footer-text">
@@ -160,6 +163,7 @@ onMounted(() => {
     background-position: center;
     background-repeat: no-repeat;
     min-height: 80vh;
+
 }
 
 

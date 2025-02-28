@@ -38,4 +38,5 @@ public interface ElderlyService extends IService<Elderly> {
     Result checkOutByEid(Long eid);
 
 
+    Result insertElderlyByUid(Elderly elderly);
 }

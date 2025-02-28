@@ -19,7 +19,7 @@
                     </div>
                     <div class="info-item">
                         <span class="label">年龄：</span>
-                        <span class="value">{{ elderInfo.elderlyAge }}岁</span>
+                        <span class="value">{{ calcAge(elderInfo.elderlyIdCard) }}岁</span>
                     </div>
                     <div class="info-item">
                         <span class="label">房间号：</span>
@@ -133,6 +133,26 @@ const viewMore = () => {
     healthRecordStore.setHealthRecords(healthRecords.value);
     router.push({ name: 'HealthRecordMore_app' })
 };
+//根据身份证计算年龄
+const calcAge = (idCard) => {
+  // 检查 idCard 是否为有效的字符串
+  if (typeof idCard !== 'string' || idCard.length !== 18) {
+    // 如果不是有效的身份证号，返回一个默认值，比如 0
+    return 0;
+  }
+  const birthYear = parseInt(idCard.slice(6, 10), 10);
+  const birthMonth = parseInt(idCard.slice(10, 12), 10);
+  const birthDay = parseInt(idCard.slice(12, 14), 10);
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
+  const currentDay = now.getDate();
+  let age = currentYear - birthYear;
+  if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
+    age--;
+  }
+  return age;
+}
 onMounted(() => {
     fetchData()
 })

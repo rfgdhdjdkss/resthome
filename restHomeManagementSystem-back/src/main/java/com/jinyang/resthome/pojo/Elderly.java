@@ -18,7 +18,7 @@ public class Elderly implements Serializable {
     /**
      * 老人信息唯一标识
      */
-    @TableId(value = "eid")
+    @TableId(value = "eid", type = IdType.AUTO)
     private Long eid;
 
     /**
@@ -117,6 +117,12 @@ public class Elderly implements Serializable {
     @TableField(value = "image")
     private String image;
 
+    /**
+     * 关系
+     */
+    @TableField(value = "relationship")
+    private String relationship;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
@@ -148,7 +154,8 @@ public class Elderly implements Serializable {
             && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
             && (this.getBedroom() == null ? other.getBedroom() == null : this.getBedroom().equals(other.getBedroom()))
             && (this.getRoomType() == null ? other.getRoomType() == null : this.getRoomType().equals(other.getRoomType()))
-            && (this.getImage() == null ? other.getImage() == null : this.getImage().equals(other.getImage()));
+            && (this.getImage() == null ? other.getImage() == null : this.getImage().equals(other.getImage()))
+            && (this.getRelationship() == null ? other.getRelationship() == null : this.getRelationship().equals(other.getRelationship()));
     }
 
     @Override
@@ -172,6 +179,7 @@ public class Elderly implements Serializable {
         result = prime * result + ((getBedroom() == null) ? 0 : getBedroom().hashCode());
         result = prime * result + ((getRoomType() == null) ? 0 : getRoomType().hashCode());
         result = prime * result + ((getImage() == null) ? 0 : getImage().hashCode());
+        result = prime * result + ((getRelationship() == null) ? 0 : getRelationship().hashCode());
         return result;
     }
 
@@ -198,6 +206,7 @@ public class Elderly implements Serializable {
         sb.append(", bedroom=").append(bedroom);
         sb.append(", roomType=").append(roomType);
         sb.append(", image=").append(image);
+        sb.append(", relationship=").append(relationship);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
