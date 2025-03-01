@@ -188,6 +188,12 @@ const router = createRouter({
                         meta: { title: '新建老人档案' },
                         component: () => import('../pages/appPages/home/elderlyDocument/CreateNewDocument.vue'),
                     },
+                    {
+                        path: '/testPay',
+                        name: 'testPay',
+                        meta: { title: '新建老人档案' },
+                        component: () => import('../pages/appPages/testPay.vue'),
+                    },
 
                 ]
         },

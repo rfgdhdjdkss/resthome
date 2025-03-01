@@ -112,6 +112,11 @@
             <artifactId>hutool-core</artifactId>
             <version>5.8.28</version>
         </dependency>
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>4.40.64.ALL</version>
+        </dependency>
 
 
     </dependencies>

@@ -27,7 +27,7 @@
             </i>
             <p :style="{ color: selectedMenu === 'health' ? '#00bfa5' : '#000' }">健康</p>
         </div>
-        <div class="menu-item" :class="{ active: selectedMenu === 'order' }" @click="selectMenu('order')">
+        <div class="menu-item" :class="{ active: selectedMenu === 'order' }" @click="selectMenu('order');router.push({name:'FoodsList_app'})">
             <i class="iconfont icon-community">
                 <svg t="1739000886351" class="icon" viewBox="0 0 1024 1024" version="1.1"
                     xmlns="http://www.w3.org/2000/svg" p-id="9184" width="35" height="25">

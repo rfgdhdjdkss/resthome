@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: restHomeManagementSystem-back
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/resthome?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 12345678
+server:
+  port: 8999
+alipay:
+  app-id: 9021000145618651          # ????? APPID
+  merchant-private-key: "MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCL8O5aqb9f4K7m9tFtX98xtGMQTYZa/0bBifuBe7jxlPnvDOjlg5LzZMVUbwxIyJXOvp2k+l4NZVIkD543qFeJJw7QITvKsL3Ty0pdDYclTBp6OUCGJ3MpQOBR6gcmDgYTtKSwAqHiklV17u648/xQeiUr8tjmKCO+io/sNJ45Yl+k+PkMNX+HPs1F3s9FI3q6cjtm+JtfOFCIvdVXiLuvT4J7/QWi3ZJ/8IIBwI5rd9wi6D0f14ZMbZ8kGRZ/sdbtmZpR0fxHZmR9R0BoW4kJHJihJQJ29yYnBq2pyHDlUJr5JTL43kdL2CKbChcQqJ+u0sjiYlA7ZpvupRO5Jh5NAgMBAAECggEAVK1tDR851eI28zrWbsBcZc8pQmwmqFlfjyzXKvqaZlQnCCdfpcF/4hdP8E9ht4joXTmqWnHFB4YPthJdQoByt2MS642wiG157/ZLARN2e3MZcmvCR2sHnCbNlcNun/BMbRAZtwdgvaCeZcY2XWQFgQzoATfpVxtixaFChUMxmrasvU0ZPBdDQiD93D0DpJ3ZkXWtwIpit9ZEzwJGstZRfUNPo7J3PfVmqH3dk5NEM86mm8amUijE2avhk+a8Eo7uBjq3gRUaW7GQkwFk80VgE4JfzX86Dj1yw2GLinE2+laPLF4hQ/9aMnICUMOqpRinin8pWZ0nioaBKlJjdU9rAQKBgQDZM9plgyZvhXBq4GLbDJ9d9BJ5doB5bK9jajeBDBkqFqFBr7yeHHYqzxqNXDyf18rlHLYMZSbuZmVz8fj6g6UDzcJecn8DwJmLeJQ7aIPhZnV5hKHOmY5yQHD/XX3oQ/bOYYdLKevZkFzJBw+xkToKDI+DtbrhpzEL7MZf7cpM2QKBgQCk8Bm7ML6AeqBEJp1eVsUXqqVhA8iFgMGnNezoyksHRTFYj4ElrQ4vkTNKAUgT6+rEcuy3J1re14PjGhvf6gHE45E4E+t0KFFWy0IgL4vsQ8RHcj+AATObKGc1RSIwwrqSD4ASCiCO+sU40VgpBH9j+8U70mPFSqECma5GQlQElQKBgQCDbzdXeleF4K+4XPQ1LZw6lHmheq4fzD8N37aapqGLsIoAX8G5w+tV2GFu7UPaThD/N7KKKaO3W8tEsEZEAemXNanK0Wo+8Qt5NIwurv4vJXss/6+Sf6WNSaWXQhHwvT/af3YJa+LGku8yzs0WXJVMg3FM+GmQJ0YsuykH37MtcQKBgQCHdvOLPLOZzh1HG/fv/ZAOqgb+MR9GFsP2U2HqqAsLQ5cNx38otIOMKdNYGslaI09EXadxng8SKyuVIGJ4ezdMwCMLTcD6PAriIDqFOMfRGq9ghsMEnPgHnR13MPqt1aFqSPTE3DB1fhzxV27y8VC3i5coVNnAtlSbUCFEb0GWKQKBgQCrM9xU6kpYn9r0Vd3UbPsAVWlT6yIgCCgGt0dXcMqzIjBAuI2G5iQeYhZ4PjT1KfDVynfTDavkXhaK/5u+hpEOmchfMLoxL+Q3i64kkTOPBYMfmD53UR7Tz9ebbZe1wlcC/BZmUbjnO62QL/NmrsztONq7yhGfMaBy3/g+uOXnBg=="  # ????????????
+  alipay-public-key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAi/DuWqm/X+Cu5vbRbV/fMbRjEE2GWv9GwYn7gXu48ZT57wzo5YOS82TFVG8MSMiVzr6dpPpeDWVSJA+eN6hXiScO0CE7yrC908tKXQ2HJUwaejlAhidzKUDgUeoHJg4GE7SksAKh4pJVde7uuPP8UHolK/LY5igjvoqP7DSeOWJfpPj5DDV/hz7NRd7PRSN6unI7ZvibXzhQiL3VV4i7r0+Ce/0Fot2Sf/CCAcCOa3fcIug9H9eGTG2fJBkWf7HW7ZmaUdH8R2ZkfUdAaFuJCRyYoSUCdvcmJwatqchw5VCa+SUy+N5HS9gimwoXEKifrtLI4mJQO2ab7qUTuSYeTQIDAQAB"    # ?????
+  notify-url: https://f2ae-117-147-107-104.ngrok-free.app/alipay/notify     # ??????
+  return-url: https://f2ae-117-147-107-104.ngrok-free.app/alipay/return
