@@ -73,7 +73,7 @@
             <h2>订单详情</h2>
             <div class="underline"></div>
             <div class="order-items">
-                <div class="order-item">
+                <div class="order-item" @click="router.push({name:'MyOrder_app',query:{tab:'all'}})">
                     <div class="icon-circle">
                         <svg t="1739003791287" class="icon" viewBox="0 0 1024 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="21499" width="20" height="20">
@@ -84,7 +84,8 @@
                     </div>
                     <span>我的订单</span>
                 </div>
-                <div class="order-item">
+                <div class="order-item" @click="router.push({name:'MyOrder_app',query:{tab:'pending'}})">
+
                     <div class="icon-circle">
                         <svg t="1739006235936" class="icon" viewBox="0 0 1024 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="27033" width="20" height="20">
@@ -101,7 +102,7 @@
                     </div>
                     <span>待付款</span>
                 </div>
-                <div class="order-item">
+                <div class="order-item" @click="router.push({name:'MyOrder_app',query:{tab:'cancelled'}})">
                     <div class="icon-circle">
                         <svg t="1739006434046" class="icon" viewBox="0 0 1024 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="28184" width="20" height="20">
@@ -110,9 +111,9 @@
                                 fill="#000000" p-id="28185"></path>
                         </svg>
                     </div>
-                    <span>待使用</span>
+                    <span>已取消</span>
                 </div>
-                <div class="order-item">
+                <div class="order-item" @click="router.push({name:'MyOrder_app',query:{tab:'evaluation'}})">
                     <div class="icon-circle">
                         <svg t="1739006531033" class="icon" viewBox="0 0 1024 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="29281" width="20" height="20">
@@ -132,7 +133,7 @@
                     </div>
                     <span>待评价</span>
                 </div>
-                <div class="order-item">
+                <div class="order-item" @click="router.push({name:'MyOrder_app',query:{tab:'sales'}})">
                     <div class="icon-circle">
                         <svg t="1739006574314" class="icon" viewBox="0 0 1024 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="32167" width="20" height="20">

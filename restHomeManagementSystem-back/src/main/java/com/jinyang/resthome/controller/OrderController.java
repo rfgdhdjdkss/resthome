@@ -4,13 +4,11 @@ import com.jinyang.resthome.common.Result;
 import com.jinyang.resthome.pojo.GoodsOrder;
 import com.jinyang.resthome.pojo.Orders;
 import com.jinyang.resthome.pojo.dto.OrderRequest;
+import com.jinyang.resthome.pojo.dto.UpdateOrderStatusRequest;
 import com.jinyang.resthome.service.OrderService;
 import com.jinyang.resthome.util.OrderNumberGeneratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -34,13 +32,30 @@ public class OrderController {
     public Result addOrder(@RequestBody OrderRequest request) {
         System.out.println(request);
         Orders order = new Orders();
-        Date date = new Date();
-        order.setCreateTime(LocalDateTime.now());
-        order.setOrderNumber(OrderNumberGeneratorUtils.generateOrderNumber(order.getCreateTime(), order.getUid()));
+        Date createTime = new Date();
+        order.setCreateTime(createTime);
+        order.setOrderNumber(OrderNumberGeneratorUtils.generateOrderNumber(order.getCreateTime(), request.getUid()));
         order.setUid(request.getUid());
         order.setOrderStatus("pending");
         List<GoodsOrder> goodsOrders = request.getGoodsOrders();
         Result result = orderService.insertOrder(order, goodsOrders);
-        return null;
+        return result;
+    }
+
+    @GetMapping("/getOrderInfoByOid/{oid}")
+    public Result getOrderInfoByOid(@PathVariable("oid") Long oid) {
+        Result result = orderService.selectOrderByOid(oid);
+        return result;
+    }
+
+    @PutMapping("/updateOrderStatus/{oid}")
+    public Result updateOrderStatus(@PathVariable Long oid, @RequestBody UpdateOrderStatusRequest request) {
+        Result result = orderService.updateOrderStatusByOid(oid, request.getOrderStatus());
+        return result;
+    }
+    @GetMapping("/getOrdersByUid/{uid}")
+    public Result getOrdersByUid(@PathVariable("uid") Long uid) {
+        Result result= orderService.selectOrdersListByUid(uid);
+        return result;
     }
 }

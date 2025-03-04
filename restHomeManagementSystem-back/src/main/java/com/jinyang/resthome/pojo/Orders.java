@@ -32,7 +32,7 @@ public class Orders implements Serializable {
      * 订单创建时间
      */
     @TableField(value = "createTime")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      * 订单号

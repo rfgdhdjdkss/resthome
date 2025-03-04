@@ -28,4 +28,5 @@ public interface CartService extends IService<Cart> {
 
     Result selectGoodsListByGidList(List<Long> gidList, Long uid);
 
+    Result deleteCartByGidList(List<Long> gidList, Long uid);
 }

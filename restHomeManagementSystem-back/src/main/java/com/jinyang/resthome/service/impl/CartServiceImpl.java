@@ -167,6 +167,19 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart>
         }
         return Result.ok(result);
     }
+
+    @Override
+    public Result deleteCartByGidList(List<Long> gidList, Long uid) {
+        QueryWrapper<Cart> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("uid", uid);
+        queryWrapper.in("gid", gidList);
+        int deletedCount = cartMapper.delete(queryWrapper);
+        if (deletedCount > 0) {
+            return Result.ok("删除成功，共删除 " + deletedCount + " 条记录");
+        } else {
+            return Result.build(null, ResultCodeEnum.DELETE_ERROR);
+        }
+    }
 }
 
 

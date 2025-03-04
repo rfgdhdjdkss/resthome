@@ -21,7 +21,7 @@
     </div>
     <div>
       <button class="new-address-button" @click="gotoCreateNewDocumentPage">
-        新增收货地址</button>
+        新增老人档案</button>
     </div>
   </div>
 </template>

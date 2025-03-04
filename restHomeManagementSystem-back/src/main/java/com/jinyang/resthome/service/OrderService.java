@@ -16,4 +16,10 @@ import java.util.List;
 public interface OrderService extends IService<Orders> {
 
     Result insertOrder(Orders order, List<GoodsOrder> goodsOrders);
+
+    Result selectOrderByOid(Long oid);
+
+    Result updateOrderStatusByOid(Long oid, String orderStatus);
+
+    Result selectOrdersListByUid(Long uid);
 }

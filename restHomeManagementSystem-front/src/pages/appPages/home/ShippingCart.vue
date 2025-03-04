@@ -9,8 +9,7 @@
             <span>完成</span>
         </div>
     </div>
-    <div v-if="cartInfoLength != 0">
-
+    <div v-if="cartInfo">
         <div class="shipping-cart-page">
             <div class="container" style="margin-top: 50px;">
                 <div class="goods-item" v-for="item in cartInfo">
@@ -68,8 +67,10 @@ import axios from '@/api/request';
 import { definedUser } from '@/stores';
 import { computed, onMounted, ref } from 'vue';
 import { ElMessage } from 'element-plus';
+
 let router = useRouter()
 let loginUser = definedUser()
+
 interface CartInfo {
     uid: number,
     gid: number,
@@ -79,11 +80,19 @@ interface CartInfo {
     price: number,
     checked: boolean
 }
+
 const cartInfo = ref<CartInfo[]>([])
+const isLoading = ref(true) // 添加加载状态
 
 const fetchCartInfo = async () => {
-    const response = await axios.get(`/cart/getCartInfoByUid/${loginUser.uid}`)
-    cartInfo.value = response.data.data
+    try {
+        const response = await axios.get(`/cart/getCartInfoByUid/${loginUser.uid}`)
+        cartInfo.value = response.data.data
+    } catch (error) {
+        console.error('获取购物车信息失败:', error)
+    } finally {
+        isLoading.value = false // 加载完成
+    }
 }
 
 // 计算选中的商品数量
@@ -110,6 +119,7 @@ const isAllChecked = computed({
         cartInfo.value.forEach(item => item.checked = value);
     }
 });
+
 const addGoodsQuantity = async (goods) => {
     const response = await axios.put('/cart/addGoodsQuantity', {
         gid: goods.gid,
@@ -117,6 +127,7 @@ const addGoodsQuantity = async (goods) => {
     })
     goods.quantity += 1
 }
+
 const minusGoodsQuantity = async (goods) => {
     const response = await axios.put('/cart/minusGoodsQuantity', {
         gid: goods.gid,
@@ -124,10 +135,13 @@ const minusGoodsQuantity = async (goods) => {
     })
     goods.quantity -= 1
 }
+
 const ifedit = ref(false)
+
 const showEdit = () => {
     ifedit.value = true
 }
+
 const closeEdit = () => {
     ifedit.value = false
 }
@@ -151,28 +165,31 @@ const deleteGoods = async () => {
             ElMessage.success('删除成功')
             cartInfo.value = cartInfo.value.filter(item => !selectedGids.includes(item.gid));
             ifedit.value = false
+            fetchCartInfo()
         }
 
     } catch (error) {
         console.error('删除失败:', error);
     }
 };
-const cartInfoLength = computed(() => {
-    return cartInfo.value.length
-})
+
+
 const goToSubmitOrder = () => {
     // 跳转到提交订单页面，并传递 gidList
     const selectedGids = cartInfo.value.filter(item => item.checked).map(item => item.gid);
-    const quantityList = cartInfo.value.filter(item => item.checked).map(item => item.quantity);
     console.log(selectedGids);
-
-    router.push({
-        name: 'SubmitOrder_app',
-        query: {
-            gidList: JSON.stringify(selectedGids),
-        }
-    });
+    if (selectedGids != '') {
+        router.push({
+            name: 'SubmitOrder_app',
+            query: {
+                gidList: JSON.stringify(selectedGids),
+            }
+        });
+    } else {
+        ElMessage.warning('请选择商品后结算')
+    }
 };
+
 onMounted(() => {
     fetchCartInfo()
 })

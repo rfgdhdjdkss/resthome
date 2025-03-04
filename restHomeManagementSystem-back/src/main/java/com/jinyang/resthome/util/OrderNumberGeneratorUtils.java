@@ -23,14 +23,14 @@ public class OrderNumberGeneratorUtils {
      * @param uid 用户 ID
      * @return 生成的订单号
      */
-    public static String generateOrderNumber(LocalDateTime time, Long uid) {
+    public static String generateOrderNumber(Date time, Long uid) {
         // 获取当前时间并格式化
-        String dateTimeStr = time.format(DATE_FORMAT);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String datePart = sdf.format(time);
 
         // 生成三位随机整数
         int randomNum = RANDOM.nextInt(900) + 100;
-
         // 组合订单号
-        return dateTimeStr  + uid + randomNum;
+        return datePart + uid + randomNum;
     }
 }

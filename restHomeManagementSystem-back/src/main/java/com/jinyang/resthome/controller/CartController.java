@@ -103,4 +103,11 @@ public class CartController {
         Result result = cartService.selectGoodsListByGidList(request.getGidList(), request.getUid());
         return result;
     }
+
+    @DeleteMapping("/deleteCartGoodsByGidList")
+    public Result deleteCartGoodsByGidList(@RequestBody GetGoodsInfoByGidListRequest request) {
+        System.out.println(request.toString());
+        Result result = cartService.deleteCartByGidList(request.getGidList(), request.getUid());
+        return result;
+    }
 }

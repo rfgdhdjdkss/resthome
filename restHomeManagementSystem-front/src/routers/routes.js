@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { useRouterStore } from '../stores/routerStore';
 const router = createRouter({
     history: createWebHashHistory(),
     routes: [
@@ -137,7 +138,7 @@ const router = createRouter({
                     }, {
                         path: '/shippingCart_app',
                         name: 'ShippingCart_app',
-                        meta: { title: '编辑收货地址' },
+                        meta: { title: '购物车' },
                         component: () => import('../pages/appPages/home/ShippingCart.vue'),
                     },
                     {
@@ -182,7 +183,7 @@ const router = createRouter({
                         name: 'ElderlyDocumentList_app',
                         meta: { title: '老人档案' },
                         component: () => import('../pages/appPages/home/elderlyDocument/ElderlyDocumentList.vue'),
-                    },{
+                    }, {
                         path: '/createNewDocument_app',
                         name: 'CreateNewDocument_app',
                         meta: { title: '新建老人档案' },
@@ -191,9 +192,26 @@ const router = createRouter({
                     {
                         path: '/testPay',
                         name: 'testPay',
-                        meta: { title: '新建老人档案' },
+                        meta: { title: '测试支付' },
                         component: () => import('../pages/appPages/testPay.vue'),
+                    }, {
+                        path: '/payment-success',
+                        name: 'PaymentSuccess',
+                        meta: { title: '支付成功' },
+                        component: () => import('../pages/appPages/PaymentSuccess.vue'),
                     },
+                    {
+                        path: '/pay_app/:oid',
+                        name: 'Pay_app',
+                        meta: { title: '支付订单' },
+                        component: () => import('../pages/appPages/order/Pay.vue'),
+                    },
+                    {
+                        path: '/myOrder_app',
+                        name: 'MyOrder_app',
+                        meta: { title: '我的订单' },
+                        component: () => import('../pages/appPages/order/MyOrder.vue'),
+                    }
 
                 ]
         },
@@ -461,6 +479,9 @@ const router = createRouter({
         }
     ]
 })
-
+router.beforeEach((to, from) => {
+    const routerStore = useRouterStore();
+    routerStore.setFromRoute(from); // 存储来源路由
+});
 // 对外暴露路由对象
 export default router;

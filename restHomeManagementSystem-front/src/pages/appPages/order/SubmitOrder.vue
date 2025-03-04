@@ -22,6 +22,7 @@
                 <span>点击添加收货地址</span>
             </div>
         </div>
+
         <div class="have-address" v-else @click="gotoShippingAddressListPage">
             <i>
                 <svg t="1740553270934" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -49,7 +50,8 @@
                     <el-tag type="success" effect="dark"> {{ addressInfo[selectedAddressid].receiveTag }}
                     </el-tag>
                 </div>
-
+                <div>
+                </div>
             </div>
             <div style="padding-left: 80px;">
                 <el-icon>
@@ -57,6 +59,7 @@
                 </el-icon>
             </div>
         </div>
+
         <div class="goods" v-for="(item, index) in cartInfo" :key="item.gid">
             <div class="goods-item">
                 <div class="goods-image">
@@ -95,6 +98,7 @@
             </div>
         </div>
     </div>
+
     <div class="cart">
         <div class="cart-price">
             <div style="display: flex; align-items: center; justify-content: center; gap: 20px;">
@@ -113,106 +117,182 @@
         </div>
     </div>
 </template>
+
 <script lang="ts" setup>
 import axios from '@/api/request';
-import { ArrowRight, Plus } from '@element-plus/icons-vue'
-
-import { onMounted, ref, computed } from 'vue'
+import { ArrowRight, Plus } from '@element-plus/icons-vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { definedUser } from '@/stores';
-let route = useRoute()
-//路由传参---商品id数组
-const gidList = JSON.parse(route.query.gidList)
+import { useRouterStore } from '@/stores/routerStore';
+const routerStore = useRouterStore();
 
-let loginUser = definedUser()
-let router = useRouter()
+const route = useRoute();
+const gidList = JSON.parse(route.query.gidList as string);
+
+let loginUser = definedUser();
+let router = useRouter();
+
 interface CartInfo {
-    uid: number,
-    gid: number,
-    image: string,
-    title: string,
-    quantity: string,
-    price: number,
-    checked: boolean
+    uid: number;
+    gid: number;
+    image: string;
+    title: string;
+    quantity: string;
+    price: number;
+    checked: boolean;
 }
-const cartInfo = ref<CartInfo[]>([])
+
+const cartInfo = ref<CartInfo[]>([]);
+const addressInfo = ref();
+const selectedAddressid = 0;
+const goodsOrders = ref([]);
+const subMitOid = ref();
+
 const fetchOrderInfo = async () => {
     const response = await axios.post("/cart/getGoodsInfoByGidList", {
         gidList: gidList,
         uid: loginUser.uid
-    })
-    cartInfo.value = response.data.data
-}
+    });
+    cartInfo.value = response.data.data;
+};
+
+const fetchGoods = async () => {
+    const singleGid = gidList[0];
+    const response = await axios.get(`/goods/getGoodsDetailByGid/${singleGid}`);
+    const data = response.data.data;
+    const newItem: CartInfo = {
+        uid: loginUser.uid,
+        gid: data.gid,
+        image: data.image,
+        title: data.title,
+        quantity: '1',
+        price: data.price,
+        checked: false
+    };
+    cartInfo.value = [newItem];
+};
+
 const totalPrice = computed(() => {
     return cartInfo.value.reduce((sum, item) => {
-        return sum + item.price * item.quantity;
+        return sum + item.price * parseInt(item.quantity);
     }, 0);
 });
-const addressInfo = ref()
-const fetchAddressInfo = async () => {
-    const response = await axios.get(`/receiveAddress/getReceiveAddressList/${loginUser.uid}`)
-    addressInfo.value = response.data.data
-    console.log(addressInfo.value);
 
-}
-const selectedAddressid = 0
+const fetchAddressInfo = async () => {
+    const response = await axios.get(`/receiveAddress/getReceiveAddressList/${loginUser.uid}`);
+    addressInfo.value = response.data.data;
+};
+
 const gotoShippingAddressListPage = () => {
-    router.push({ name: 'SelectShippingAddressList_app' })
+    
+    localStorage.setItem("orderInfo", JSON.stringify(cartInfo.value))
+    router.push({ name: 'SelectShippingAddressList_app' });
+};
+const fromRoute = routerStore.fromRoute.name;
+
+const fetchOrderInfoByLocalStorage = () => {
+    if (localStorage.getItem('orderInfo')) {
+        cartInfo.value = JSON.parse(localStorage.getItem('orderInfo'))
+    } else if (fromRoute === 'ShippingCart_app') {
+        fetchOrderInfo();
+    } else if (fromRoute === 'GoodsDetail_app') {
+        fetchGoods();
+    }
 }
-// 修改默认地址后重新获取地址信息
 const fetchAddressInfoByLocalStorage = async () => {
     if (localStorage.getItem('receiveAddressId')) {
-        const raid = localStorage.getItem('receiveAddressId')
-        const response = await axios.get(`/receiveAddress/getReceiveAddressListByRaid/${raid}`)
-        addressInfo.value = response.data.data
+        const raid = localStorage.getItem('receiveAddressId');
+        const response = await axios.get(`/receiveAddress/getReceiveAddressListByRaid/${raid}`);
+        addressInfo.value = response.data.data;
+    } else {
+        fetchAddressInfo();
     }
-    else {
-        fetchAddressInfo()
-    }
-}
+};
 
-//商品数量+1
 const addGoodsQuantity = async (goods) => {
-    const response = await axios.put('/cart/addGoodsQuantity', {
-        gid: goods.gid,
-        uid: goods.uid
-    })
-    goods.quantity += 1
-}
-//商品数量-1
+    if (routerStore.fromRoute.name === 'GoodsDetail_app') {
+        goods.quantity = (parseInt(goods.quantity) + 1).toString();
+    } else {
+        const response = await axios.put('/cart/addGoodsQuantity', {
+            gid: goods.gid,
+            uid: goods.uid
+        });
+        goods.quantity = (parseInt(goods.quantity) + 1).toString();
+    }
+};
+
 const minusGoodsQuantity = async (goods) => {
-    const response = await axios.put('/cart/minusGoodsQuantity', {
-        gid: goods.gid,
-        uid: goods.uid
-    })
-    goods.quantity -= 1
-}
-// 提取gid和quantity组成goodsOrders
-const goodsOrders = ref([]);
+    if (routerStore.fromRoute.name === 'GoodsDetail_app') {
+        if (parseInt(goods.quantity) > 1) {
+            goods.quantity = (parseInt(goods.quantity) - 1).toString();
+        }
+    } else {
+        const response = await axios.put('/cart/minusGoodsQuantity', {
+            gid: goods.gid,
+            uid: goods.uid
+        });
+        if (parseInt(goods.quantity) > 1) {
+            goods.quantity = (parseInt(goods.quantity) - 1).toString();
+        }
+    }
+};
 
-//提交订单
+const deleteCartGoods = async () => {
+    const response = await axios.delete("/cart/deleteCartGoodsByGidList", {
+        data: {
+            gidList: gidList,
+            uid: loginUser.uid
+        }
+    });
+    console.log(response);
+};
+
 const submitOrder = async () => {
-
     cartInfo.value.forEach(item => {
         goodsOrders.value.push({
             gid: item.gid,
             quantity: parseInt(item.quantity)
         });
-        console.log(goodsOrders.value);
-
     });
-    axios.post("/order/addOrder",
-        {
-            uid: loginUser.uid,
-            goodsOrders: goodsOrders.value
+    const response = await axios.post("/order/addOrder", {
+        uid: loginUser.uid,
+        goodsOrders: goodsOrders.value
+    });
+    if (response.data.code == 200) {
+        subMitOid.value = response.data.data;
+        deleteCartGoods();
+        router.push({
+            name: 'Pay_app',
+            params: { oid: subMitOid.value }
+        });
+    }
+};
 
-        })
-}
+
+watch(
+    () => route.query.refreshCartInfo, // 监听 refreshCartInfo 参数
+    (newValue) => {
+        if (newValue === 'true') {
+            const fromRoute = routerStore.fromRoute.name;
+            if (fromRoute === 'ShippingCart_app') {
+                fetchOrderInfo();
+            } else if (fromRoute === 'GoodsDetail_app') {
+                fetchGoods();
+            }
+            // 清除标志，避免重复触发
+            router.replace({ query: {} });
+        }
+    }
+);
+
 onMounted(() => {
-    fetchOrderInfo()
-    fetchAddressInfoByLocalStorage()
-})
+    fetchOrderInfoByLocalStorage()
+    localStorage.removeItem('orderInfo')
+    fetchAddressInfoByLocalStorage();
+});
 </script>
+
 <style scoped>
 .header {
     position: fixed;

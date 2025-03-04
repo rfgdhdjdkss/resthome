@@ -58,7 +58,7 @@ _axios.interceptors.response.use((response) => {
                 });
                 localStorage.removeItem('token');
                 loginUser.$reset();
-                router.push({ name: 'Login' });
+                router.push({ name: 'Login_app' });
                 // 将标志变量置为true，表示已经显示过登录失效提示信息了
                 hasShownLoginExpiredMessage = true;
             }
