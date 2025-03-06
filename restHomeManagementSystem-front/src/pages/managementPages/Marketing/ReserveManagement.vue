@@ -1,5 +1,8 @@
 <!-- 员工管理 -->
 <template>
+    <Header-web></Header-web>
+    <Menu-web></Menu-web>
+    <Footer-web></Footer-web>
     <div id="box">
         <div>
             <el-table :data="filterTableData" style="width: 100%" size="large">
@@ -97,7 +100,7 @@
 
 <script lang="ts" setup>
 
-import axios from '../../api/request.js';
+import axios from '@/api/request.js';
 
 import { computed, ref, onMounted, reactive, watch } from 'vue'
 import { ArrowDownBold, ArrowLeftBold, ArrowRightBold, InfoFilled, User } from '@element-plus/icons-vue'
@@ -231,7 +234,7 @@ function processTableData(data: RuleForm[], filters: any, formatters: any): Rule
     data = data.map(item => {
         const formatElderlySex = item.elderlySex === 'male' ? '男' : '女'
         const formatIsHealth = item.isHealth === 'healthy' ? '健康' : '有疾病史或有其他健康问题'
-        const formattedBookerTime = item.bookerTime.slice(0, 10);
+        const formattedBookerTime = convertTimestamp(item.bookerTime);
         const formattedIsVoluntaryOccupancy = item.isVoluntaryOccupancy === 1 ? '自愿' : '非自愿'
         return {
             ...item,
@@ -298,7 +301,18 @@ watch(search, (newVal, oldVal) => {
         searchTableData(newVal)
     }
 })
+const convertTimestamp = (timeStamp) => {
+    const date = new Date(parseInt(timeStamp));
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
 
+   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+   
+};
 
 //挂载时，第一次向服务器请求所有用户信息
 onMounted(() => {
@@ -311,6 +325,18 @@ onMounted(() => {
 <style>
 #box {
     background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    width: 82%;
+    height: auto;
+    float: right;
+    position: relative;
+    top: 80px;
+    margin-right: 10px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
 }
 
 #pageChangeDiv {

@@ -120,7 +120,6 @@ const paymentMethods = ref([
 const selectPaymentMethod = (method) => {
     paymentMethod.value = method;
 };
-
 // 确认支付的方法
 const confirmPayment = async () => {
     if (paymentMethod.value === 'alipay') {
@@ -132,8 +131,9 @@ const confirmPayment = async () => {
             const subject = `${loginUser.nickname}的订单`;
             const htmlData = await createAlipayPayment(orderId, amount, subject);
             submitAlipayForm(htmlData);
-            updateOrderStatus('finished');
-        
+            // 这里先不更新订单状态，等待支付宝回调
+            // updateOrderStatus('finished');
+
         } catch (error) {
             console.error('支付失败:', error);
         }
@@ -168,6 +168,7 @@ const updateOrderStatus = async (status) => {
 onUnmounted(() => {
     clearInterval(timerId);
 });
+
 </script>
 
 <style scoped>

@@ -1,4 +1,7 @@
 <template>
+    <Header-web></Header-web>
+    <Menu-web></Menu-web>
+    <Footer-web></Footer-web>
     <div id="box">
         <el-table :data="tableData" style="width: 100%" size="large">
             <el-table-column label="老人姓名" prop="elderlyName" />
@@ -35,9 +38,9 @@ import { computed, ref, onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router';
 let router = useRouter()
 
-import axios from '../../api/request.js';
+import axios from '@/api/request.js';
 
-import { definedUser } from '../../stores/index.js';
+import { definedUser } from '@/stores/index.js';
 import { InfoFilled } from '@element-plus/icons-vue'
 
 let loginUser = definedUser()
@@ -106,3 +109,20 @@ onMounted(() => {
 })
 
 </script>
+<style>
+#box{
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    width: 82%;
+    height: auto;
+    float: right;
+    position: relative;
+    top: 80px;
+    margin-right: 10px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+}
+</style>

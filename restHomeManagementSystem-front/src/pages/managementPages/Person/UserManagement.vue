@@ -1,5 +1,8 @@
 <!-- 员工管理 -->
 <template>
+    <Header-web></Header-web>
+    <Menu-web></Menu-web>
+    <Footer-web></Footer-web>
     <div id="box">
         <div>
             <el-table :data="filterTableData" style="width: 100%" size="large">
@@ -129,7 +132,7 @@
 </template>
 
 <script lang="ts" setup>
-import axios from '../../api/request.js';
+import axios from '@/api/request.js';
 
 import { computed, ref, onMounted, reactive, watch } from 'vue'
 import { ArrowDownBold, ArrowLeftBold, ArrowRightBold, InfoFilled, User } from '@element-plus/icons-vue'

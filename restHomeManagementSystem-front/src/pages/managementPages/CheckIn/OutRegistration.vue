@@ -52,9 +52,9 @@
 import { reactive, ref } from 'vue'
 import type { ComponentSize, FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
-import { definedUser } from '../../stores/index.js';
+import { definedUser } from '@/stores/index.js';
 
-import axios from '../../api/request.js';
+import axios from '@/api/request.js';
 let loginUser = definedUser()
 
 //RuleForm接口，定义一个预定的所有属性

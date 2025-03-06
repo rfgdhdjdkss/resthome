@@ -12,4 +12,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface GoodscommentService extends IService<Goodscomment> {
 
     Result selectAllComment(Long gid);
+
+    Result addGoodsComment(Long uid, Long gid, String content);
 }

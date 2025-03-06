@@ -1,4 +1,7 @@
 <template>
+  <Header-web></Header-web>
+    <Menu-web></Menu-web>
+    <Footer-web></Footer-web>
   <div id="box">
     <el-table :data="tableData" style="width: 100%" size="large">
       <el-table-column label="老人姓名" prop="elderlyName" />
@@ -87,11 +90,11 @@
 </template>
 
 <script lang="ts" setup>
-import axios from '../../api/request.js';
+import axios from '@/api/request.js';
 
 import { computed, ref, onMounted, reactive, watch, } from 'vue'
 import { ArrowDownBold, ArrowLeftBold, ArrowRightBold, InfoFilled, User } from '@element-plus/icons-vue'
-import { definedUser } from '../../stores/index.js';
+import { definedUser } from '@/stores/index.js';
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router';
 let router = useRouter();
@@ -295,10 +298,19 @@ onMounted(() => {
 </script>
 <style scoped>
 #box {
-  background-color: white;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+  background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    width: 82%;
+    height: auto;
+    float: right;
+    position: relative;
+    top: 80px;
+    margin-right: 10px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
 }
 
 #pageChangeDiv {

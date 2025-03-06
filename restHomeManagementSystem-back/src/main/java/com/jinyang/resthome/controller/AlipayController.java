@@ -4,6 +4,11 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeWapPayResponse;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.jinyang.resthome.mapper.OrdersMapper;
+import com.jinyang.resthome.pojo.Orders;
+import com.jinyang.resthome.pojo.dto.UpdateOrderStatusRequest;
+import com.jinyang.resthome.service.OrderService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
@@ -26,10 +31,6 @@ import com.alipay.api.AlipayClient;
  * @Date: 2025/3/1 15:05
  * @Version: 1.0
  */
-import com.alipay.api.AlipayApiException;
-
-import java.util.Map;
-
 @RestController
 @RequestMapping("/alipay")
 public class AlipayController {
@@ -39,6 +40,13 @@ public class AlipayController {
 
     @Autowired
     private AlipayConfig alipayConfig;
+
+    @Autowired
+    private OrderService orderService; // 注入订单服务
+
+    @Autowired
+    private OrdersMapper ordersMapper; // 注入订单Mapper
+
     @GetMapping("/create-payment")
     public String createPayment(
             @RequestParam String orderId,
@@ -60,31 +68,48 @@ public class AlipayController {
         AlipayTradeWapPayResponse response = alipayClient.pageExecute(request);
         return response.getBody(); // 返回支付宝的支付表单
     }
+
     @GetMapping("/return")
     public RedirectView handleReturn(HttpServletRequest request) throws AlipayApiException {
         // 1. 获取支付宝同步返回的订单号
-        String orderId = request.getParameter("out_trade_no");
-        System.out.println("订单号: " + orderId);
+        String orderNumber = request.getParameter("out_trade_no");
+        System.out.println("订单号: " + orderNumber);
 
-        // 2. 调用支付宝查询接口验证交易状态
+        // 2. 根据订单号查询订单ID（oid）
+        QueryWrapper<Orders> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("orderNumber", orderNumber);
+        Orders order = ordersMapper.selectOne(queryWrapper);
+
+        if (order == null) {
+            // 处理订单不存在的情况
+            return new RedirectView("http://localhost:5173/#/payment-failed?orderNumber=" + orderNumber);
+        }
+
+        Long oid = order.getOid();
+
+        // 3. 调用支付宝查询接口验证交易状态
         AlipayTradeQueryRequest queryRequest = new AlipayTradeQueryRequest();
         JSONObject queryContent = new JSONObject();
-        queryContent.put("out_trade_no", orderId);
+        queryContent.put("out_trade_no", orderNumber);
         queryRequest.setBizContent(queryContent.toJSONString());
 
         AlipayTradeQueryResponse queryResponse = alipayClient.execute(queryRequest);
 
-        // 3. 检查交易是否成功
+        // 4. 检查交易是否成功
         if (queryResponse.isSuccess() && "TRADE_SUCCESS".equals(queryResponse.getTradeStatus())) {
             // 从查询响应中获取支付金额
             String amount = queryResponse.getTotalAmount(); // 支付宝返回的金额字段
+
+            // 更新订单状态为 finished
+            UpdateOrderStatusRequest updateRequest = new UpdateOrderStatusRequest();
+            updateRequest.setOrderStatus("evaluation");
+            orderService.updateOrderStatusByOid(oid, updateRequest.getOrderStatus());
+
             // 重定向到前端成功页面，携带订单号和金额
-            return new RedirectView("http://localhost:5173/#/payment-success?orderId=" + orderId + "&amount=" + amount);
+            return new RedirectView("http://localhost:5173/#/payment-success?orderNumber=" + orderNumber + "&amount=" + amount);
         } else {
             // 失败时重定向到失败页面（可选携带金额）
-            return new RedirectView("http://localhost:5173/#/payment-failed?orderId=" + orderId);
+            return new RedirectView("http://localhost:5173/#/payment-failed?orderNumber=" + orderNumber);
         }
     }
-
-
 }

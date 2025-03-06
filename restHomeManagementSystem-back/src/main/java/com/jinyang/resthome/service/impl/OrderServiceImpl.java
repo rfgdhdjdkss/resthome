@@ -117,6 +117,7 @@ public class OrderServiceImpl extends ServiceImpl<OrdersMapper, Orders>
         // 如果订单状态不是待处理，返回查询为空的结果
         return Result.build(null, ResultCodeEnum.SELECT_EMPTY);
     }
+
     @Override
     public Result updateOrderStatusByOid(Long oid, String orderStatus) {
         UpdateWrapper updateWrapper = new UpdateWrapper();
@@ -141,15 +142,17 @@ public class OrderServiceImpl extends ServiceImpl<OrdersMapper, Orders>
         long fifteenMinutes = 15 * 60 * 1000; // 15 分钟的毫秒数
         for (Orders order : ordersList) {
             Date createTime = order.getCreateTime();
-            if (createTime != null) {
+            if (createTime != null && "pending".equals(order.getOrderStatus())) { // 确保订单状态为待支付（pending）
                 long elapsedTime = currentTime - createTime.getTime();
-                if (elapsedTime > fifteenMinutes && !"cancelled".equals(order.getOrderStatus())) {
+                if (elapsedTime > fifteenMinutes) {
                     // 更新订单状态为 cancelled
                     UpdateWrapper updateWrapper = new UpdateWrapper();
                     updateWrapper.eq("oid", order.getOid());
                     updateWrapper.set("orderStatus", "cancelled");
                     int update = ordersMapper.update(updateWrapper);
-                    order.setOrderStatus("cancelled");
+                    if (update == 1) {
+                        order.setOrderStatus("cancelled");
+                    }
                 }
             }
         }

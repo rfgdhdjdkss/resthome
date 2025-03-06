@@ -245,11 +245,11 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted, computed } from 'vue'
-import axios from '../../api/request.js';
+import axios from '@/api/request.js';
 
 import { useRoute } from 'vue-router';
 import { ElMessage } from 'element-plus'
-import { definedUser } from '../../stores/index.js';
+import { definedUser } from '@/stores/index.js';
 import { useRouter } from 'vue-router';
 let router = useRouter()
 let loginUser = definedUser()

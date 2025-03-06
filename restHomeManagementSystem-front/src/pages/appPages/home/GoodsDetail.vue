@@ -19,7 +19,6 @@
                 <div class="goods-image">
                     <img :src="`http://localhost:8999/images/upload/goodsImg/${goodsInfo.image}`" alt=""
                         v-if="goodsInfo.image != undefined">
-
                 </div>
                 <div class="goods-price">
                     <div class="now-price">
@@ -364,8 +363,6 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     padding: 10px;
-    min-height: 150px;
-
 }
 
 .comment-content2 {

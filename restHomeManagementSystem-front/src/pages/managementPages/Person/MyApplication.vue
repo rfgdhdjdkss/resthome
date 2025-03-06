@@ -24,8 +24,8 @@
 
 <script lang="ts" setup>
 import { computed, ref, onMounted, reactive, watch, } from 'vue'
-import axios from '../../api/request.js';
-import { definedUser } from '../../stores/index.js';
+import axios from '@/api/request.js';
+import { definedUser } from '@/stores/index.js';
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router';
 let loginUser = definedUser()

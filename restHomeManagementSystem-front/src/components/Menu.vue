@@ -1,12 +1,17 @@
 <template>
     <div id="menu_div">
         <div id="logo_sysName_div">
-            <span>
-                <img id="logo" src="../images/logo.png" alt="">
-            </span>
-            <span id="sysName">
-                养老院管理系统
-            </span>
+            <div>
+                <span>
+                    <img id="logo" src="@/assets/images/logo.jpg" alt="">
+                </span>
+            </div>
+            <div>
+                <span id="sysName">
+                    养老生活--养老院管理系统
+                </span>
+            </div>
+
         </div>
         <el-row class="tac">
             <el-col :span="12">
@@ -29,14 +34,15 @@
                             </el-icon>
                             <span>营销管理</span>
                         </template>
-                        <router-link :to="{ name: 'Consult', params: { whichUidConsult: loginUser.uid } }" v-if="loginUser.permission==='普通用户'"> <el-menu-item
+                        <!-- <router-link :to="{ name: 'Consult', params: { whichUidConsult: loginUser.uid } }"
+                            v-if="loginUser.permission === '普通用户'">
+                            <el-menu-item index="2-1">咨询管理</el-menu-item></router-link> -->
+                        <router-link to="/marketing/consultCollection"> <el-menu-item
                                 index="2-1">咨询管理</el-menu-item></router-link>
-                        <router-link to="/marketing/consultCollection" v-else> <el-menu-item
-                                index="2-1">咨询管理</el-menu-item></router-link>
-                        <router-link to="/marketing/reserve">
+                        <!-- <router-link to="/marketing/reserve">
                             <el-menu-item index="2-2">预定入住</el-menu-item>
-                        </router-link>
-                        <router-link to="/marketing/reserveManagement" v-if="loginUser.permission==='管理员'">
+                        </router-link> -->
+                        <router-link to="/marketing/reserveManagement" v-if="loginUser.permission === '管理员'">
                             <el-menu-item index="2-3">预定管理</el-menu-item>
                         </router-link>
                     </el-sub-menu>
@@ -51,12 +57,12 @@
                         <router-link to="/checkIn/signCheckInManagement">
                             <el-menu-item index="3-1">入住签约</el-menu-item>
                         </router-link>
-                        <router-link to="/checkIn/outRegistration">
+                        <!-- <router-link to="/checkIn/outRegistration">
                             <el-menu-item index="3-2">外出登记</el-menu-item>
                         </router-link>
                         <router-link to="/checkIn/inRegistration">
                             <el-menu-item index="3-3">来访登记</el-menu-item>
-                        </router-link>
+                        </router-link> -->
                         <router-link to="/checkIn/checkOut">
                             <el-menu-item index="3-4">退住申请</el-menu-item>
                         </router-link>
@@ -70,10 +76,10 @@
                             </el-icon>
                             <span>人员管理</span>
                         </template>
-                        <router-link to="/person/elderlyInformation">
+                        <!-- <router-link to="/person/elderlyInformation">
                             <el-menu-item index="4-1">老人信息</el-menu-item>
-                        </router-link>
-                        <router-link :to="{name:'ElderlyInformationManagement'}">
+                        </router-link> -->
+                        <router-link :to="{ name: 'ElderlyInformationManagement' }">
                             <el-menu-item index="4-1">老人信息管理</el-menu-item>
                         </router-link>
                         <router-link to="/person/userManagement">
@@ -118,7 +124,7 @@
                             <el-menu-item index="6-3">点餐</el-menu-item>
                         </router-link>
                     </el-sub-menu>
-                    <!-- 费用管理 -->
+                    <!-- 费用管理
                     <el-sub-menu index="7">
                         <template #title>
                             <el-icon>
@@ -137,7 +143,7 @@
                         </router-link>
 
                     </el-sub-menu>
-                    <!-- 基础设置 -->
+                     基础设置 
                     <el-sub-menu index="8">
                         <template #title>
                             <el-icon>
@@ -156,7 +162,7 @@
                             <template #title>item four</template>
                             <el-menu-item index="8-4-1">item one</el-menu-item>
                         </el-sub-menu>
-                    </el-sub-menu>
+                    </el-sub-menu> -->
 
                 </el-menu>
             </el-col>
@@ -190,26 +196,36 @@ const handleClose = (key: string, keyPath: string[]) => {
 
 <style>
 #menu_div {
-    width: 305px;
+    /* width: 305px;
     height: auto;
-    /* border-bottom: 1px solid var(--el-border-color); */
-
+    border-bottom: 1px solid var(--el-border-color); */
+    display: flex;
+    float: left;
+    flex-direction: column;
+    width: 17%;
+    height: 100vh;
+    position: fixed;
+    border-right: 1px solid var(--el-menu-border-color);
+    background-color: rgb(58, 61, 72);
 
 }
 
 #logo_sysName_div {
-    width: 305px;
+    padding: 10px;
+    width: 284px;
     height: 70px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
 }
 
 #logo {
     width: 70px;
     height: 70px;
     float: left;
-    margin-left: 20px;
+    border-radius: 50%;
+    /* margin-left: 20px; */
 }
 
 #sysName {
@@ -217,7 +233,6 @@ const handleClose = (key: string, keyPath: string[]) => {
     font-weight: bold;
     line-height: 40px;
     color: white;
-    margin-right: 20px;
 }
 
 .el-col-12 {

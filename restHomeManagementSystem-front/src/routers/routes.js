@@ -217,6 +217,10 @@ const router = createRouter({
                         name: 'paymentSuccess',
                         meta: { title: '我的订单' },
                         component: () => import('../pages/appPages/PaymentSuccess.vue'),
+                    }, {
+                        path: '/goods-comment',
+                        name: 'GoodsComment',
+                        component: ()=>import('../pages/appPages/order/GoodsCommentPage.vue')
                     }
 
                 ]
@@ -229,14 +233,14 @@ const router = createRouter({
                     path: '/',
                     name: 'Login',
                     meta: { title: '登录' },
-                    component: () => import('../pages/Login.vue'),
+                    component: () => import('../pages/managementPages/Login.vue'),
                 },
                 //注册
                 {
                     path: '/register',
                     name: 'Register',
                     meta: { title: '注册' },
-                    component: () => import('../pages/Register.vue'),
+                    component: () => import('../pages/managementPages/Register.vue'),
                 },
                 // 首页Home
                 {
@@ -245,13 +249,13 @@ const router = createRouter({
                     meta: {
                         title: '首页'
                     },
-                    component: () => import('../pages/Home.vue'),
+                    component: () => import('../pages/managementPages/Home.vue'),
 
                 },
                 //我的申请路由
                 {
                     path: '/myApplication',
-                    component: () => import('../pages/Person/MyApplication.vue'),
+                    component: () => import('../pages/managementPages/Person/MyApplication.vue'),
                     name: 'MyApplication',
                     meta: {
                         title: '我的申请'
@@ -264,12 +268,12 @@ const router = createRouter({
                     meta: {
                         title: '营销管理'
                     },
-                    redirect: '/marketing/reserve',
+                    redirect: '/managementPages/marketing/reserve',
                     children: [
                         {
                             //咨询管理路由(普通用户)
                             path: '/marketing/consult/:whichUidConsult',
-                            component: () => import('../pages/Marketing/Consult.vue'),
+                            component: () => import('../pages/managementPages/Marketing/Consult.vue'),
                             name: 'Consult',
                             meta: {
                                 title: '咨询管理'
@@ -278,7 +282,7 @@ const router = createRouter({
                         {
                             //咨询管理路由（管理员）
                             path: '/marketing/consultCollection',
-                            component: () => import('../pages/Marketing/ConsultCollection.vue'),
+                            component: () => import('../pages/managementPages/Marketing/ConsultCollection.vue'),
                             name: 'ConsultCollection',
                             meta: {
                                 title: '咨询管理'
@@ -287,7 +291,7 @@ const router = createRouter({
                         {
                             //预定管理路由
                             path: '/marketing/reserve',
-                            component: () => import('../pages/Marketing/Reserve.vue'),
+                            component: () => import('../pages/managementPages/Marketing/Reserve.vue'),
                             name: 'Reserve',
                             meta: {
                                 title: '预定入住'
@@ -296,7 +300,7 @@ const router = createRouter({
                         {
                             //预定管理路由
                             path: '/marketing/reserveManagement',
-                            component: () => import('../pages/Marketing/ReserveManagement.vue'),
+                            component: () => import('../pages/managementPages/Marketing/ReserveManagement.vue'),
                             name: 'ReserveManagement',
                             meta: {
                                 title: '预定管理'
@@ -315,7 +319,7 @@ const router = createRouter({
                     children: [
                         {
                             path: 'signCheckInManagement', // 修改为相对路径
-                            component: () => import('../pages/CheckIn/SignCheckInManagement.vue'),
+                            component: () => import('../pages/managementPages/CheckIn/SignCheckInManagement.vue'),
                             name: 'SignCheckInManagement',
                             meta: {
                                 title: '入住签约管理'
@@ -323,7 +327,7 @@ const router = createRouter({
                         },
                         {
                             path: '/checkIn/signCheckIn/:eid',
-                            component: () => import('../pages/CheckIn/SignCheckIn.vue'),
+                            component: () => import('../pages/managementPages/CheckIn/SignCheckIn.vue'),
                             name: 'SignCheckIn',
                             meta: {
                                 title: '入住签约'
@@ -332,7 +336,7 @@ const router = createRouter({
                         {
                             //外出登记路由
                             path: '/checkIn/outRegistration',
-                            component: () => import('../pages/CheckIn/OutRegistration.vue'),
+                            component: () => import('../pages/managementPages/CheckIn/OutRegistration.vue'),
                             name: 'OutRegistration',
                             meta: {
                                 title: '外出登记'
@@ -341,7 +345,7 @@ const router = createRouter({
                         {
                             //来访登记路由
                             path: '/checkIn/inRegistration',
-                            component: () => import('../pages/CheckIn/InRegistration.vue'),
+                            component: () => import('../pages/managementPages/CheckIn/InRegistration.vue'),
                             name: 'InRegistration',
                             meta: {
                                 title: '来访登记'
@@ -350,7 +354,7 @@ const router = createRouter({
                         {
                             //退住申请路由
                             path: '/checkIn/checkOut',
-                            component: () => import('../pages/CheckIn/CheckOut.vue'),
+                            component: () => import('../pages/managementPages/CheckIn/CheckOut.vue'),
                             name: 'CheckOut',
                             meta: {
                                 title: '退住申请'
@@ -370,7 +374,7 @@ const router = createRouter({
                         {
                             //老人信息路由
                             path: '/person/elderlyInformation',
-                            component: () => import('../pages/Person/ElderlyInformation.vue'),
+                            component: () => import('../pages/managementPages/Person/ElderlyInformation.vue'),
                             name: 'ElderlyInformation',
                             meta: {
                                 title: '老人信息'
@@ -379,7 +383,7 @@ const router = createRouter({
                         {
                             //老人信息管理路由（管理员+员工）
                             path: '/person/elderlyInformationManagement',
-                            component: () => import('../pages/Person/ElderlyInformationManagement.vue'),
+                            component: () => import('../pages/managementPages/Person/ElderlyInformationManagement.vue'),
                             name: 'ElderlyInformationManagement',
                             meta: {
                                 title: '老人信息管理'
@@ -388,7 +392,7 @@ const router = createRouter({
                         {
                             //员工管理路由
                             path: '/person/userManagement',
-                            component: () => import('../pages/Person/UserManagement.vue'),
+                            component: () => import('../pages/managementPages/Person/UserManagement.vue'),
                             name: 'UserManagement',
                             meta: {
                                 title: '用户管理'
@@ -397,7 +401,7 @@ const router = createRouter({
                         {
                             //个人中心路由
                             path: '/person/personalCenter',
-                            component: () => import('../pages/Person/PersonalCenter.vue'),
+                            component: () => import('../pages/managementPages/Person/PersonalCenter.vue'),
                             name: 'PersonalCenter',
                             meta: {
                                 title: '个人中心'
@@ -417,7 +421,7 @@ const router = createRouter({
                         {
                             //菜品管理路由
                             path: '/catering/dishes',
-                            component: () => import('../pages/Catering/Dishes.vue'),
+                            component: () => import('../pages/managementPages/Catering/Dishes.vue'),
                             name: 'Dishes',
                             meta: {
                                 title: '菜品管理'
@@ -426,7 +430,7 @@ const router = createRouter({
                         {
                             //餐饮套餐路由
                             path: '/catering/combo',
-                            component: () => import('../pages/Catering/Combo.vue'),
+                            component: () => import('../pages/managementPages/Catering/Combo.vue'),
                             name: 'Combo',
                             meta: {
                                 title: '餐饮套餐'
@@ -435,7 +439,7 @@ const router = createRouter({
                         {
                             //点餐路由
                             path: '/catering/order',
-                            component: () => import('../pages/Catering/Order.vue'),
+                            component: () => import('../pages/managementPages/Catering/Order.vue'),
                             name: 'Order',
                             meta: {
                                 title: '点餐'
@@ -455,7 +459,7 @@ const router = createRouter({
                         {
                             //预付充值路由
                             path: '/cost/recharge',
-                            component: () => import('../pages/Cost/Recharge.vue'),
+                            component: () => import('../pages/managementPages/Cost/Recharge.vue'),
                             name: 'Recharge',
                             meta: {
                                 title: '预付充值'
@@ -464,7 +468,7 @@ const router = createRouter({
                         {
                             //消费记录路由
                             path: '/cost/costRecord',
-                            component: () => import('../pages/Cost/CostRecord.vue'),
+                            component: () => import('../pages/managementPages/Cost/CostRecord.vue'),
                             name: 'CostRecord',
                             meta: {
                                 title: '消费记录'
@@ -473,7 +477,7 @@ const router = createRouter({
                         {
                             //退住费用审核路由
                             path: '/cost/costAudit',
-                            component: () => import('../pages/Cost/CostAudit.vue'),
+                            component: () => import('../pages/managementPages/Cost/CostAudit.vue'),
                             name: 'CostAudit',
                             meta: {
                                 title: '退住费用审核'

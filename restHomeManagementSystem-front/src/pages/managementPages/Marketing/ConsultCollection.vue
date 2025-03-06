@@ -1,4 +1,7 @@
 <template>
+    <Header-web></Header-web>
+    <Menu-web></Menu-web>
+    <Footer-web></Footer-web>
     <div id="box">
         <el-table :data="tableData" :default-sort="{ prop: 'isReply', order: 'descending' }" style="width: 100%"
             size="large">
@@ -24,7 +27,7 @@ import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router';
 
 
-import axios from '../../api/request.js';
+import axios from '@/api/request.js';
 
 let router = useRouter()
 
@@ -82,7 +85,18 @@ onMounted(() => {
     display: flex;
     align-items: center;
     flex-direction: column;
-    /* height: 100%; */
+    width: 82%;
+    height: auto;
+    float: right;
+    position: relative;
+    top: 80px;
+    margin-right: 10px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: rgb(243, 244, 246);
+    border-radius: 10px;
 }
 
 #container {

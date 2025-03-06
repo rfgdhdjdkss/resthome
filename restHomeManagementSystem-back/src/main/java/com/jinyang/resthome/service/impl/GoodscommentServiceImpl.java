@@ -63,6 +63,19 @@ public class GoodscommentServiceImpl extends ServiceImpl<GoodscommentMapper, Goo
             return Result.ok(result);
         }
     }
+
+    @Override
+    public Result addGoodsComment(Long uid, Long gid, String content) {
+        Goodscomment goodscomment = new Goodscomment();
+        goodscomment.setUid(uid);
+        goodscomment.setGid(gid);
+        goodscomment.setContent(content);
+        int result = goodscommentMapper.insert(goodscomment);
+        if (result == 1) {
+            return Result.ok(goodscomment);
+        }
+        return Result.build(null, ResultCodeEnum.INSERT_FAIL);
+    }
 }
 
 

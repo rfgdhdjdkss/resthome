@@ -1,5 +1,8 @@
 <!-- 咨询管理 -->
 <template>
+       <Header-web></Header-web>
+    <Menu-web></Menu-web>
+    <Footer-web></Footer-web>
     <div id="box">
         <div id="chatBox">
             <div id="chatHeader">
@@ -49,10 +52,10 @@
 
 <script lang="ts" setup>
 
-import axios from '../../api/request.js';
+import axios from '@/api/request.js';
 
 import { onMounted, reactive, ref } from 'vue'
-import { definedUser } from '../../stores/index.js';
+import { definedUser } from '@/stores/index.js';
 import { useRoute } from 'vue-router';
 
 let route = useRoute()
@@ -182,6 +185,16 @@ onMounted(async () => {
     display: flex;
     align-items: center;
     flex-direction: column;
+    width: 82%;
+    height: auto;
+    float: right;
+    position: relative;
+    top: 80px;
+    margin-right: 10px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
 }
 
 #chatBox {

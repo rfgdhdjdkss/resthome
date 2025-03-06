@@ -73,7 +73,6 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue';
-import axios from '../../api/request.js';
 import { Plus } from '@element-plus/icons-vue';
 
 import type { UploadProps } from 'element-plus';

@@ -201,9 +201,9 @@
     </div>
 </template>
 <script lang="ts" setup>
-import axios from '../../api/request.js';
+import axios from '@/api/request.js';
 import { computed, ref, onMounted, reactive, watch, } from 'vue'
-import { definedUser } from '../../stores/index.js';
+import { definedUser } from '@/stores/index.js';
 import { ElMessage } from 'element-plus'
 import { Plus, InfoFilled } from '@element-plus/icons-vue'
 import type { UploadProps } from 'element-plus'

@@ -574,41 +574,42 @@ function closeDialog() {
 } 
 
 // 修改支付函数，保存状态
-const payHandle = async () => {
-    // if (paymentList.value[selectedPaymentIndex.value].name === '支付宝') {
-    //     try {
-    //         console.log(elderly);
-            
-    //         const orderId = Date.now() + `${loginUser.uid}_${routeEid}`;
-    //         const subject = '老人账户充值';
-    //         const htmlData = await createAlipayPayment(orderId, '1', subject);
-    //         submitAlipayForm(htmlData);
-    //     } catch (error) {
-    //         console.error('支付失败:', error);
-    //     }
-    // }
-    if (selectedPaymentIndex.value != null) {
-        axios.put("/user/rechargeBalance", {
-            uid: loginUser.uid,
-            money: recharge.value,
-        }).then(function (response) {
-            console.log(response)
-            getBalance()
-            addIn()
-        }).catch(function (error) {
-            console.log(error);
-        }),
-            closeDialog()
+const handelPerform = () => {
+    if (balance.value < earnest.value) {
+        // 余额不足，跳转到支付页面并传递当前进度
+        if (paymentList.value[selectedPaymentIndex.value].name === 'alipay') {
+            // 调用支付宝支付接口，传递必要参数
+            createAlipayPayment({
+                orderId: 'your_order_id', // 订单ID，需要根据实际情况生成
+                amount: earnest.value,
+                subject: '养老院签约定金',
+                active: active.value // 传递当前进度
+            }).then((response) => {
+                // 处理支付宝返回的表单数据
+                submitAlipayForm(response)
+            }).catch((error) => {
+                ElMessage.error('创建支付宝支付订单失败，请稍后重试')
+            })
+        } else {
+            ElMessage.error('请选择支付宝支付方式')
+        }
+    }
+    //当余额大于预缴金额
+    if (active.value >= 2 && balance.value >= earnest.value) {
+        active.value = 3
+
+        //成功签约
+        signCheckIn()
+
+        //展示成功信息
         ElMessage({
-            message: '充值成功',
+            message: '签约成功，将在3秒后跳转至老人信息页',
             type: 'success',
         })
-    }
-    else {
-        ElMessage({
-            message: '请选择支付方式',
-            type: 'error',
-        })
+        //3秒后跳转至老人信息页
+        setTimeout(() => {
+            router.push({ name: "ElderlyDocumentList_app" });
+        }, 3000);
     }
 }
 //取消充值事件

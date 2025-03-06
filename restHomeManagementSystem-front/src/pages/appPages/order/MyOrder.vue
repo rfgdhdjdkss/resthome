@@ -35,15 +35,19 @@
                                 <span class="product-price">￥{{ item.price }}</span>
                                 <span class="product-quantity">x{{ item.quantity }}</span>
                             </div>
+                            <div style="display: flex; align-items: center;justify-content: end;">
+                                <button class="repurchase-btn" @click="repurchase(order)">再次购买</button>
+                                <button v-if="order.orderStatus === 'evaluation'" class="repurchase-btn"
+                                    @click="gotoGoodsCommentPage(item.gid, order)">去评价</button>
+                                <button v-if="order.orderStatus === 'evaluation'" class="repurchase-btn"
+                                    @click="repurchase(order)">去售后</button>
+                            </div>
                         </div>
                     </div>
+
                 </div>
                 <div class="order-total">合计: ￥{{ calculateTotal(order.goodsList) }}</div>
-                <div style="display: flex; align-items: center;justify-content: end;">
-                    <button class="repurchase-btn" @click="repurchase(order)">再次购买</button>
-                    <button v-if="order.orderStatus==='evaluation'" class="repurchase-btn" @click="repurchase(order)">去评价</button>
-                    <button v-if="order.orderStatus==='evaluation'" class="repurchase-btn" @click="repurchase(order)">去售后</button>
-                </div>
+
             </div>
         </div>
         <div v-else class="order-empty">
@@ -113,6 +117,10 @@ const filteredOrders = computed(() => {
 const repurchase = (order) => {
     console.log('再次购买', order);
 };
+const gotoGoodsCommentPage = (gid, order) => {
+
+    router.push({ name: 'GoodsComment', query: { gid: gid, oid: order.oid } })
+};
 
 // 计算订单总价
 const calculateTotal = (goodsList) => {
@@ -124,8 +132,9 @@ const orderStatusMap = {
     all: '全部订单',
     pending: '待付款',
     cancelled: '已取消',
-    evaluation: '已完成-待评价',
-    sales: '退款售后'
+    evaluation: '待评价',
+    sales: '退款售后',
+    finished:'已完成'
 };
 
 // 获取订单状态
@@ -227,7 +236,6 @@ const getOrderStatus = (status) => {
 .product-details {
     display: flex;
     flex-direction: column;
-    gap: 20px;
     width: 100%;
     padding: 0 10px 0 10pxs;
 }

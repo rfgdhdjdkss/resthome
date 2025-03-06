@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="header-components">
     <div id="breadcrumb">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: item.path }" v-for="item in breadcrumbList" :key="item.path">
@@ -90,6 +90,19 @@ const toMyApplication = () => {
 </script>
 
 <style scoped>
+.header-components {
+  display: flex;
+  float: right;
+  height: 70px;
+  width: 83%;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--el-border-color);
+  position: fixed;
+  right: 0px;
+  z-index: 9;
+  background-color: white;
+}
+
 #breadcrumb {
   width: 300px;
   display: flex;
