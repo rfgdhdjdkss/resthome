@@ -1,5 +1,11 @@
 package com.jinyang.resthome.controller;
 
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayTradeWapPayRequest;
+import com.alipay.api.response.AlipayTradeWapPayResponse;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -11,10 +17,6 @@ import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.jinyang.resthome.config.AlipayConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import com.alipay.api.AlipayClient;
 
 /**
@@ -23,7 +25,11 @@ import com.alipay.api.AlipayClient;
  * @Author: jinyang
  * @Date: 2025/3/1 15:05
  * @Version: 1.0
- */import com.alipay.api.AlipayApiException;
+ */
+import com.alipay.api.AlipayApiException;
+
+import java.util.Map;
+
 @RestController
 @RequestMapping("/alipay")
 public class AlipayController {
@@ -33,14 +39,13 @@ public class AlipayController {
 
     @Autowired
     private AlipayConfig alipayConfig;
-
     @GetMapping("/create-payment")
     public String createPayment(
             @RequestParam String orderId,
             @RequestParam Double amount,
             @RequestParam String subject) throws AlipayApiException {
 
-        AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
+        AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
         request.setReturnUrl(alipayConfig.getReturnUrl()); // 同步返回地址
         request.setNotifyUrl(alipayConfig.getNotifyUrl()); // 异步通知地址
 
@@ -52,29 +57,34 @@ public class AlipayController {
 
         request.setBizContent(bizContent.toJSONString());
 
-        AlipayTradePagePayResponse response = alipayClient.pageExecute(request);
+        AlipayTradeWapPayResponse response = alipayClient.pageExecute(request);
         return response.getBody(); // 返回支付宝的支付表单
     }
-
     @GetMapping("/return")
     public RedirectView handleReturn(HttpServletRequest request) throws AlipayApiException {
-        // 获取支付宝返回的参数
+        // 1. 获取支付宝同步返回的订单号
         String orderId = request.getParameter("out_trade_no");
         System.out.println("订单号: " + orderId);
 
-        // 调用支付宝查询接口
+        // 2. 调用支付宝查询接口验证交易状态
         AlipayTradeQueryRequest queryRequest = new AlipayTradeQueryRequest();
         JSONObject queryContent = new JSONObject();
         queryContent.put("out_trade_no", orderId);
         queryRequest.setBizContent(queryContent.toJSONString());
 
         AlipayTradeQueryResponse queryResponse = alipayClient.execute(queryRequest);
+
+        // 3. 检查交易是否成功
         if (queryResponse.isSuccess() && "TRADE_SUCCESS".equals(queryResponse.getTradeStatus())) {
-            // 支付成功，重定向到前端支付成功页面
-            return new RedirectView("http://localhost:5173/#/payment-success?orderId=" + orderId);
+            // 从查询响应中获取支付金额
+            String amount = queryResponse.getTotalAmount(); // 支付宝返回的金额字段
+            // 重定向到前端成功页面，携带订单号和金额
+            return new RedirectView("http://localhost:5173/#/payment-success?orderId=" + orderId + "&amount=" + amount);
         } else {
-            // 支付失败，重定向到前端支付失败页面
+            // 失败时重定向到失败页面（可选携带金额）
             return new RedirectView("http://localhost:5173/#/payment-failed?orderId=" + orderId);
         }
     }
+
+
 }

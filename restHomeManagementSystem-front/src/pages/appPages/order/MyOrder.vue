@@ -41,6 +41,8 @@
                 <div class="order-total">合计: ￥{{ calculateTotal(order.goodsList) }}</div>
                 <div style="display: flex; align-items: center;justify-content: end;">
                     <button class="repurchase-btn" @click="repurchase(order)">再次购买</button>
+                    <button v-if="order.orderStatus==='evaluation'" class="repurchase-btn" @click="repurchase(order)">去评价</button>
+                    <button v-if="order.orderStatus==='evaluation'" class="repurchase-btn" @click="repurchase(order)">去售后</button>
                 </div>
             </div>
         </div>
@@ -122,7 +124,7 @@ const orderStatusMap = {
     all: '全部订单',
     pending: '待付款',
     cancelled: '已取消',
-    evaluation: '待评价',
+    evaluation: '已完成-待评价',
     sales: '退款售后'
 };
 

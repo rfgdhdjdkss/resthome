@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        <span class="back-arrow" @click="router.push({name:'MyOrder_app',query:{tab:'all'}})">←</span>
+        <span class="back-arrow" @click="router.push({ name: 'MyOrder_app', query: { tab: 'all' } })">←</span>
         <h4>支付订单</h4>
     </div>
     <div class="payment-order-container">
@@ -30,7 +30,8 @@
                 <div style="display: flex; align-items: center;">
                     <img :src="method.icon" :alt="method.label + '图标'" />
                     <span>{{ method.label }}</span>
-                    <span style="margin-left: 10px; font-size: 12px; color: #7f7f7f;" v-if="method.label == '账号余额'">(账户内剩余¥{{ loginUser.balance }}）</span>
+                    <span style="margin-left: 10px; font-size: 12px; color: #7f7f7f;"
+                        v-if="method.label == '账号余额'">(账户内剩余¥{{ loginUser.balance }}）</span>
                 </div>
                 <div>
                     <input type="radio" :value="method.value" v-model="paymentMethod" :id="method.value"
@@ -46,6 +47,8 @@
 
 <script setup>
 import { onMounted, ref, computed, onUnmounted, watch } from 'vue';
+import { createAlipayPayment, submitAlipayForm } from '@/api/alipay';
+
 import { useRouter, useRoute } from 'vue-router';
 import { definedUser } from '@/stores';
 import axios from '@/api/request';
@@ -119,7 +122,22 @@ const selectPaymentMethod = (method) => {
 };
 
 // 确认支付的方法
-const confirmPayment = () => {
+const confirmPayment = async () => {
+    if (paymentMethod.value === 'alipay') {
+        console.log(111);
+
+        try {
+            const orderId = orderInfo.value.orderNo;
+            const amount = totalAmount.value;
+            const subject = `${loginUser.nickname}的订单`;
+            const htmlData = await createAlipayPayment(orderId, amount, subject);
+            submitAlipayForm(htmlData);
+            updateOrderStatus('finished');
+        
+        } catch (error) {
+            console.error('支付失败:', error);
+        }
+    }
     console.log('确认支付，支付方式：', paymentMethod.value);
     // 这里可以添加实际的支付请求逻辑
 };
@@ -130,14 +148,14 @@ watch(remainingTime, (newValue) => {
         console.log("<<<<<<0");
 
         // 剩余时间小于等于 0，发送请求更新订单状态
-        updateOrderStatus();
+        updateOrderStatus('cancelled');
     }
 });
 
-const updateOrderStatus = async () => {
+const updateOrderStatus = async (status) => {
     try {
         const response = await axios.put(`/order/updateOrderStatus/${oid}`, {
-            orderStatus: 'cancelled' // 假设更新为已取消状态
+            orderStatus: status // 假设更新为已取消状态
         });
         console.log('订单状态更新成功', response.data);
         // 可以在这里添加一些提示信息或跳转逻辑

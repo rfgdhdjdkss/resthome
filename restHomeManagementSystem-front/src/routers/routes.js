@@ -211,6 +211,12 @@ const router = createRouter({
                         name: 'MyOrder_app',
                         meta: { title: '我的订单' },
                         component: () => import('../pages/appPages/order/MyOrder.vue'),
+                    },
+                    {
+                        path: '/paymentSuccess',
+                        name: 'paymentSuccess',
+                        meta: { title: '我的订单' },
+                        component: () => import('../pages/appPages/PaymentSuccess.vue'),
                     }
 
                 ]

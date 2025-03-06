@@ -225,10 +225,12 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted, computed } from 'vue'
-import axios from '../../../api/request.js';
+import axios from '@/api/request.js';
+import { createAlipayPayment, submitAlipayForm } from '@/api/alipay';
+
 import { useRoute } from 'vue-router';
 import { ElMessage } from 'element-plus'
-import { definedUser } from '../../../stores/index.js';
+import { definedUser } from '@/stores/index.js';
 import { useRouter } from 'vue-router';
 let router = useRouter()
 let loginUser = definedUser()
@@ -286,7 +288,7 @@ const handelPerform = () => {
         })
         //3秒后跳转至老人信息页
         setTimeout(() => {
-            router.push({ name: "ElderlyInformation" });
+            router.push({ name: "ElderlyDocumentList_app" });
 
         }, 3000);
 
@@ -569,9 +571,22 @@ function openDialog() {
 }
 function closeDialog() {
     showDialog.value = false; // 隐藏支付弹框
-}
-//充值事件，将输入框中的金额存入数据库当前用户的余额
-function payHandle() {
+} 
+
+// 修改支付函数，保存状态
+const payHandle = async () => {
+    // if (paymentList.value[selectedPaymentIndex.value].name === '支付宝') {
+    //     try {
+    //         console.log(elderly);
+            
+    //         const orderId = Date.now() + `${loginUser.uid}_${routeEid}`;
+    //         const subject = '老人账户充值';
+    //         const htmlData = await createAlipayPayment(orderId, '1', subject);
+    //         submitAlipayForm(htmlData);
+    //     } catch (error) {
+    //         console.error('支付失败:', error);
+    //     }
+    // }
     if (selectedPaymentIndex.value != null) {
         axios.put("/user/rechargeBalance", {
             uid: loginUser.uid,
@@ -608,6 +623,8 @@ function cancelPay() {
 const selectedPaymentIndex = ref<number | null>(null)
 function selectPayment(index: number) {
     selectedPaymentIndex.value = index; // 更新选中索引
+    rechargeType.value = paymentList.value[index].name;
+
 }
 //支付方式图标列表
 const paymentList = ref([
@@ -632,7 +649,6 @@ interface Elderly {
     uid: number;
 }
 const elderly = reactive<Elderly>({})
-console.log(selectedBedType);
 
 function signCheckIn() {
     //发送put请求，更新reserve表中预定老人是否已经完成签约
@@ -858,57 +874,78 @@ onMounted(() => {
 } */
 
 .pay-dialog {
-    padding: 20px; /* 内边距 */
-    background-color: #f9f9f9; /* 背景色 */
-    border-radius: 10px; /* 圆角 */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+    padding: 20px;
+    /* 内边距 */
+    background-color: #f9f9f9;
+    /* 背景色 */
+    border-radius: 10px;
+    /* 圆角 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    /* 阴影效果 */
 }
 
 .pay-dialog-content {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px; /* 内容底部间距 */
+    margin-bottom: 20px;
+    /* 内容底部间距 */
 }
 
 .recharge-label {
-    margin-right: 30px; /* 标签右边距 */
-    font-weight: bold; /* 标签加粗 */
+    margin-right: 30px;
+    /* 标签右边距 */
+    font-weight: bold;
+    /* 标签加粗 */
 }
 
 .recharge-input {
-    width: 240px; /* 输入框宽度 */
+    width: 240px;
+    /* 输入框宽度 */
 }
 
 .payment-container {
     display: flex;
-    justify-content: center; /* 居中对齐 */
-    margin-bottom: 20px; /* 底部间距 */
+    justify-content: center;
+    /* 居中对齐 */
+    margin-bottom: 20px;
+    /* 底部间距 */
     gap: 5px;
 }
 
 .paymentBox {
     display: flex;
-    flex-direction: column; /* 垂直排列 */
-    align-items: center; /* 水平居中 */
-    text-align: center; /* 文字居中 */
-    padding: 10px; /* 内边距 */
-    transition: border 0.3s; /* 添加过渡效果 */
+    flex-direction: column;
+    /* 垂直排列 */
+    align-items: center;
+    /* 水平居中 */
+    text-align: center;
+    /* 文字居中 */
+    padding: 10px;
+    /* 内边距 */
+    transition: border 0.3s;
+    /* 添加过渡效果 */
 }
 
 .selected-payment {
-    border: 2px solid #409EFF; /* 选中时的边框颜色 */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* 选中时的阴影效果 */
+    border: 2px solid #409EFF;
+    /* 选中时的边框颜色 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    /* 选中时的阴影效果 */
 }
 
 .payment-image {
-    width: 50px; /* 图片宽度 */
-    height: auto; /* 保持比例 */
-    margin-bottom: 10px; /* 图片与文字之间的间距 */
+    width: 50px;
+    /* 图片宽度 */
+    height: auto;
+    /* 保持比例 */
+    margin-bottom: 10px;
+    /* 图片与文字之间的间距 */
 }
 
 .recharge-buttons {
     display: flex;
-    justify-content: space-between; /* 按钮之间的间距 */
+    justify-content: space-between;
+    /* 按钮之间的间距 */
 }
 </style>
