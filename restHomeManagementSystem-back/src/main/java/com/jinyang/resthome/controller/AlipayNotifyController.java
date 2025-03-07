@@ -51,6 +51,7 @@ public class AlipayNotifyController {
 
         if (signVerified && "TRADE_SUCCESS".equals(params.get("trade_status"))) {
             String orderId = params.get("out_trade_no");
+            System.out.println("notify--->subject"+params.get("subject")+"uid"+params.get("uid"));
             // 更新订单状态为已支付
             System.out.println("订单 " + orderId + " 支付成功");
             return "success"; // 返回 success 表示处理成功

@@ -1,10 +1,13 @@
 import axios from '@/api/request';
-
+import { definedUser } from '@/stores';
+let loginUser = definedUser()
 // 封装支付宝创建支付请求
 export const createAlipayPayment = async (orderId, amount, subject) => {
   try {
+const uid=loginUser.uid
+    
     const response = await axios.get('/alipay/create-payment', {
-      params: { orderId, amount, subject }
+      params: { orderId, amount, subject, uid }
     });
     return response.data;
   } catch (error) {

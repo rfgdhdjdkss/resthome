@@ -221,8 +221,13 @@ const router = createRouter({
                         path: '/goods-comment',
                         name: 'GoodsComment',
                         component: ()=>import('../pages/appPages/order/GoodsCommentPage.vue')
+                    },
+                    {
+                        path: '/transactionRecord_app',
+                        name: 'TransactionRecordPage_app',
+                        component: ()=>import('../pages/appPages/mine/TransactionRecordPage.vue')
                     }
-
+                    
                 ]
         },
         // 后台管理路由

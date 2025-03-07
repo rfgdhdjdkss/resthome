@@ -34,7 +34,7 @@ public class OrderController {
         Orders order = new Orders();
         Date createTime = new Date();
         order.setCreateTime(createTime);
-        order.setOrderNumber(OrderNumberGeneratorUtils.generateOrderNumber(order.getCreateTime(), request.getUid()));
+        order.setOrderNumber("PAY_"+OrderNumberGeneratorUtils.generateOrderNumber(order.getCreateTime(), request.getUid()));
         order.setUid(request.getUid());
         order.setOrderStatus("pending");
         List<GoodsOrder> goodsOrders = request.getGoodsOrders();

@@ -126,7 +126,7 @@ const submitForm = async () => {
     }
     // 调用支付接口
     try {
-        const orderId = Date.now().toString();
+        const orderId = `RECHARGE_${Date.now().toString()}`;
         const amount = form.amount;
         const subject = '账户充值订单';
 

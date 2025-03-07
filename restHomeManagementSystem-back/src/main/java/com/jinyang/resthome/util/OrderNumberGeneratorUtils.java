@@ -32,5 +32,6 @@ public class OrderNumberGeneratorUtils {
         int randomNum = RANDOM.nextInt(900) + 100;
         // 组合订单号
         return datePart + uid + randomNum;
+
     }
 }

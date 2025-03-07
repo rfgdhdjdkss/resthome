@@ -123,16 +123,13 @@ const selectPaymentMethod = (method) => {
 // 确认支付的方法
 const confirmPayment = async () => {
     if (paymentMethod.value === 'alipay') {
-        console.log(111);
 
         try {
-            const orderId = orderInfo.value.orderNo;
+            const orderId = `${orderInfo.value.orderNo}`;
             const amount = totalAmount.value;
-            const subject = `${loginUser.nickname}的订单`;
+            const subject = `${loginUser.nickname}购买的商品订单`;
             const htmlData = await createAlipayPayment(orderId, amount, subject);
             submitAlipayForm(htmlData);
-            // 这里先不更新订单状态，等待支付宝回调
-            // updateOrderStatus('finished');
 
         } catch (error) {
             console.error('支付失败:', error);

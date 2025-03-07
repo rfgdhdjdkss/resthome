@@ -28,8 +28,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="Elderly" />
-                  <option name="tableName" value="elderly" />
+                  <option name="className" value="Healthrecord" />
+                  <option name="tableName" value="healthRecord" />
                 </TableUIInfo>
               </list>
             </option>

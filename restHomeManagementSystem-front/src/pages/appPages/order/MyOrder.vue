@@ -21,7 +21,7 @@
                     <span class="order-status">{{ getOrderStatus(order.orderStatus) }}</span>
                 </div>
                 <div class="order-products">
-                    <div v-for="(item, itemIndex) in order.goodsList" :key="itemIndex" class="order-product">
+                    <div v-for="(item, itemIndex) in order.goodsList" :key="itemIndex" class="order-product" @click="gotoGoodsDetailPage(item.gid)">
                         <div
                             style="width: 100px; height: 100px; display: flex;align-items: center;justify-content: center; margin-right: 15px;">
                             <img :src="`http://localhost:8999/images/upload/goodsImg/${item.image}`"
@@ -37,6 +37,7 @@
                             </div>
                             <div style="display: flex; align-items: center;justify-content: end;">
                                 <button class="repurchase-btn" @click="repurchase(order)">再次购买</button>
+                                <button class="repurchase-btn" v-if="order.orderStatus === 'pending'" @click="repurchase(order)">去付款</button>
                                 <button v-if="order.orderStatus === 'evaluation'" class="repurchase-btn"
                                     @click="gotoGoodsCommentPage(item.gid, order)">去评价</button>
                                 <button v-if="order.orderStatus === 'evaluation'" class="repurchase-btn"
@@ -141,6 +142,11 @@ const orderStatusMap = {
 const getOrderStatus = (status) => {
     return orderStatusMap[status] || status; // 如果没有匹配的状态，返回原状态
 };
+const gotoGoodsDetailPage=(gid)=>{
+    router.push({name:'GoodsDetail_app',params:{
+        gid:gid
+    }})
+}
 </script>
 
 <style scoped>

@@ -260,4 +260,10 @@ public class UserController {
         Result result = userService.updateSex(request.getUid(), request.getSex());
         return result;
     }
+
+    @GetMapping("/getHeadImg/{uid}")
+    public Result<Object> getHeadImg(@PathVariable("uid") Long uid) {
+        User user = userService.selectUserById(uid);
+        return Result.ok(user);
+    }
 }

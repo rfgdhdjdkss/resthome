@@ -368,7 +368,18 @@ const save = () => {
 </script>
 <style>
 #box {
-    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    width: 82%;
+    height: auto;
+    float: right;
+    position: relative;
+    top: 80px;
+    margin-right: 10px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
 }
 
 #pageChangeDiv {

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="header">
-            <span class="back-arrow" @click="router.go(-1)">←</span>
+            <span class="back-arrow" @click="router.push({name:'Home_app'})">←</span>
             <h2>签约详情</h2>
         </div>
         <div
@@ -525,6 +525,8 @@ const selectedCardIndex = ref(Number)
 //点击哪个卡片，将卡片索引赋值给被选中的卡片索引
 function selectCard(index) {
     selectedCardIndex.value = index; // 更新当前选中的卡片索引
+    console.log(selectedCardIndex.value);
+
 }
 //计算属性：根据被选中的卡片索引确定被选中的床位的类型
 const selectedBedType = computed(() => {
@@ -556,6 +558,7 @@ function getBalance() {
         .then(function (response) {
             //表格数据
             balance.value = response.data.data.balance
+            loginUser.balance = balance.value
         }
         ).catch(function (error) {
             console.log(error);
@@ -571,46 +574,50 @@ function openDialog() {
 }
 function closeDialog() {
     showDialog.value = false; // 隐藏支付弹框
-} 
+}
 
 // 修改支付函数，保存状态
-const handelPerform = () => {
-    if (balance.value < earnest.value) {
-        // 余额不足，跳转到支付页面并传递当前进度
-        if (paymentList.value[selectedPaymentIndex.value].name === 'alipay') {
-            // 调用支付宝支付接口，传递必要参数
-            createAlipayPayment({
-                orderId: 'your_order_id', // 订单ID，需要根据实际情况生成
-                amount: earnest.value,
-                subject: '养老院签约定金',
-                active: active.value // 传递当前进度
-            }).then((response) => {
-                // 处理支付宝返回的表单数据
-                submitAlipayForm(response)
-            }).catch((error) => {
-                ElMessage.error('创建支付宝支付订单失败，请稍后重试')
-            })
-        } else {
-            ElMessage.error('请选择支付宝支付方式')
+const payHandle = async () => {
+    // 余额不足，跳转到支付页面并传递当前进度
+    if (paymentList.value[selectedPaymentIndex.value].name === '支付宝') {
+        // 调用支付宝支付接口，传递必要参数
+        localStorage.setItem('eid', routeEid)
+        try {
+            const orderId = `RECHARGE_${Date.now()}${loginUser.uid}`
+            const amount = recharge.value
+            const subject = '养老院签约定金'
+            const htmlData = await createAlipayPayment(orderId, amount, subject);
+            submitAlipayForm(htmlData);
+
+        } catch (error) {
+            console.error('支付失败:', error);
         }
+
     }
-    //当余额大于预缴金额
-    if (active.value >= 2 && balance.value >= earnest.value) {
-        active.value = 3
-
-        //成功签约
-        signCheckIn()
-
-        //展示成功信息
+    else if (selectedPaymentIndex.value != null) {
+        axios.put("/user/rechargeBalance", {
+            uid: loginUser.uid,
+            money: recharge.value,
+        }).then(function (response) {
+            console.log(response)
+            getBalance()
+            addIn()
+        }).catch(function (error) {
+            console.log(error);
+        }),
+            closeDialog()
         ElMessage({
-            message: '签约成功，将在3秒后跳转至老人信息页',
+            message: '充值成功',
             type: 'success',
         })
-        //3秒后跳转至老人信息页
-        setTimeout(() => {
-            router.push({ name: "ElderlyDocumentList_app" });
-        }, 3000);
     }
+    else {
+        ElMessage({
+            message: '请选择支付方式',
+            type: 'error',
+        })
+    }
+
 }
 //取消充值事件
 function cancelPay() {
@@ -737,6 +744,10 @@ const transactionDeduct = () => {
 
 //挂载
 onMounted(() => {
+    if (localStorage.getItem('eid')) {
+        fetchData(localStorage.getItem('eid'))
+        localStorage.removeItem('eid')
+    }
     fetchData(routeEid)
     fetchBedInfo()
     getBalance()

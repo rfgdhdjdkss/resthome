@@ -32,7 +32,7 @@
         </div>
         <div class="store-title">
           <span>
-            养老生活
+            {{ subject }}
           </span>
         </div>
       </div>
@@ -67,20 +67,42 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute,useRouter } from 'vue-router';
-let router=useRouter()
+import { useRoute, useRouter } from 'vue-router';
+let router = useRouter()
 const route = useRoute();
 const orderId = ref('');
 const amount = ref('');
+const subject = ref('');
 const handleBackToReserve = () => {
-  router.push({
-    name: 'Home_app', // 签约页面的路由名称
-    
-  });
+  if (subject.value.endsWith('商品订单')) {
+    router.push({
+      name: 'MyOrder_app',
+      query: {
+        tab: 'all'
+      }
+    });
+  } else if (subject.value.endsWith('充值订单')) {
+    router.push({
+      name: 'Recharge_app'
+    });
+  } else if (subject.value === '养老院签约定金') {
+    router.push({
+      name: 'SignCheckInDetail_app',
+      params:{
+        eid:localStorage.getItem('eid')
+      }
+    });
+  } else {
+    router.push({
+      name: 'Home_app',
+
+    });
+  }
 };
 onMounted(() => {
   orderId.value = route.query.orderId; // 从 URL 中获取订单号
   amount.value = route.query.amount;   // 从 URL 中获取支付金额
+  subject.value = route.query.subject;   // 从 URL 中获取支付金额
 });
 </script>
 

@@ -7,10 +7,11 @@
 
 <script setup>
 import { createAlipayPayment, submitAlipayForm } from '@/api/alipay';
-
+import { definedUser } from '../../stores';
+let loginUser=definedUser()
 const handlePay = async () => {
   try {
-    const orderId = '20221321416102935425';
+    const orderId = `Recharge_${Date.now()}${loginUser.uid}`;
     const amount = 20;
     const subject = '测试订单';
 

@@ -121,6 +121,7 @@ const formatTime = (time) => {
     flex-direction: column;
     padding: 20px;
     background-color: #f5f7fa;
+    background-image: url('@/assets/images/home_app_background.jpg');
 }
 
 .message-area {

@@ -1,6 +1,6 @@
 <!-- 咨询管理 -->
 <template>
-       <Header-web></Header-web>
+    <Header-web></Header-web>
     <Menu-web></Menu-web>
     <Footer-web></Footer-web>
     <div id="box">
@@ -13,7 +13,9 @@
                     <div id="chatContainer" v-for="item in chatList">
                         <div id="chatLeft_box" v-if="item.type === 'left'">
                             <div class="portrait">
-                                <img src="../../images/tou.JPG" alt="" style="max-width: 100%;height: auto;">
+                                <img :src="`http://localhost:8999/images/upload/headPortrait/${headImgLeft}`" alt=""
+                                    style="max-width: 100%;height: auto;">
+
                             </div>
                             <div class="chat-bubble left">
                                 {{ item.chatContent }}
@@ -31,7 +33,8 @@
                                 {{ item.chatContent }}
                             </div>
                             <div class="portrait">
-                                <img src="../../images/tou.JPG" alt="" style="max-width: 100%;height: auto;">
+                                <img :src="`http://localhost:8999/images/upload/headPortrait/${headImgRight}`" alt=""
+                                style="max-width: 100%;height: auto;">
                             </div>
                         </div>
                     </div>
@@ -145,7 +148,7 @@ function formatSendTime(time) {
     //定义一个Date对象
     const sendTime = new Date(time);
     //返回想要的时间格式
-    return (sendTime.getMonth()+1) + "/" + sendTime.getDate() + " " + sendTime.getHours() + ":" + sendTime.getMinutes().toString().padStart(2, '0')
+    return (sendTime.getMonth() + 1) + "/" + sendTime.getDate() + " " + sendTime.getHours() + ":" + sendTime.getMinutes().toString().padStart(2, '0')
 
 }
 const myScrollbar = ref(null);
@@ -166,10 +169,18 @@ function updateIsReply() {
         console.log(error);
     })
 }
+const getHeadImg = async (uid) => {
+    const response = await axios.get(`/user/getHeadImg/${uid}`)
+    return response.data.data.headImgUrl
+}
+const headImgLeft = ref('')
+const headImgRight = ref('')
 //挂载
 onMounted(async () => {
     //获取数据
     await fetchChat();
+    headImgLeft.value = await getHeadImg(routeWhichUidConsult)
+    headImgRight.value = await getHeadImg(loginUser.uid)
     // 等待数据加载完成
     // 使用 setTimeout 作为延迟机制，给 Vue 和 el-scrollbar 一些额外的时间，再将滚动条调整到最下端
     setTimeout(() => {
