@@ -1,7 +1,7 @@
 <template>
   <Header-web></Header-web>
-    <Menu-web></Menu-web>
-    <Footer-web></Footer-web>
+  <Menu-web></Menu-web>
+  <Footer-web></Footer-web>
   <div id="box">
     <el-table :data="tableData" style="width: 100%" size="large">
       <el-table-column label="老人姓名" prop="elderlyName" />
@@ -118,7 +118,7 @@ interface Elderly {
   note: String,
   uid: number,
   balance: number,
-  bedroom:String
+  bedroom: String
 }
 const search = ref('')
 //pageInfo 接收服务器响应的分页属性
@@ -291,7 +291,24 @@ const handleDelete = (index: number, row: User) => {
 const confirmEvent = (index: number, row: User) => {
   handleDelete(index, row)
 }
-
+const addDialogFormVisible = ref(false)
+// 打开新增商品对话框
+function openAddDialog() {
+    // 清空表单数据
+    form.gid = '';
+    form.title = '';
+    form.price = '';
+    form.quantity = '';
+    form.image = '';
+    form.description = '';
+    form.afterSale = '';
+    form.deliver = '';
+    form.discount = '';
+    form.fee = '';
+    form.service = '';
+    headImgUrl.value = '';
+    addDialogFormVisible.value = true;
+}
 onMounted(() => {
   fetchData()
 })
@@ -299,18 +316,18 @@ onMounted(() => {
 <style scoped>
 #box {
   background-color: #fff;
-    display: flex;
-    flex-direction: column;
-    width: 82%;
-    height: auto;
-    float: right;
-    position: relative;
-    top: 80px;
-    margin-right: 10px;
-    z-index: 1;
-    display: flex;
-    justify-content: center;
-    border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 82%;
+  height: auto;
+  float: right;
+  position: relative;
+  top: 80px;
+  margin-right: 10px;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
 }
 
 #pageChangeDiv {

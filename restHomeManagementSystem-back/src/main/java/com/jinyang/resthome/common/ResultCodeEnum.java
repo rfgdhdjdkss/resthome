@@ -22,7 +22,8 @@ public enum ResultCodeEnum {
     SELECT_EMPTY(510, "查询为空"),
     INSERT_FAIL(511, "创建失败"),
     PHONE_ILLEGAL(512, "手机号不合法，请输入11位手机号"),
-    DELETE_ERROR(513, "删除失败");
+    DELETE_ERROR(513, "删除失败"),
+    REPEAT_ERROR(514, "已存在");
     private Integer code;
     private String message;
 

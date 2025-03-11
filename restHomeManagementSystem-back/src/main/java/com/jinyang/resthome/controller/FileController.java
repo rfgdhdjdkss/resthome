@@ -2,6 +2,7 @@ package com.jinyang.resthome.controller;
 
 import com.jinyang.resthome.common.Result;
 import com.jinyang.resthome.service.DishesService;
+import com.jinyang.resthome.service.GoodsService;
 import com.jinyang.resthome.service.UserService;
 import com.jinyang.resthome.util.FileUtil;
 import org.apache.commons.io.FileUtils;
@@ -27,6 +28,9 @@ public class FileController {
     private UserService userService;
     @Autowired
     private DishesService dishesService;
+@Autowired
+private GoodsService goodsService;
+
     //文件上传存储路径
 //    private static final String filePath = System.getProperty("user.dir") + "/upload";
 
@@ -78,7 +82,25 @@ public class FileController {
         String newFileName = System.currentTimeMillis() + oldFileName;
         try {
             FileUtil.uploadFile(file.getBytes(), filePath, newFileName);
-            userService.updateHeadImgUrlByUid(newFileName, gid);
+            goodsService.updateGoodsImageByGid(newFileName, gid);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return newFileName;
+    }
+    /**
+     * 上传文件
+     *
+     * @param file
+     * @return
+     */
+    @PostMapping("/upload/addNewGoods")
+    public String uploadGoodsImgName(MultipartFile file) {
+        String oldFileName = file.getOriginalFilename();
+        String filePath = FileUtil.getUpLoadFilePath() + "/goodsImg";
+        String newFileName = System.currentTimeMillis() + oldFileName;
+        try {
+            FileUtil.uploadFile(file.getBytes(), filePath, newFileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -414,12 +414,12 @@ const router = createRouter({
                         },
                     ]
                 },
-                //餐饮管理
+                //商品管理
                 {
                     path: '/catering',
                     name: 'Catering',
                     meta: {
-                        title: '餐饮管理'
+                        title: '商品管理'
                     },
                     redirect: '/catering/dishes',
                     children: [
@@ -449,25 +449,33 @@ const router = createRouter({
                             meta: {
                                 title: '点餐'
                             }
+                        }, {
+                            //点餐路由
+                            path: '/catering/goodsManagementPage',
+                            component: () => import('../pages/managementPages/Catering/GoodsManagementPage.vue'),
+                            name: 'GoodsManagement',
+                            meta: {
+                                title: '商品管理'
+                            }
                         },
                     ]
                 },
-                //费用管理
+                //服务管理
                 {
-                    path: '/cost',
-                    name: 'Cost',
+                    path: '/service',
+                    name: 'Service',
                     meta: {
-                        title: '费用管理'
+                        title: '服务管理'
                     },
-                    redirect: '/cost/recharge ',
+                    redirect: '/service/elderLyHealthManagement',
                     children: [
                         {
                             //预付充值路由
-                            path: '/cost/recharge',
-                            component: () => import('../pages/managementPages/Cost/Recharge.vue'),
-                            name: 'Recharge',
+                            path: 'elderLyHealthManagement',
+                            component: () => import('../pages/managementPages/Service/ElderLyHealthManagementPage.vue'),
+                            name: 'ElderLyHealthManagementPage',
                             meta: {
-                                title: '预付充值'
+                                title: '老人健康信息管理'
                             }
                         },
                         {

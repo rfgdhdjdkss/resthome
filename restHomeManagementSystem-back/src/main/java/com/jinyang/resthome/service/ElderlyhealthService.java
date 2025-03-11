@@ -1,5 +1,6 @@
 package com.jinyang.resthome.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jinyang.resthome.common.Result;
 import com.jinyang.resthome.pojo.Elderlyhealth;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -16,4 +17,10 @@ public interface ElderlyhealthService extends IService<Elderlyhealth> {
     Result selectHealthListByUid(Long uid);
 
     Result selectHealthDetailByEid(Long eid);
+
+    Page<Elderlyhealth> findAllElderlyHealth(Page<Elderlyhealth> page);
+
+    Page<Elderlyhealth> selectBySearchValue(Page<Elderlyhealth> page, String searchValue);
+
+    Result updateByEid(Elderlyhealth elderlyhealth);
 }

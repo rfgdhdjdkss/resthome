@@ -15,8 +15,7 @@
         </div>
         <el-row class="tac">
             <el-col :span="12">
-                <el-menu default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
-                    :unique-opened='true'>
+                <el-menu class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
                     <!-- 首页 -->
                     <router-link to="/home">
                         <el-menu-item index="1">
@@ -27,6 +26,24 @@
                         </el-menu-item>
                     </router-link>
                     <!-- 营销管理 -->
+
+                    <!-- <el-menu-item index="6">
+                        
+                        <el-icon>
+                            <DishDot />
+                        </el-icon>
+                        <span>商品管理</span>
+                        <router-link to="/catering/goodsManagementPage">
+                            <el-sub-menu index="6-1">
+                                <template #title>
+                                    商品管理
+                                </template>
+</el-sub-menu>
+</router-link>
+
+</el-menu-item> -->
+
+
                     <el-sub-menu index="2">
                         <template #title>
                             <el-icon>
@@ -94,36 +111,37 @@
                             </el-icon>
                             <span>服务管理</span>
                         </template>
-                        <el-menu-item-group title="Group One">
-                            <el-menu-item index="5-1">item one</el-menu-item>
-                            <el-menu-item index="5-2">item two</el-menu-item>
-                        </el-menu-item-group>
-                        <el-menu-item-group title="Group Two">
-                            <el-menu-item index="5-3">item three</el-menu-item>
-                        </el-menu-item-group>
-                        <el-sub-menu index="5-4">
-                            <template #title>item four</template>
-                            <el-menu-item index="5-4-1">item one</el-menu-item>
-                        </el-sub-menu>
+                        <router-link to="/service/elderLyHealthManagement">
+                            <el-menu-item index="5-1">老人健康管理</el-menu-item>
+
+                        </router-link>
                     </el-sub-menu>
                     <!-- 餐饮管理 -->
-                    <el-sub-menu index="6">
-                        <template #title>
-                            <el-icon>
-                                <DishDot />
-                            </el-icon>
-                            <span>餐饮管理</span>
-                        </template>
-                        <router-link to="/catering/dishes">
+
+                    <!-- <router-link to="/catering/dishes">
                             <el-menu-item index="6-1">菜品管理</el-menu-item>
                         </router-link>
                         <router-link to="/catering/combo">
                             <el-menu-item index="6-2">餐饮套餐</el-menu-item>
-                        </router-link>
-                        <router-link to="/catering/order">
-                            <el-menu-item index="6-3">点餐</el-menu-item>
-                        </router-link>
+                        </router-link> -->
+
+                    <el-sub-menu index="6-1">
+
+                        <template #title>
+                            <el-icon>
+                                <DishDot />
+                            </el-icon>
+                            商品管理
+                        </template>
+                            <router-link to="/catering/goodsManagementPage">
+                                <el-menu-item index="1-3">
+
+                                    <span>商品管理</span>
+                                </el-menu-item>
+                            </router-link>
                     </el-sub-menu>
+
+
                     <!-- 费用管理
                     <el-sub-menu index="7">
                         <template #title>
@@ -182,7 +200,8 @@ import {
     CreditCard,
     Setting,
 } from '@element-plus/icons-vue'
-
+import { useRouter } from 'vue-router'
+let router = useRouter()
 import { definedUser } from '../stores/index.js'
 let loginUser = definedUser()
 
