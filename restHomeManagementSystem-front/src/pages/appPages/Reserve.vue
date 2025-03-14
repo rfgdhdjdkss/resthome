@@ -216,6 +216,7 @@ function reserve() {
             message: '提交成功',
             type: 'success',
         })
+        router.go(-1)
     }).catch(function (error) {
         console.log(error);
         //响应失败弹出提交失败

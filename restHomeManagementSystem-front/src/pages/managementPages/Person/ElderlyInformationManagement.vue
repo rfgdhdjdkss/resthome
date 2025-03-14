@@ -275,6 +275,7 @@ const updateIsCheckined = (row) => {
 const handleDelete = (index: number, row: User) => {
   // if (window.confirm('您确定要删除用户 ' + row.username + ' 吗？')) {
   // 用户点击了确定按钮
+  
   axios.delete(`/elderly/delete/${row.eid}`)
     .then(response => {
       // 服务器成功响应删除请求

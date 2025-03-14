@@ -134,6 +134,7 @@ public class ElderlyController {
      */
     @DeleteMapping("/delete/{eid}")
     public Result delete(@PathVariable("eid") Long eid) {
+        System.out.println(eid+"eid");
         int result = elderlyService.deleteByEid(eid);
         return Result.ok(result);
     }

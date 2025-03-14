@@ -32,7 +32,6 @@ import java.util.Map;
 @Service
 public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
         implements ElderlyService {
-
     @Autowired
     private ElderlyMapper elderlyMapper;
     @Autowired
@@ -100,12 +99,25 @@ public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
         return update;
     }
 
+    /**
+     * 分页查询老人信息
+     *
+     * @param page
+     * @return
+     */
     @Override
     public Page<Elderly> selectAllElderly(Page<Elderly> page) {
         Page<Elderly> elderlyList = elderlyMapper.selectPage(page, null);
         return elderlyList;
     }
 
+    /**
+     * 更新入住床状态
+     *
+     * @param eid
+     * @param isCheckined
+     * @return
+     */
     @Override
     public int updateIsCheckined(long eid, Integer isCheckined) {
         UpdateWrapper<Elderly> updateWrapper = new UpdateWrapper<>();
@@ -115,6 +127,13 @@ public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
         return update;
     }
 
+    /**
+     * 分页查询--模糊查询
+     *
+     * @param page
+     * @param searchValue
+     * @return
+     */
     @Override
     public Page<Elderly> selectBySearchValue(Page<Elderly> page, String searchValue) {
         LambdaQueryWrapper<Elderly> wrapper = new LambdaQueryWrapper<>();
@@ -123,12 +142,25 @@ public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
         return elderlyList;
     }
 
+    /**
+     * 删除老人档案
+     *
+     * @param eid
+     * @return
+     */
     @Override
     public int deleteByEid(Long eid) {
+        System.out.println(eid + "eid");
         int result = elderlyMapper.deleteById(eid);
         return result;
     }
 
+    /**
+     * 查询已入住老人列表
+     *
+     * @param uid
+     * @return
+     */
     @Override
     public List<Elderly> selectIsCheckinElderlyByUid(Long uid) {
         QueryWrapper<Elderly> queryWrapper = new QueryWrapper<>();
@@ -139,6 +171,12 @@ public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
         return elderlyList;
     }
 
+    /**
+     * 退住
+     *
+     * @param eid
+     * @return
+     */
     @Override
     public Result checkOutByEid(Long eid) {
         UpdateWrapper updateWrapper = new UpdateWrapper();
@@ -151,6 +189,12 @@ public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
         return Result.build(null, ResultCodeEnum.UPDATE_ERROR);
     }
 
+    /**
+     * 新增老人档案
+     *
+     * @param elderly
+     * @return
+     */
     @Override
     public Result insertElderlyByUid(Elderly elderly) {
         elderly.setBalance(0.00);
@@ -160,8 +204,6 @@ public class ElderlyServiceImpl extends ServiceImpl<ElderlyMapper, Elderly>
         }
         return Result.build(null, ResultCodeEnum.INSERT_FAIL);
     }
-
-
 }
 
 

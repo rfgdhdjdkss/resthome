@@ -37,7 +37,7 @@
                             </div>
                             <div style="display: flex; align-items: center;justify-content: end;">
                                 <button class="repurchase-btn" @click="repurchase(order)">再次购买</button>
-                                <button class="repurchase-btn" v-if="order.orderStatus === 'pending'" @click="repurchase(order)">去付款</button>
+                                <button class="repurchase-btn" v-if="order.orderStatus === 'pending'" @click.stop="gotoPay(order)">去付款</button>
                                 <button v-if="order.orderStatus === 'evaluation'" class="repurchase-btn"
                                     @click="gotoGoodsCommentPage(item.gid, order)">去评价</button>
                                 <button v-if="order.orderStatus === 'evaluation'" class="repurchase-btn"
@@ -117,6 +117,18 @@ const filteredOrders = computed(() => {
 // 再次购买
 const repurchase = (order) => {
     console.log('再次购买', order);
+    router.push({
+            name: 'Pay_app',
+            params: { oid: order.oid }
+        });
+};
+
+const gotoPay = (order) => {
+    console.log('再次购买', order);
+    router.push({
+            name: 'Pay_app',
+            params: { oid: order.oid }
+        });
 };
 const gotoGoodsCommentPage = (gid, order) => {
 

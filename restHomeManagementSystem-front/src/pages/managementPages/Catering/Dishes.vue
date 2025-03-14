@@ -1,28 +1,26 @@
 <!-- 菜品管理 -->
 <template>
+    <Header-web></Header-web>
+    <Menu-web></Menu-web>
+    <Footer-web></Footer-web>
     <div id="box">
         <div style="margin-bottom: 10px;">
             <el-row>
                 <el-col :span="24">
-                    <el-button type="primary" @click="addDish">新增</el-button>
+                    <el-button type="primary" @click="addDish">新增菜品</el-button>
                     <el-button type="danger" @click="selectAll">删除</el-button>
                 </el-col>
             </el-row>
         </div>
         <el-table :data="dishesData" border style="width: 100%" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column label="图片">
+            <el-table-column label="菜品图片">
                 <template #default="scope">
-                    <el-upload class="avatar-uploader"
-                        :action="`http://localhost:8999/files/upload/addNewDish/${scope.row.dishId}`"
-                        :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-                        <img v-if="scope.row.dishImg"
-                            :src="`http://localhost:8999/images/upload/addNewDish/dishImg/${scope.row.dishImg}`"
-                            class="avatar" />
-                        <el-icon v-else class="avatar-uploader-icon">
-                            <Plus />
-                        </el-icon>
-                    </el-upload>
+                    <div
+                        style="width: 100px; height: 100px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                        <img :src="`http://localhost:8999/images/upload/addNewDish/dishImg/${scope.row.dishImg}`"
+                            alt="菜品图片" style="width: 80px; height: 80px;">
+                    </div>
                 </template>
             </el-table-column>
             <el-table-column label="菜品名称" prop="dishName"></el-table-column>
@@ -36,38 +34,40 @@
             </el-table-column>
         </el-table>
 
-
-
         <transition name="el-zoom-in-top">
-            <el-dialog v-model="showAdd" title="新增菜品" width="600">
+            <el-dialog v-model="showAdd" title="新增菜品" width="500">
                 <el-form :model="newDish">
-
-                    <el-form-item label="菜品名">
+                    <el-form-item label="菜品名称">
                         <el-input v-model="newDish.dishName" autocomplete="off" />
+                    </el-form-item>
+                    <el-form-item label="菜品图片">
+                        <el-upload class="avatar-uploader" :action="`http://localhost:8999/files/upload/addNewDish`"
+                            :show-file-list="false" :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload">
+                            <el-icon v-if="newDish.dishImg" class="avatar-uploader-icon">
+                                <img :src="`http://localhost:8999/images/upload/addNewDish/dishImg/${newDish.dishImg}`"
+                                    class="avatar" />
+                            </el-icon>
+                            <el-icon v-else class="avatar-uploader-icon">
+                                <Plus />
+                            </el-icon>
+                        </el-upload>
+                    </el-form-item>
+                    <el-form-item label="菜品价格">
+                        <el-input v-model="newDish.dishPrice" autocomplete="off" />
                     </el-form-item>
                     <el-form-item label="菜品数量">
                         <el-input v-model="newDish.dishQuantity" autocomplete="off" />
-                    </el-form-item>
-
-                    <el-form-item label="菜品价格">
-                        <el-input v-model="newDish.dishPrice" autocomplete="off" />
                     </el-form-item>
                 </el-form>
                 <template #footer>
                     <div class="dialog-footer">
                         <el-button @click="doNotSave">返回</el-button>
-                        <el-button type="primary" @click="doAddNewDishes">
-                            添加
-                        </el-button>
+                        <el-button type="primary" @click="doAddNewDishes">添加</el-button>
                     </div>
                 </template>
             </el-dialog>
         </transition>
-
-
-
-
-
     </div>
 </template>
 
@@ -145,9 +145,19 @@ onMounted(() => {
 
 <style scoped>
 #box {
-    background-color: white;
     display: flex;
     flex-direction: column;
+    width: 82%;
+    height: auto;
+    float: right;
+    position: relative;
+    top: 80px;
+    margin-right: 10px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+
 }
 
 .avatar-uploader .avatar {

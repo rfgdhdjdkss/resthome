@@ -69,7 +69,7 @@ public class ElderlyhealthServiceImpl extends ServiceImpl<ElderlyhealthMapper, E
             String bloodPressure = health.getBloodPressure();
             String temperature = health.getTemperature();
             String bedroom = elderlyMap.get(eid).getBedroom();
-            String status = health.getStatus() == 1 ? "正常" : "需要关注";
+            Integer status = health.getStatus();
             result.add(new elderlyHealthVo(hid, eid, elderlyName, elderlyAge, heartRate, bloodPressure, temperature, bedroom, status, image));
         }
 
@@ -95,6 +95,7 @@ public class ElderlyhealthServiceImpl extends ServiceImpl<ElderlyhealthMapper, E
     public Page<Elderlyhealth> findAllElderlyHealth(Page<Elderlyhealth> page) {
         QueryWrapper<Elderlyhealth> queryWrapper = new QueryWrapper<>();
         Page<Elderlyhealth> elderlyhealthPage = elderlyhealthMapper.selectPage(page, queryWrapper);
+
         return elderlyhealthPage;
     }
 
@@ -119,7 +120,6 @@ public class ElderlyhealthServiceImpl extends ServiceImpl<ElderlyhealthMapper, E
         LambdaQueryWrapper<Elderlyhealth> healthWrapper = Wrappers.lambdaQuery(Elderlyhealth.class)
                 .in(Elderlyhealth::getEid, eidList);
         IPage<Elderlyhealth> elderlyhealthPage = elderlyhealthMapper.selectPage(page, healthWrapper);
-
         return (Page<Elderlyhealth>) elderlyhealthPage;
     }
 
@@ -128,6 +128,18 @@ public class ElderlyhealthServiceImpl extends ServiceImpl<ElderlyhealthMapper, E
         UpdateWrapper<Elderlyhealth> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("eid", elderlyhealth.getEid());
         int update = elderlyhealthMapper.update(elderlyhealth, updateWrapper);
+        if (update != 1) {
+            return Result.build(null, ResultCodeEnum.UPDATE_ERROR);
+        }
+        return Result.ok(update);
+    }
+
+    @Override
+    public Result updateStatus(Long eid, Integer status) {
+        UpdateWrapper updateWrapper = new UpdateWrapper();
+        updateWrapper.eq("eid", eid);
+        updateWrapper.set("status", status);
+        int update = elderlyhealthMapper.update(updateWrapper);
         if (update != 1) {
             return Result.build(null, ResultCodeEnum.UPDATE_ERROR);
         }

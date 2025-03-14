@@ -19,9 +19,10 @@ public class elderlyHealthVo {
     private String bloodPressure;
     private String temperature;
     private String bedroom;
-    private String status;
+    private String oxygen;
+    private Integer status;
 
-    public elderlyHealthVo(Long hid, Long eid, String elderlyName, String elderlyAge, String heartRate, String bloodPressure, String temperature, String bedroom, String status, String image) {
+    public elderlyHealthVo(Long hid, Long eid, String elderlyName, String elderlyAge, String heartRate, String bloodPressure, String temperature, String bedroom, Integer status, String image,String oxygen) {
         this.hid = hid;
         this.eid = eid;
         this.elderlyName = elderlyName;
@@ -32,11 +33,12 @@ public class elderlyHealthVo {
         this.bedroom = bedroom;
         this.status = status;
         this.image = image;
+        this.oxygen = oxygen;
     }
 
     private String image;
 
-    public elderlyHealthVo(Long hid, Long eid, String elderlyName, String elderlyAge, String heartRate, String bloodPressure, String temperature, String bedroom, String status) {
+    public elderlyHealthVo(Long hid, Long eid, String elderlyName, String elderlyAge, String heartRate, String bloodPressure, String temperature, String bedroom, Integer status,String oxygen) {
         this.hid = hid;
         this.eid = eid;
         this.elderlyName = elderlyName;
@@ -46,28 +48,10 @@ public class elderlyHealthVo {
         this.temperature = temperature;
         this.bedroom = bedroom;
         this.status = status;
+        this.oxygen = oxygen;
     }
 
-    public elderlyHealthVo(Long hid, Long eid, String elderlyName, String elderlyAge, String heartRate, String bloodPressure, String temperature, String bedroom) {
-        this.hid = hid;
-        this.eid = eid;
-        this.elderlyName = elderlyName;
-        this.elderlyAge = elderlyAge;
-        this.heartRate = heartRate;
-        this.bloodPressure = bloodPressure;
-        this.temperature = temperature;
-        this.bedroom = bedroom;
-    }
 
-    public elderlyHealthVo(Long hid, Long eid, String elderlyName, String elderlyAge, String heartRate, String bloodPressure, String temperature) {
-        this.hid = hid;
-        this.eid = eid;
-        this.elderlyName = elderlyName;
-        this.elderlyAge = elderlyAge;
-        this.heartRate = heartRate;
-        this.bloodPressure = bloodPressure;
-        this.temperature = temperature;
-    }
 
     @Override
     public String toString() {

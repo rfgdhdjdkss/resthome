@@ -14,6 +14,15 @@
             <el-table-column label="心率(次/分)" prop="heartRate" />
             <el-table-column label="体温(°C)" prop="temperature" />
             <el-table-column label="血压(mmHg)" prop="bloodPressure" />
+            <el-table-column label="血氧" prop="oxygen" />
+            <el-table-column label="是否需要关注">
+                <template #default="{ row }">
+                    <el-tag :type="row.status ? 'success' : 'warning'">{{ row.status ? '正常' : '需要关注'
+                        }}</el-tag>
+                    <el-switch v-model="row.status" @click="updateStatus(row)" style="margin-left: 2px;" />
+
+                </template>
+            </el-table-column>
             <el-table-column align="right">
                 <template #header>
                     <el-input v-model="search" size="default" placeholder="输入老人姓名/编号/房间号搜索" />
@@ -96,14 +105,14 @@
 
     <el-dialog v-model="editDialogFormVisible" title="编辑老人健康信息" width="500">
         <el-form :model="editForm">
-            <el-form-item label="老人姓名" :label-width="formLabelWidth" >
-                <el-input v-model="editForm.elderlyName" autocomplete="off" disabled/>
+            <el-form-item label="老人姓名" :label-width="formLabelWidth">
+                <el-input v-model="editForm.elderlyName" autocomplete="off" disabled />
             </el-form-item>
             <el-form-item label="床位号" :label-width="formLabelWidth">
-                <el-input v-model="editForm.bedroom" autocomplete="off" disabled/>
+                <el-input v-model="editForm.bedroom" autocomplete="off" disabled />
             </el-form-item>
             <el-form-item label="年龄" :label-width="formLabelWidth">
-                <el-input v-model="editForm.elderlyAge" autocomplete="off" disabled/>
+                <el-input v-model="editForm.elderlyAge" autocomplete="off" disabled />
             </el-form-item>
             <el-form-item label="心率(次/分)" :label-width="formLabelWidth">
                 <el-input v-model="editForm.heartRate" autocomplete="off" />
@@ -114,6 +123,10 @@
             <el-form-item label="血压(mmHg)" :label-width="formLabelWidth">
                 <el-input v-model="editForm.bloodPressure" autocomplete="off" />
             </el-form-item>
+            <el-form-item label="血氧" :label-width="formLabelWidth">
+                <el-input v-model="editForm.oxygen" autocomplete="off" />
+            </el-form-item>
+
         </el-form>
         <template #footer>
             <div class="dialog-footer">
@@ -129,7 +142,7 @@
 <script lang="ts" setup>
 import axios from '@/api/request.js';
 import { computed, ref, onMounted, reactive, watch } from 'vue';
-import { ArrowDownBold, ArrowLeftBold, ArrowRightBold, InfoFilled, User } from '@element-plus/icons-vue';
+import { ArrowDownBold, ArrowLeftBold, ArrowRightBold, InfoFilled } from '@element-plus/icons-vue';
 import { definedUser } from '@/stores/index.js';
 import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
@@ -137,28 +150,7 @@ import { useRouter } from 'vue-router';
 let router = useRouter();
 let loginUser = definedUser();
 
-// 控制dialog是否打开
-// 老人信息接口
-interface Elderly {
-    eid: number;
-    elderlyName: string;
-}
-
-// 老人健康信息接口
-interface ElderlyHealth {
-    eid: number;
-    isHealthy: boolean;
-    healthProblems: string;
-    lastCheckupTime: string;
-}
-
-// 合并后的老人信息和健康信息接口
-interface ElderlyWithHealth extends Elderly {
-    healthInfo: ElderlyHealth;
-}
-
 const search = ref('');
-// pageInfo 接收服务器响应的分页属性
 const pageInfo = reactive({
     currentPage: 1,
     pageSize: 10,
@@ -167,39 +159,27 @@ const pageInfo = reactive({
     hasPrevious: false,
     hasNext: false,
 });
-const tableData = reactive<ElderlyWithHealth[]>([]);
+const tableData = reactive([]);
 
 // 获取老人健康信息
 const fetchData = () => {
     axios.get(`/eHealth/selectAllElderlyWithHealth`, {
         params: {
-            // 当前页
             currentPage: pageInfo.currentPage,
-            // 每页有几条数据
             pageSize: pageInfo.pageSize,
         },
     }).then(function (response) {
-        console.log(response);
-
-        // 表格数据
-        const convertedData: ElderlyWithHealth[] = response.data.data.records.map(item => ({
+        const convertedData = response.data.data.records.map(item => ({
             ...item,
+            status: item.status === 1,
         }));
         tableData.splice(0, tableData.length, ...convertedData);
-
-        // 接收到的数据中共有几条数据
         pageInfo.total = response.data.data.total;
-        // 当前为第几页
         pageInfo.currentPage = response.data.data.currentPage;
-        // 接收到的数据中一页有几条数据
         pageInfo.pageSize = response.data.data.pageSize;
-        // 接收到的数据中共有几页
         pageInfo.pages = response.data.data.pages;
-        // 是否有前一页
         pageInfo.hasPrevious = response.data.data.hasPrevious;
-        // 是否有后一页
         pageInfo.hasNext = response.data.data.hasNext;
-        console.log(response);
     }).catch(function (error) {
         console.log(error);
     });
@@ -209,15 +189,12 @@ const fetchData = () => {
 function searchTableData(searchValue) {
     axios.get("/eHealth/selectForSearchHealthManagement", {
         params: {
-            // 当前页
             currentPage: pageInfo.currentPage,
-            // 页大小
             pageSize: pageInfo.pageSize,
-            // 搜索框的值
             searchValue: searchValue,
         },
     }).then(response => {
-        const convertedData: ElderlyWithHealth[] = response.data.data.records.map(item => ({
+        const convertedData = response.data.data.records.map(item => ({
             ...item,
         }));
         tableData.splice(0, tableData.length, ...convertedData);
@@ -299,13 +276,9 @@ function changeNextPage() {
 }
 
 // 删除事件
-const handleDelete = (index: number, row: ElderlyWithHealth) => {
-    // if (window.confirm('您确定要删除用户 ' + row.username + ' 吗？')) {
-    // 用户点击了确定按钮
+const handleDelete = (index, row) => {
     axios.delete(`/elderly/delete/${row.eid}`)
         .then(response => {
-            // 服务器成功响应删除请求
-            // 从本地数组中移除用户
             tableData.splice(index, 1);
             fetchData();
         })
@@ -315,15 +288,13 @@ const handleDelete = (index: number, row: ElderlyWithHealth) => {
 };
 
 // 点击删除后确认，触发事件，删除老人信息
-const confirmEvent = (index: number, row: ElderlyWithHealth) => {
+const confirmEvent = (index, row) => {
     handleDelete(index, row);
 };
 
 const addDialogFormVisible = ref(false);
-// 是否显示编辑框
 const editDialogFormVisible = ref(false);
 const formLabelWidth = '140px';
-// 存储编辑框内的响应式数据
 const editForm = reactive({
     eid: '',
     elderlyName: '',
@@ -331,11 +302,12 @@ const editForm = reactive({
     elderlyAge: '',
     heartRate: '',
     temperature: '',
-    bloodPressure: ''
+    bloodPressure: '',
+    oxygen: ''
 });
 
 // 编辑事件
-function editInfo(index: number, row: ElderlyWithHealth) {
+function editInfo(index, row) {
     editForm.eid = row.eid;
     editForm.elderlyName = row.elderlyName;
     editForm.bedroom = row.bedroom;
@@ -343,6 +315,7 @@ function editInfo(index: number, row: ElderlyWithHealth) {
     editForm.heartRate = row.heartRate;
     editForm.temperature = row.temperature;
     editForm.bloodPressure = row.bloodPressure;
+    editForm.oxygen = row.oxygen;
 
     editDialogFormVisible.value = true;
 }
@@ -356,7 +329,8 @@ const saveEdit = async () => {
         elderlyAge: editForm.elderlyAge,
         heartRate: editForm.heartRate,
         temperature: editForm.temperature,
-        bloodPressure: editForm.bloodPressure
+        bloodPressure: editForm.bloodPressure,
+        oxygen: editForm.oxygen
     });
 
     if (response.data.code === 200) {
@@ -376,10 +350,16 @@ const doNotSave = () => {
         type: 'warning',
     });
 };
-// 打开新增商品对话框
-function openAddDialog() {
-    // 清空表单数据
-    addDialogFormVisible.value = true;
+
+const updateStatus = (row) => {
+    axios.put(`/eHealth/updateStatus`, {
+        eid: row.eid,
+        status: row.status === true ? 1 : 0
+    }).then(function (response) {
+        ElMessage.success('修改成功');
+    }).catch(function (error) {
+        console.log(error);
+    });
 }
 
 onMounted(() => {
@@ -475,6 +455,7 @@ onMounted(() => {
     font-size: var(--el-font-size-base);
     color: var(--el-text-color-regular);
 }
+
 /* 编辑对话框 */
 .edit-dialog {
     width: 500px;

@@ -6,6 +6,7 @@ import com.jinyang.resthome.mapper.ElderlyMapper;
 import com.jinyang.resthome.pojo.Elderly;
 import com.jinyang.resthome.pojo.Elderlyhealth;
 import com.jinyang.resthome.pojo.User;
+import com.jinyang.resthome.pojo.dto.HealthStatusRequest;
 import com.jinyang.resthome.pojo.vo.elderlyHealthVo;
 import com.jinyang.resthome.service.ElderlyService;
 import com.jinyang.resthome.service.ElderlyhealthService;
@@ -88,8 +89,9 @@ public class ElderlyhealthController {
             String bloodPressure = health.getBloodPressure();
             String temperature = health.getTemperature();
             String bedroom = elderly.getBedroom();
-            String status = health.getStatus() == 1 ? "正常" : "需要关注";
-            result.add(new elderlyHealthVo(hid, eid, elderlyName, elderlyAge, heartRate, bloodPressure, temperature, bedroom, status, image));
+            String oxygen = health.getOxygen();
+            Integer status = health.getStatus();
+            result.add(new elderlyHealthVo(hid, eid, elderlyName, elderlyAge, heartRate, bloodPressure, temperature, bedroom, status, image, oxygen));
         }
         return result;
     }
@@ -107,7 +109,6 @@ public class ElderlyhealthController {
 
         // 将Elderlyhealth对象转换为elderlyHealthVo对象
         List<elderlyHealthVo> elderlyHealthVoList = convertToElderlyHealthVoList(elderlyhealthPage.getRecords());
-
         // 创建一个新的Page对象，用于存储elderlyHealthVo数据
         Page<elderlyHealthVo> elderlyHealthVoPage = new Page<>(currentPage, pageSize, elderlyhealthPage.getTotal());
         elderlyHealthVoPage.setRecords(elderlyHealthVoList);
@@ -126,6 +127,13 @@ public class ElderlyhealthController {
     @PutMapping("/updateElderlyHealth")
     public Result updateElderlyHealth(@RequestBody Elderlyhealth elderlyhealth) {
         Result result = elderlyhealthService.updateByEid(elderlyhealth);
+        return result;
+    }
+
+    @PutMapping("/updateStatus")
+    public Result updateStatus(@RequestBody HealthStatusRequest request) {
+        System.out.println(request.toString());
+        Result result = elderlyhealthService.updateStatus(request.getEid(), request.getStatus());
         return result;
     }
 

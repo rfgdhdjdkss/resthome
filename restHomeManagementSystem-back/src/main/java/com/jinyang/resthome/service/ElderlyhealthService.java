@@ -23,4 +23,6 @@ public interface ElderlyhealthService extends IService<Elderlyhealth> {
     Page<Elderlyhealth> selectBySearchValue(Page<Elderlyhealth> page, String searchValue);
 
     Result updateByEid(Elderlyhealth elderlyhealth);
+
+    Result updateStatus(Long eid, Integer status);
 }

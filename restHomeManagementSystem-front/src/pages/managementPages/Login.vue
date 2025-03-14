@@ -1,31 +1,39 @@
 <template>
     <div id="box">
-        <h2>登录</h2>
-        <el-form ref="ruleFormRef" :model="ruleForm" status-icon :rules="rules" class="demo-ruleForm" size="large"
-            label-position="top">
-            <el-form-item class="el_input" label="用户名" prop="username" name="username">
-                <el-input v-model="ruleForm.username" type="" autocomplete="off" />
-            </el-form-item>
-            <el-form-item class="el_input" label="密码" prop="password" name="password">
-                <el-input v-model="ruleForm.password" type="password" autocomplete="off" show-password />
-            </el-form-item>
-            <el-form-item label="我是" label-position="left" prop="permission">
-                <el-radio-group v-model="ruleForm.permission">
-                    <el-radio value="普通用户">普通用户</el-radio>
-                    <el-radio value="员工">员工</el-radio>
-                    <el-radio value="管理员">管理员</el-radio>
+        <h1>养老院管理系统</h1>
+        <div class="form-container">
+            <div class="login-img">
+                <img src="@/images/login-img.png" alt="" style="width: 100%;">
+            </div>
+            <div class="form-div">
 
-                </el-radio-group>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="login">
-                    登录
-                </el-button>
-                <el-button @click="resetForm(ruleFormRef)">重置</el-button>
-                <el-button @click="toRegister">去注册</el-button>
+                <h2 style="width: 300px;">登录</h2>
+                <el-form ref="ruleFormRef" :model="ruleForm" status-icon :rules="rules" class="demo-ruleForm"
+                    size="large" label-position="top">
+                    <el-form-item class="el_input" label="用户名" prop="username" name="username">
+                        <el-input v-model="ruleForm.username" type="" autocomplete="off" />
+                    </el-form-item>
+                    <el-form-item class="el_input" label="密码" prop="password" name="password">
+                        <el-input v-model="ruleForm.password" type="password" autocomplete="off" show-password />
+                    </el-form-item>
+                    <el-form-item label="我是" label-position="left" prop="permission">
+                        <el-radio-group v-model="ruleForm.permission">
+                            <el-radio value="普通用户">普通用户</el-radio>
+                            <el-radio value="员工">员工</el-radio>
+                            <el-radio value="管理员">管理员</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="login">
+                            登录
+                        </el-button>
+                        <el-button @click="resetForm(ruleFormRef)">重置</el-button>
+                        <el-button @click="toRegister">去注册</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
 
-            </el-form-item>
-        </el-form>
+        </div>
     </div>
 </template>
 
@@ -126,15 +134,73 @@ const resetForm = (formEl: FormInstance | undefined) => {
 </script>
 <style scoped>
 #box {
-    background-color: #fff;
+    background-color: #4473d9;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 700px;
+    height: 100vh;
+    width: 100%;
+}
+
+h1 {
+    font-size: 2.5em;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.form-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    width: 900px;
+    gap: 60px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 50px;
+    width: 400px;
+    height: 300px;
+
+
+}
+.form-div{
+    width: 400px;
+}
+/* 添加动态漂浮圆点 */
+.login-background::before {
+    content: "";
+    position: absolute;
+    width: 300%;
+    height: 300%;
+    background: radial-gradient(circle,
+            rgba(255, 255, 255, 0.1) 10%,
+            transparent 20%);
+    animation: float 20s linear infinite;
+}
+
+@keyframes float {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
 
 .el_input {
-    width: 600px;
+    width: 300px;
 }
 </style>

@@ -118,14 +118,12 @@
                     </el-sub-menu>
                     <!-- 餐饮管理 -->
 
-                    <!-- <router-link to="/catering/dishes">
-                            <el-menu-item index="6-1">菜品管理</el-menu-item>
-                        </router-link>
-                        <router-link to="/catering/combo">
+
+                    <!-- <router-link to="/catering/combo">
                             <el-menu-item index="6-2">餐饮套餐</el-menu-item>
                         </router-link> -->
 
-                    <el-sub-menu index="6-1">
+                    <el-sub-menu index="6">
 
                         <template #title>
                             <el-icon>
@@ -133,12 +131,15 @@
                             </el-icon>
                             商品管理
                         </template>
-                            <router-link to="/catering/goodsManagementPage">
-                                <el-menu-item index="1-3">
+                        <router-link to="/catering/goodsManagementPage">
+                            <el-menu-item index="6-1">
 
-                                    <span>商品管理</span>
-                                </el-menu-item>
-                            </router-link>
+                                <span>商品管理</span>
+                            </el-menu-item>
+                        </router-link>
+                        <router-link to="/catering/dishes">
+                            <el-menu-item index="6-2">菜品管理</el-menu-item>
+                        </router-link>
                     </el-sub-menu>
 
 
