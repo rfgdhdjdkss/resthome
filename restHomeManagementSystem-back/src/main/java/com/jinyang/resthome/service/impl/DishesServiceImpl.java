@@ -1,9 +1,14 @@
 package com.jinyang.resthome.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jinyang.resthome.common.Result;
+import com.jinyang.resthome.common.ResultCodeEnum;
 import com.jinyang.resthome.pojo.Dishes;
+import com.jinyang.resthome.pojo.Goods;
 import com.jinyang.resthome.pojo.User;
 import com.jinyang.resthome.service.DishesService;
 import com.jinyang.resthome.mapper.DishesMapper;
@@ -24,6 +29,11 @@ public class DishesServiceImpl extends ServiceImpl<DishesMapper, Dishes>
     private DishesMapper dishesMapper;
 
     @Override
+    public Dishes addDish(Dishes dishes) {
+        return null;
+    }
+
+    @Override
     public List<Dishes> getAllDishes() {
         return dishesMapper.selectList(null);
     }
@@ -37,17 +47,53 @@ public class DishesServiceImpl extends ServiceImpl<DishesMapper, Dishes>
     }
 
     @Override
-    public Dishes addDish(Dishes dishes) {
-        dishesMapper.insert(dishes);
-        QueryWrapper<Dishes> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("dishName", dishes.getDishName()).eq("dishQuantity", dishes.getDishQuantity()).eq("dishPrice", dishes.getDishPrice());
-        List<Dishes> newDish = dishesMapper.selectList(queryWrapper);
-        System.out.println(newDish);
-        return newDish.get(0);
+    public Page<Dishes> findAllDishes(Page<Dishes> page) {
+        Page<Dishes> Dishes = dishesMapper.selectPage(page, null);
+        return Dishes;
     }
 
+    @Override
+    public Result deleteDishesByGid(Long gid) {
+        int result = dishesMapper.deleteById(gid);
+        if (result != 1) {
+            return Result.build(null, ResultCodeEnum.DELETE_ERROR);
+        } else {
+            return Result.ok(null);
+        }
+    }
 
+    @Override
+    public Page<Dishes> selectBySearchValue(Page<Dishes> page, String searchValue) {
+        LambdaQueryWrapper<Dishes> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(Dishes::getDishName, searchValue).or().like(Dishes::getDescription, searchValue);
+        Page<Dishes> dishes = dishesMapper.selectPage(page, wrapper);
+        return dishes;
+    }
+
+    @Override
+    public Result updateDishesByGid(Dishes dishes) {
+        UpdateWrapper<Dishes> wrapper = new UpdateWrapper<>();
+        wrapper.eq("dishId", dishes.getDishId());
+        int update = dishesMapper.update(dishes, wrapper);
+        if (update != 1) {
+            return Result.build(null, ResultCodeEnum.UPDATE_ERROR);
+        }
+        return Result.ok(dishes);
+    }
+
+    @Override
+    public Result insertDishes(Dishes dishes) {
+        int insert = dishesMapper.insert(dishes);
+        if (insert != 1) {
+            Result.build(null,ResultCodeEnum.INSERT_FAIL);
+        }
+        return Result.ok(insert);
+    }
 }
+
+
+
+
 
 
 

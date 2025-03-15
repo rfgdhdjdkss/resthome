@@ -21,7 +21,8 @@
                     <span class="order-status">{{ getOrderStatus(order.orderStatus) }}</span>
                 </div>
                 <div class="order-products">
-                    <div v-for="(item, itemIndex) in order.goodsList" :key="itemIndex" class="order-product" @click="gotoGoodsDetailPage(item.gid)">
+                    <div v-for="(item, itemIndex) in order.goodsList" :key="itemIndex" class="order-product"
+                        @click="gotoGoodsDetailPage(item.gid)">
                         <div
                             style="width: 100px; height: 100px; display: flex;align-items: center;justify-content: center; margin-right: 15px;">
                             <img :src="`http://localhost:8999/images/upload/goodsImg/${item.image}`"
@@ -37,7 +38,8 @@
                             </div>
                             <div style="display: flex; align-items: center;justify-content: end;">
                                 <button class="repurchase-btn" @click="repurchase(order)">再次购买</button>
-                                <button class="repurchase-btn" v-if="order.orderStatus === 'pending'" @click.stop="gotoPay(order)">去付款</button>
+                                <button class="repurchase-btn" v-if="order.orderStatus === 'pending'"
+                                    @click.stop="gotoPay(order)">去付款</button>
                                 <button v-if="order.orderStatus === 'evaluation'" class="repurchase-btn"
                                     @click="gotoGoodsCommentPage(item.gid, order)">去评价</button>
                                 <button v-if="order.orderStatus === 'evaluation'" class="repurchase-btn"
@@ -100,17 +102,22 @@ const changeTab = (tabValue) => {
 
 // 根据 createTime 排序，新的排在上面
 const filteredOrders = computed(() => {
-    let filtered = orders.value;
-    // 根据当前标签筛选订单
+    let filtered = orders.value.filter(order =>
+        !order.orderNumber.startsWith('CATERING') // 使用可选链防止空值
+    );
+    console.log(filtered);
+
+    // 第一步：按标签筛选
     if (currentTab.value !== 'all') {
-        filtered = orders.value.filter((order) => order.orderStatus === currentTab.value);
+        filtered = orders.value.filter(order =>
+            order.orderStatus === currentTab.value
+        );
     }
 
-    // 根据 createTime 排序
+
+    // 第三步：时间排序
     return filtered.sort((a, b) => {
-        const timeA = new Date(a.createTime).getTime(); // 转换为时间戳
-        const timeB = new Date(b.createTime).getTime(); // 转换为时间戳
-        return timeB - timeA; // 降序排列
+        return new Date(b.createTime) - new Date(a.createTime);
     });
 });
 
@@ -118,17 +125,17 @@ const filteredOrders = computed(() => {
 const repurchase = (order) => {
     console.log('再次购买', order);
     router.push({
-            name: 'Pay_app',
-            params: { oid: order.oid }
-        });
+        name: 'Pay_app',
+        params: { oid: order.oid }
+    });
 };
 
 const gotoPay = (order) => {
     console.log('再次购买', order);
     router.push({
-            name: 'Pay_app',
-            params: { oid: order.oid }
-        });
+        name: 'Pay_app',
+        params: { oid: order.oid }
+    });
 };
 const gotoGoodsCommentPage = (gid, order) => {
 
@@ -147,17 +154,19 @@ const orderStatusMap = {
     cancelled: '已取消',
     evaluation: '待评价',
     sales: '退款售后',
-    finished:'已完成'
+    finished: '已完成'
 };
 
 // 获取订单状态
 const getOrderStatus = (status) => {
     return orderStatusMap[status] || status; // 如果没有匹配的状态，返回原状态
 };
-const gotoGoodsDetailPage=(gid)=>{
-    router.push({name:'GoodsDetail_app',params:{
-        gid:gid
-    }})
+const gotoGoodsDetailPage = (gid) => {
+    router.push({
+        name: 'GoodsDetail_app', params: {
+            gid: gid
+        }
+    })
 }
 </script>
 

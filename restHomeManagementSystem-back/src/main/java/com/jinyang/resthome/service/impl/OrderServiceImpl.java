@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jinyang.resthome.common.Result;
 import com.jinyang.resthome.common.ResultCodeEnum;
+import com.jinyang.resthome.mapper.DishesorderMapper;
 import com.jinyang.resthome.mapper.GoodsMapper;
 import com.jinyang.resthome.mapper.GoodsOrderMapper;
 import com.jinyang.resthome.mapper.OrdersMapper;
@@ -34,6 +35,8 @@ public class OrderServiceImpl extends ServiceImpl<OrdersMapper, Orders>
     private GoodsOrderMapper goodsOrderMapper;
     @Autowired
     private GoodsMapper goodsMapper;
+    @Autowired
+    private DishesorderMapper dishesorderMapper;
 
     @Override
     public Result insertOrder(Orders order, List<GoodsOrder> goodsOrders) {
@@ -206,5 +209,18 @@ public class OrderServiceImpl extends ServiceImpl<OrdersMapper, Orders>
         }
 
         return Result.ok(result);
+    }
+
+    @Override
+    public Result insertDishOrder(Orders order, List<Dishesorder> dishesorders) {
+        ordersMapper.insert(order);
+        Long orderId = order.getOid();
+
+        // 保存订单商品关联信息
+        for (Dishesorder dishesorder : dishesorders) {
+            dishesorder.setOid(orderId);
+            dishesorderMapper.insert(dishesorder);
+        }
+        return Result.ok(order.getOrderNumber());
     }
 }

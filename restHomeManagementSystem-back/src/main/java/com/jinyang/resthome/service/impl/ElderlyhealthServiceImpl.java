@@ -22,10 +22,7 @@ import com.jinyang.resthome.util.IdCardAgeCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -42,6 +39,8 @@ public class ElderlyhealthServiceImpl extends ServiceImpl<ElderlyhealthMapper, E
     private ElderlyMapper elderlyMapper;
     @Autowired
     private HealthrecordMapper healthrecordMapper;
+    @Autowired
+    private HealthrecordMapper healthRecordMapper;
 
     @Override
     public Result selectHealthListByUid(Long uid) {
@@ -125,8 +124,48 @@ public class ElderlyhealthServiceImpl extends ServiceImpl<ElderlyhealthMapper, E
 
     @Override
     public Result updateByEid(Elderlyhealth elderlyhealth) {
+
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("eid", elderlyhealth.getEid());
+        Elderlyhealth elderlyhealth1 = elderlyhealthMapper.selectOne(queryWrapper);
+        if (!elderlyhealth.getBloodPressure().equals(elderlyhealth1.getBloodPressure())) {
+            Healthrecord healthrecord = new Healthrecord();
+            healthrecord.setEid(elderlyhealth.getEid());
+            healthrecord.setContent("进行了血压检测");
+            healthrecord.setTime(new Date());
+            healthrecord.setType("success");
+            healthRecordMapper.insert(healthrecord);
+        }
+        if (!elderlyhealth.getOxygen().equals(elderlyhealth1.getOxygen())) {
+            Healthrecord healthrecord = new Healthrecord();
+            healthrecord.setEid(elderlyhealth.getEid());
+            healthrecord.setContent("进行了血氧检测");
+            healthrecord.setTime(new Date());
+            healthrecord.setType("primary");
+            healthRecordMapper.insert(healthrecord);
+
+        }
+        if (!elderlyhealth.getTemperature().equals(elderlyhealth1.getTemperature())) {
+            Healthrecord healthrecord = new Healthrecord();
+            healthrecord.setEid(elderlyhealth.getEid());
+            healthrecord.setContent("进行了体温检测");
+            healthrecord.setTime(new Date());
+            healthrecord.setType("info");
+            healthRecordMapper.insert(healthrecord);
+        }
+        if (!elderlyhealth.getHeartRate().equals(elderlyhealth1.getHeartRate())) {
+            Healthrecord healthrecord = new Healthrecord();
+            healthrecord.setEid(elderlyhealth.getEid());
+            healthrecord.setContent("进行了心率检测");
+            healthrecord.setTime(new Date());
+            healthrecord.setType("warning");
+            healthRecordMapper.insert(healthrecord);
+        }
+
+
         UpdateWrapper<Elderlyhealth> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("eid", elderlyhealth.getEid());
+
         int update = elderlyhealthMapper.update(elderlyhealth, updateWrapper);
         if (update != 1) {
             return Result.build(null, ResultCodeEnum.UPDATE_ERROR);

@@ -1,5 +1,7 @@
 package com.jinyang.resthome.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jinyang.resthome.common.Result;
 import com.jinyang.resthome.pojo.Dishes;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -17,4 +19,14 @@ public interface DishesService extends IService<Dishes> {
     List<Dishes> getAllDishes();
 
     void updateDishImgByDishId(String newFileName, Long dishId);
+
+    Page<Dishes> findAllDishes(Page<Dishes> page);
+
+    Result deleteDishesByGid(Long gid);
+
+    Page<Dishes> selectBySearchValue(Page<Dishes> page, String searchValue);
+
+    Result updateDishesByGid(Dishes dishes);
+
+    Result insertDishes(Dishes dishes);
 }

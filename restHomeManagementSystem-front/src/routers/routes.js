@@ -125,6 +125,11 @@ const router = createRouter({
                         meta: { title: '收货地址' },
                         component: () => import('../pages/appPages/mine/shippingAddress/SelectShippingAddressList.vue'),
                     }, {
+                        path: '/selectElderlyAddressList_app',
+                        name: 'SelectElderlyAddressList_app',
+                        meta: { title: '收货地址' },
+                        component: () => import('../pages/appPages/catering/SelectElderlyAddressList.vue'),
+                    }, {
                         path: '/createNewAddress_app',
                         name: 'CreateNewAddress_app',
                         meta: { title: '新增收货地址' },
@@ -174,6 +179,12 @@ const router = createRouter({
                         component: () => import('../pages/appPages/order/SubmitOrder.vue'),
                     },
                     {
+                        path: '/submitDishOrder_app',
+                        name: 'SubmitDishOrder_app',
+                        meta: { title: '提交点餐订单' },
+                        component: () => import('../pages/appPages/catering/SubmitDishOrder.vue'),
+                    },
+                    {
                         path: '/checkOut_app',
                         name: 'CheckOut_app',
                         meta: { title: '退住' },
@@ -194,6 +205,11 @@ const router = createRouter({
                         name: 'testPay',
                         meta: { title: '测试支付' },
                         component: () => import('../pages/appPages/testPay.vue'),
+                    }, {
+                        path: '/catering_app',
+                        name: 'Catering_app',
+                        meta: { title: '点餐' },
+                        component: () => import('../pages/appPages/catering/Catering.vue'),
                     }, {
                         path: '/payment-success',
                         name: 'PaymentSuccess',
@@ -220,14 +236,14 @@ const router = createRouter({
                     }, {
                         path: '/goods-comment',
                         name: 'GoodsComment',
-                        component: ()=>import('../pages/appPages/order/GoodsCommentPage.vue')
+                        component: () => import('../pages/appPages/order/GoodsCommentPage.vue')
                     },
                     {
                         path: '/transactionRecord_app',
                         name: 'TransactionRecordPage_app',
-                        component: ()=>import('../pages/appPages/mine/TransactionRecordPage.vue')
+                        component: () => import('../pages/appPages/mine/TransactionRecordPage.vue')
                     }
-                    
+
                 ]
         },
         // 后台管理路由

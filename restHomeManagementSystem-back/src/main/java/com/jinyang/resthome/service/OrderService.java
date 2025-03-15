@@ -1,6 +1,7 @@
 package com.jinyang.resthome.service;
 
 import com.jinyang.resthome.common.Result;
+import com.jinyang.resthome.pojo.Dishesorder;
 import com.jinyang.resthome.pojo.GoodsOrder;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jinyang.resthome.pojo.Orders;
@@ -22,4 +23,6 @@ public interface OrderService extends IService<Orders> {
     Result updateOrderStatusByOid(Long oid, String orderStatus);
 
     Result selectOrdersListByUid(Long uid);
+
+    Result insertDishOrder(Orders order, List<Dishesorder> dishesorders);
 }

@@ -1,8 +1,10 @@
 package com.jinyang.resthome.controller;
 
 import com.jinyang.resthome.common.Result;
+import com.jinyang.resthome.pojo.Dishesorder;
 import com.jinyang.resthome.pojo.GoodsOrder;
 import com.jinyang.resthome.pojo.Orders;
+import com.jinyang.resthome.pojo.dto.DishesOrderRequest;
 import com.jinyang.resthome.pojo.dto.OrderRequest;
 import com.jinyang.resthome.pojo.dto.UpdateOrderStatusRequest;
 import com.jinyang.resthome.service.OrderService;
@@ -34,11 +36,25 @@ public class OrderController {
         Orders order = new Orders();
         Date createTime = new Date();
         order.setCreateTime(createTime);
-        order.setOrderNumber("PAY_"+OrderNumberGeneratorUtils.generateOrderNumber(order.getCreateTime(), request.getUid()));
+        order.setOrderNumber("PAY_" + OrderNumberGeneratorUtils.generateOrderNumber(order.getCreateTime(), request.getUid()));
         order.setUid(request.getUid());
         order.setOrderStatus("pending");
         List<GoodsOrder> goodsOrders = request.getGoodsOrders();
         Result result = orderService.insertOrder(order, goodsOrders);
+        return result;
+    }
+
+    @PostMapping("/addDishOrder")
+    public Result addDishOrder(@RequestBody DishesOrderRequest request) {
+        System.out.println(request);
+        Orders order = new Orders();
+        Date createTime = new Date();
+        order.setCreateTime(createTime);
+        order.setOrderNumber("CATERING_" + OrderNumberGeneratorUtils.generateOrderNumber(order.getCreateTime(), request.getUid()));
+        order.setUid(request.getUid());
+        order.setOrderStatus("pending");
+        List<Dishesorder> dishesorders = request.getDishesorders();
+        Result result = orderService.insertDishOrder(order, dishesorders);
         return result;
     }
 
@@ -53,9 +69,10 @@ public class OrderController {
         Result result = orderService.updateOrderStatusByOid(oid, request.getOrderStatus());
         return result;
     }
+
     @GetMapping("/getOrdersByUid/{uid}")
     public Result getOrdersByUid(@PathVariable("uid") Long uid) {
-        Result result= orderService.selectOrdersListByUid(uid);
+        Result result = orderService.selectOrdersListByUid(uid);
         return result;
     }
 }

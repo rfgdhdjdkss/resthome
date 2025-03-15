@@ -44,6 +44,18 @@ public class Dishes implements Serializable {
     @TableField(value = "dishImg")
     private String dishImg;
 
+    /**
+     * 菜品描述
+     */
+    @TableField(value = "description")
+    private String description;
+
+    /**
+     * 菜品类别
+     */
+    @TableField(value = "tab")
+    private String tab;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
@@ -63,7 +75,9 @@ public class Dishes implements Serializable {
             && (this.getDishName() == null ? other.getDishName() == null : this.getDishName().equals(other.getDishName()))
             && (this.getDishPrice() == null ? other.getDishPrice() == null : this.getDishPrice().equals(other.getDishPrice()))
             && (this.getDishQuantity() == null ? other.getDishQuantity() == null : this.getDishQuantity().equals(other.getDishQuantity()))
-            && (this.getDishImg() == null ? other.getDishImg() == null : this.getDishImg().equals(other.getDishImg()));
+            && (this.getDishImg() == null ? other.getDishImg() == null : this.getDishImg().equals(other.getDishImg()))
+            && (this.getDescription() == null ? other.getDescription() == null : this.getDescription().equals(other.getDescription()))
+            && (this.getTab() == null ? other.getTab() == null : this.getTab().equals(other.getTab()));
     }
 
     @Override
@@ -75,6 +89,8 @@ public class Dishes implements Serializable {
         result = prime * result + ((getDishPrice() == null) ? 0 : getDishPrice().hashCode());
         result = prime * result + ((getDishQuantity() == null) ? 0 : getDishQuantity().hashCode());
         result = prime * result + ((getDishImg() == null) ? 0 : getDishImg().hashCode());
+        result = prime * result + ((getDescription() == null) ? 0 : getDescription().hashCode());
+        result = prime * result + ((getTab() == null) ? 0 : getTab().hashCode());
         return result;
     }
 
@@ -89,6 +105,8 @@ public class Dishes implements Serializable {
         sb.append(", dishPrice=").append(dishPrice);
         sb.append(", dishQuantity=").append(dishQuantity);
         sb.append(", dishImg=").append(dishImg);
+        sb.append(", description=").append(description);
+        sb.append(", tab=").append(tab);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

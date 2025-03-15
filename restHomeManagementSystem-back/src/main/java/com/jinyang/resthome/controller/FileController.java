@@ -68,7 +68,18 @@ private GoodsService goodsService;
         return newFileName;
 
     }
-
+    @PostMapping("/upload/addNewDish")
+    public String uploadDishesImgName(MultipartFile file) {
+        String oldFileName = file.getOriginalFilename();
+        String filePath = FileUtil.getUpLoadFilePath() + "/dishImg";
+        String newFileName = System.currentTimeMillis() + oldFileName;
+        try {
+            FileUtil.uploadFile(file.getBytes(), filePath, newFileName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return newFileName;
+    }
     /**
      * 上传文件
      *

@@ -106,6 +106,8 @@ public class AlipayController {
                 return handlePaymentReturn(orderNumber, subject, uid);
             } else if (orderNumber.startsWith("RECHARGE_")) {
                 return handleRechargeReturn(orderNumber, subject, uid);
+            } else if (orderNumber.startsWith("CATERING_")) {
+                return handleRechargeReturn(orderNumber, subject, uid);
             } else {
                 return new RedirectView("http://localhost:5173/#/payment-failed?error=unknown_order_type");
             }
