@@ -8,7 +8,7 @@
                 <div class="info-label">
                     <span>收货人</span>
                 </div>
-                <div>
+                <div style="width: 100%;">
                     <input type="text" placeholder="请填写收货人姓名" class="info-input" style="padding-left: 18px;"
                         v-model="addressInfo.receiveName">
                 </div>
@@ -17,7 +17,7 @@
                 <div class="info-label">
                     <span>收货地址</span>
                 </div>
-                <div>
+                <div style="width: 100%;">
                     <input type="text" placeholder="详细地址，具体到门牌号" class="info-input"
                         v-model="addressInfo.receiveAddress">
                 </div>
@@ -26,7 +26,7 @@
                 <div class="info-label">
                     <span>手机号码</span>
                 </div>
-                <div>
+                <div style="width: 100%;">
                     <input type="text" placeholder="请填写收货人手机号码" class="info-input" v-model="addressInfo.receivePhone">
                 </div>
             </div>
@@ -210,6 +210,7 @@ const deleteAddress = async () => {
 }
 
 .info-input {
+    width: 100%;
     border: none;
 }
 

@@ -156,6 +156,7 @@ const editAddress = () => {
 const logout = () => {
     loginUser.$reset();
     localStorage.removeItem('token')
+    localStorage.removeItem('receiveAddressId')
     // 跳转到登录页
     ElMessage.success('当前账号退出成功')
     router.push({ name: 'Login_app' });

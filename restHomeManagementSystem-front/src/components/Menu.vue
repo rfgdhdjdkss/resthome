@@ -64,7 +64,7 @@
                         </router-link>
                     </el-sub-menu>
                     <!-- 入住管理 -->
-                    <el-sub-menu index="3">
+                    <!-- <el-sub-menu index="3">
                         <template #title>
                             <el-icon>
                                 <CircleCheck />
@@ -74,17 +74,16 @@
                         <router-link to="/checkIn/signCheckInManagement">
                             <el-menu-item index="3-1">入住签约</el-menu-item>
                         </router-link>
-                        <!-- <router-link to="/checkIn/outRegistration">
+                         <router-link to="/checkIn/outRegistration">
                             <el-menu-item index="3-2">外出登记</el-menu-item>
                         </router-link>
                         <router-link to="/checkIn/inRegistration">
                             <el-menu-item index="3-3">来访登记</el-menu-item>
-                        </router-link> -->
+                        </router-link> 
                         <router-link to="/checkIn/checkOut">
                             <el-menu-item index="3-4">退住申请</el-menu-item>
                         </router-link>
-
-                    </el-sub-menu>
+                    </el-sub-menu> -->
                     <!-- 人员管理 -->
                     <el-sub-menu index="4">
                         <template #title>
