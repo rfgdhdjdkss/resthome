@@ -219,6 +219,8 @@ const itemPath = ref([
     '/src/images/carousel_1.JPG',
     '/src/images/carousel_2.JPG',
     '/src/images/carousel_3.JPG',
+    '/src/images/carousel_4.JPG',
+    '/src/images/carousel_5.JPG',
 ])
 const goodsList = ref([])
 const allGoods = ref([{}])
@@ -408,7 +410,9 @@ const gotoRegistrationApplicationPage = () => {
     border-radius: 20px;
     margin-bottom: 30px;
 }
-
+#carousel_div img{
+   width: 100%;
+}
 .el-carousel__item {
     display: flex;
     line-height: 150px;

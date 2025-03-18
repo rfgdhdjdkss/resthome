@@ -12,7 +12,9 @@
             <div v-for="record in filteredRecords" :key="record.id" class="transaction-item">
                 <div>
                     <img src="@/images/AliPay.png" width="50" height="50" alt="" style="border-radius: 50%;" v-if="record.transactionType==='支付宝'">
-                    <img  src="@/assets/images/logo.jpg" width="50" height="50" alt="" style="border-radius: 50%;" v-else>
+                    <img  src="@/images/weChatPay.png" width="50" height="50" alt="" style="border-radius: 50%;" v-if="record.transactionType==='微信支付' ">
+                    <img  src="@/assets/images/logo.jpg" width="50" height="50" alt="" style="border-radius: 50%;" v-if="record.transactionType==='账户余额' ">
+                    <img  src="@/images/yunShanFuPay.png" width="50" height="50" alt="" style="border-radius: 50%;" v-if="record.transactionType==='云闪付' ">
                 </div>
                 <div class="transaction-info">
                     <div>

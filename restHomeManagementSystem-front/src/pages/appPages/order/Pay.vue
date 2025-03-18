@@ -52,6 +52,7 @@ import { createAlipayPayment, submitAlipayForm } from '@/api/alipay';
 import { useRouter, useRoute } from 'vue-router';
 import { definedUser } from '@/stores';
 import axios from '@/api/request';
+import { ElMessage } from 'element-plus';
 
 let loginUser = definedUser()
 let router = useRouter()
@@ -135,6 +136,43 @@ const confirmPayment = async () => {
             console.error('支付失败:', error);
         }
     }
+    else if (paymentMethod.value === 'balance') {
+
+        const res = await axios.get(`/user/selectBalance/${loginUser.uid}`)
+        const newBalance = res.data.data.balance
+
+        if (newBalance >= totalAmount.value) {
+
+            axios.put(`/user/deductBalance`, {
+                uid: loginUser.uid,
+                money: totalAmount.value,
+            })
+            axios.post("/transaction/addIn", {
+                uid: loginUser.uid,
+                transactionMoney: totalAmount.value,
+                transactionType: '账户余额',
+                description: `${loginUser.nickname}购买的商品订单`,
+                inOrOut: 0
+            })
+            ElMessage.success('购买成功')
+            updateOrderStatus("finished")
+        }
+        else{
+            ElMessage.error('余额不足')
+        }
+    }
+    else if (paymentMethod.value === 'wechat') {
+        ElMessage.success('购买成功')
+        axios.post("/transaction/addIn", {
+            uid: loginUser.uid,
+            transactionMoney: totalAmount.value,
+            transactionType: '微信支付',
+            description: `${loginUser.nickname}购买的商品订单`,
+            inOrOut: 0
+        })
+        updateOrderStatus("finished")
+
+    }
     console.log('确认支付，支付方式：', paymentMethod.value);
     // 这里可以添加实际的支付请求逻辑
 };
@@ -142,8 +180,6 @@ const confirmPayment = async () => {
 // 监听剩余时间的变化
 watch(remainingTime, (newValue) => {
     if (newValue <= 0) {
-        console.log("<<<<<<0");
-
         // 剩余时间小于等于 0，发送请求更新订单状态
         updateOrderStatus('cancelled');
     }

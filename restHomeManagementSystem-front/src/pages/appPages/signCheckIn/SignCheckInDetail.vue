@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="header">
-            <span class="back-arrow" @click="router.push({name:'Home_app'})">←</span>
+            <span class="back-arrow" @click="router.push({ name: 'Home_app' })">←</span>
             <h2>签约详情</h2>
         </div>
         <div
@@ -680,10 +680,6 @@ function signCheckIn() {
         axios.put(`/user/deductBalance`, {
             uid: loginUser.uid,
             money: earnest.value,
-        }).then(function (response) {
-            console.log(response)
-        }).catch(function (error) {
-            console.log(error);
         })
         //记录扣除当前用户余额的交易记录
         transactionDeduct()

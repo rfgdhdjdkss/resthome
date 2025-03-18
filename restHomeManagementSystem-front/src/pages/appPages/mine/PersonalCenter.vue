@@ -86,7 +86,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import { useRouter } from 'vue-router';
 import { ArrowRight, Plus } from '@element-plus/icons-vue'
@@ -99,6 +99,7 @@ let router = useRouter()
 const nickname = ref(loginUser.nickname);
 const sex = ref(loginUser.sex);
 const balance = ref(loginUser.balance);
+
 const address = ref('修改/添加');
 
 const showModifyNickname = ref(false);
@@ -191,6 +192,10 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
 const getActionUrl = () => {
     return `http://localhost:8999/files/upload/${loginUser.uid}`
 }
+onMounted(async()=>{
+    const res = await axios.get(`/user/selectBalance/${loginUser.uid}`)
+    loginUser.balance = res.data.data.balance
+})
 
 </script>
 

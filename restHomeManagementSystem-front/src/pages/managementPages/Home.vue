@@ -7,7 +7,12 @@
     <div class="home-page">
 
         <div id="carousel_div">
-            <el-carousel indicator-position="none" height="330px">
+            <!-- <el-carousel indicator-position="none" height="330px">
+                <el-carousel-item v-for="item in itemPath" :key="item">
+                    <img :src="item" alt="carousel item">
+                </el-carousel-item>
+            </el-carousel> -->
+            <el-carousel :interval="2000" type="card" height="330px">
                 <el-carousel-item v-for="item in itemPath" :key="item">
                     <img :src="item" alt="carousel item">
                 </el-carousel-item>
@@ -119,6 +124,8 @@ const itemPath = ref([
     '/src/images/carousel_1.JPG',
     '/src/images/carousel_2.JPG',
     '/src/images/carousel_3.JPG',
+    '/src/images/carousel_4.JPG',
+    '/src/images/carousel_5.JPG',
 ])
 const spaceRoomNumber = ref()
 const spaceBedNumber = ref()
@@ -154,6 +161,11 @@ onMounted(() => {
 #carousel_div {
     background-color: white;
     margin: 10px;
+
+}
+
+#carousel_div img {
+    width: 100%;
 
 }
 

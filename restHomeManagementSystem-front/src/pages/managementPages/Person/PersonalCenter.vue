@@ -1,4 +1,7 @@
 <template>
+    <Header-web></Header-web>
+    <Menu-web></Menu-web>
+    <Footer-web></Footer-web>
     <div id="box">
         <div id="container1">
             <el-card style="width: 95%;">
@@ -288,8 +291,8 @@ const paymentList = ref([
     { imgSrc: "/src/images/AliPay.png", name: '支付宝' },
     { imgSrc: "/src/images/WeChatPay.png", name: '微信支付' },
     { imgSrc: "/src/images/yunShanFuPay.png", name: '云闪付' },
-    { imgSrc: "/src/images/applePay.png", name: '苹果支付' },
-    { imgSrc: "/src/images/paypalPay.png", name: '贝宝支付' },
+    // { imgSrc: "/src/images/applePay.png", name: '苹果支付' },
+    // { imgSrc: "/src/images/paypalPay.png", name: '贝宝支付' },
 ]);
 const selectedPaymentIndex = ref()
 const rechargeType = ref()
@@ -426,7 +429,7 @@ const confirmModifyPwd = () => {
 
 const headImgUrl = ref(`http://localhost:8999/images/upload/headPortrait/${loginUser.headImgUrl}`)
 const handleAvatarSuccess = (response) => {
-    
+
     headImgUrl.value = "http://localhost:8999/images/upload/headPortrait/" + response
     loginUser.headImgUrl = response
 }
@@ -497,10 +500,18 @@ onMounted(() => {
 </script>
 <style scoped>
 #box {
-    background-color: #fff;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    width: 82%;
+    height: auto;
+    float: right;
+    position: relative;
+    top: 80px;
+    margin-right: 10px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
 }
 
 #container1 {

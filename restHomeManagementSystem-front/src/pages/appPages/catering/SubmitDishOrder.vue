@@ -139,6 +139,7 @@ import { definedUser } from '@/stores';
 import { createAlipayPayment, submitAlipayForm } from '@/api/alipay';
 
 import { useRouterStore } from '@/stores/routerStore';
+import { ElMessage } from 'element-plus';
 const routerStore = useRouterStore();
 let loginUser = definedUser()
 const route = useRoute();
@@ -217,7 +218,6 @@ const submitOrder = async () => {
     });
     if (response.data.code == 200) {
         subMitOrderNumber.value = response.data.data;
-        axios.delete(`/dCart/clearByUid/${loginUser.uid}`)
         if (paymentMethod.value === 'alipay') {
 
             try {
@@ -230,6 +230,46 @@ const submitOrder = async () => {
             } catch (error) {
                 console.error('支付失败:', error);
             }
+            axios.delete(`/dCart/clearByUid/${loginUser.uid}`)
+
+        }
+        else if (paymentMethod.value === 'balance') {
+
+            const res = await axios.get(`/user/selectBalance/${loginUser.uid}`)
+            const newBalance = res.data.data.balance
+            if (newBalance >= totalPrice.value) {
+
+                axios.put(`/user/deductBalance`, {
+                    uid: loginUser.uid,
+                    money: totalAmount.value,
+                })
+                axios.post("/transaction/addIn", {
+                    uid: loginUser.uid,
+                    transactionMoney: totalAmount.value,
+                    transactionType: '账户余额',
+                    description: `${loginUser.nickname}购买的点餐订单`,
+                    inOrOut: 0
+                })
+                ElMessage.success('购买成功')
+                axios.delete(`/dCart/clearByUid/${loginUser.uid}`)
+
+            }
+            else {
+                ElMessage.error('余额不足')
+            }
+        }
+        else if (paymentMethod.value === 'wechat') {
+            ElMessage.success('购买成功')
+            axios.delete(`/dCart/clearByUid/${loginUser.uid}`)
+
+            axios.post("/transaction/addIn", {
+                uid: loginUser.uid,
+                transactionMoney: totalPrice.value,
+                transactionType: '微信支付',
+                description: `${loginUser.nickname}购买的点餐订单`,
+                inOrOut: 0
+            })
+
         }
         console.log('确认支付，支付方式：', paymentMethod.value);
     }
@@ -247,9 +287,11 @@ const paymentMethods = ref([
 const selectPaymentMethod = (method) => {
     paymentMethod.value = method;
 };
-onMounted(() => {
+onMounted(async () => {
     fetchElderly()
     fetchOrderInfo()
+    const res = await axios.get(`/user/selectBalance/${loginUser.uid}`)
+    loginUser.balance = res.data.data.balance
 })
 </script>
 
