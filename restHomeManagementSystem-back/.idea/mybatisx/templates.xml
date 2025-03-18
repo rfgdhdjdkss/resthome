@@ -69,8 +69,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="Dishesorder" />
-                  <option name="tableName" value="dishesOrder" />
+                  <option name="className" value="Today" />
+                  <option name="tableName" value="today" />
                 </TableUIInfo>
               </list>
             </option>

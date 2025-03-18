@@ -27,7 +27,7 @@
                     <!-- 新增数量 -->
                     <div class="box_head">
                         <div class="newQuantity_div">
-                            <p class="newQuantity_p">0</p>
+                            <p class="newQuantity_p">{{ todayNewResidents }}</p>
                         </div>
                         <div class="message_div">
                             <el-icon color="white" size="35px">
@@ -44,7 +44,7 @@
                     <!-- 新增数量 -->
                     <div class="box_head">
                         <div class="newQuantity_div">
-                            <p class="newQuantity_p">0</p>
+                            <p class="newQuantity_p">{{ todayNewContracts }}</p>
                         </div>
                         <div class="message_div">
                             <el-icon color="white" size="35px">
@@ -61,7 +61,7 @@
                     <!-- 新增数量 -->
                     <div class="box_head">
                         <div class="newQuantity_div">
-                            <p class="newQuantity_p">0</p>
+                            <p class="newQuantity_p"> {{ todayExitRequests }}</p>
                         </div>
                         <div class="message_div">
                             <el-icon color="white" size="35px">
@@ -70,7 +70,7 @@
                         </div>
                     </div>
                     <p class="new_p">
-                        今日退住申请
+                        今日退住人数
                     </p>
                 </div>
                 <!-- 合同到期提醒 -->
@@ -78,7 +78,7 @@
                     <!-- 新增数量 -->
                     <div class="box_head">
                         <div class="newQuantity_div">
-                            <p class="newQuantity_p">0</p>
+                            <p class="newQuantity_p">{{ todayExpiringContracts }}</p>
                         </div>
                         <div class="message_div">
                             <el-icon color="white" size="35px">
@@ -151,9 +151,24 @@ const getSpaceBedNumber = () => {
     }
     )
 }
-onMounted(() => {
+const todayNewResidents = ref(0);
+const todayNewContracts = ref(0);
+const todayExitRequests = ref(0);
+const todayExpiringContracts = ref(0);
+const findToday = async () => {
+    const res = await axios.get("/today/findToday")
+    console.log(res);
+    todayNewResidents.value = res.data.data.todayNewResidents
+    todayNewContracts.value = res.data.data.todayNewContracts
+    todayExitRequests.value = res.data.data.todayExitRequests
+    todayExpiringContracts.value = res.data.data.todayExpiringContracts
+
+}
+
+onMounted(async () => {
     getSpaceRoomNumber()
     getSpaceBedNumber()
+    findToday()
 })
 </script>
 <style scoped>

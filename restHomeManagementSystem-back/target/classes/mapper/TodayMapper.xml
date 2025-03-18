@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinyang.resthome.mapper.TodayMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinyang.resthome.pojo.Today">
+            <id property="todayId" column="todayId" jdbcType="BIGINT"/>
+            <result property="todayNewResidents" column="todayNewResidents" jdbcType="INTEGER"/>
+            <result property="todayNewContracts" column="todayNewContracts" jdbcType="INTEGER"/>
+            <result property="todayExitRequests" column="todayExitRequests" jdbcType="INTEGER"/>
+            <result property="todayExpiringContracts" column="todayExpiringContracts" jdbcType="INTEGER"/>
+            <result property="date" column="date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        todayId,todayNewResidents,todayNewContracts,
+        todayExitRequests,todayExpiringContracts,date
+    </sql>
+</mapper>

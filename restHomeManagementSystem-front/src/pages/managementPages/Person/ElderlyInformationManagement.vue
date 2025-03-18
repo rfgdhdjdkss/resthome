@@ -258,24 +258,48 @@ function changeNextPage() {
   }
 }
 
-const updateIsCheckined = (row) => {
-  axios.put(`/elderly/updateIsCheckined`, {
-    eid: row.eid,
-    isCheckined: row.isCheckined === true ? 1 : 0
-  }).then(function (response) {
+const updateIsCheckined = async (row) => {
+  try {
+    // 发送请求到后端
+    await axios.put(`/elderly/updateIsCheckined`, {
+      eid: row.eid,
+      isCheckined: row.isCheckined === true ? 1 : 0
+    });
+
     ElMessage.success('修改成功');
-    // fetchData()
-  }).catch(function (error) {
-    console.log(error);
+
+
+    // 调用Pinia的异步action（带后端同步）
+    if (row.isCheckined) {
+      const now = new Date();
+      const isoDateTime = now.toISOString();
+      const response = await axios.put('/today/incrementNewResidents', {
+        date: isoDateTime
+      });
+
+    } else {
+      const now = new Date();
+      const isoDateTime = now.toISOString();
+      const response = await axios.put('/today/incrementExitRequests', {
+        date: isoDateTime
+      });
+    }
+
+
+
+
+  } catch (error) {
+    console.error('修改失败:', error);
+    ElMessage.error('修改失败');
+    row.isCheckined = !row.isCheckined; // 回滚开关状态
   }
-  )
-}
+};
 
 // 删除事件
 const handleDelete = (index: number, row: User) => {
   // if (window.confirm('您确定要删除用户 ' + row.username + ' 吗？')) {
   // 用户点击了确定按钮
-  
+
   axios.delete(`/elderly/delete/${row.eid}`)
     .then(response => {
       // 服务器成功响应删除请求
@@ -295,21 +319,22 @@ const confirmEvent = (index: number, row: User) => {
 const addDialogFormVisible = ref(false)
 // 打开新增商品对话框
 function openAddDialog() {
-    // 清空表单数据
-    form.gid = '';
-    form.title = '';
-    form.price = '';
-    form.quantity = '';
-    form.image = '';
-    form.description = '';
-    form.afterSale = '';
-    form.deliver = '';
-    form.discount = '';
-    form.fee = '';
-    form.service = '';
-    headImgUrl.value = '';
-    addDialogFormVisible.value = true;
+  // 清空表单数据
+  form.gid = '';
+  form.title = '';
+  form.price = '';
+  form.quantity = '';
+  form.image = '';
+  form.description = '';
+  form.afterSale = '';
+  form.deliver = '';
+  form.discount = '';
+  form.fee = '';
+  form.service = '';
+  headImgUrl.value = '';
+  addDialogFormVisible.value = true;
 }
+
 onMounted(() => {
   fetchData()
 })

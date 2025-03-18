@@ -232,6 +232,7 @@ import { useRoute } from 'vue-router';
 import { ElMessage } from 'element-plus'
 import { definedUser } from '@/stores/index.js';
 import { useRouter } from 'vue-router';
+
 let router = useRouter()
 let loginUser = definedUser()
 let route = useRoute()
@@ -658,33 +659,31 @@ interface Elderly {
 }
 const elderly = reactive<Elderly>({})
 
-function signCheckIn() {
-    //发送put请求，更新reserve表中预定老人是否已经完成签约
-    axios.put(`/reserve/updateReserveIsReserved/${routeEid}`, {
-    }).then(function (response) {
-        console.log(response);
-        const data = response.data.data
-        elderly.elderlyName = data.elderlyName,
-            elderly.elderlySex = data.elderlySex,
-            elderly.elderlyBirth = data.elderlyBirth,
-            elderly.elderlyIdCard = data.elderlyIdCard,
-            elderly.elderlyPhone = data.elderlyPhone,
-            elderly.elderlyAddress = data.elderlyAddress,
-            elderly.isHealth = data.isHealth,
-            elderly.bookerName = data.bookerName,
-            elderly.bookerTime = data.bookerTime,
-            elderly.isVoluntaryOccupancy = data.isVoluntaryOccupancy,
-            elderly.note = data.note,
-            elderly.isReserved = data.isReserved
-        //发送put请求，扣除登录用户余额，将扣除的金额存入预定老人账户 （余额-签约预定时的预缴金额）
-        axios.put(`/user/deductBalance`, {
-            uid: loginUser.uid,
-            money: earnest.value,
-        })
-        //记录扣除当前用户余额的交易记录
-        transactionDeduct()
-        //发送post请求向elderly表新增老人信息
-        axios.post(`/elderly/addNewElderly`, {
+async function signCheckIn() {
+    try {
+        // 1. 更新预订状态
+        const updateRes = await axios.put(`/reserve/updateReserveIsReserved/${routeEid}`);
+        const elderData = updateRes.data.data
+        elderly.elderlyName = elderData.elderlyName,
+            elderly.elderlySex = elderData.elderlySex,
+            elderly.elderlyBirth = elderData.elderlyBirth,
+            elderly.elderlyIdCard = elderData.elderlyIdCard,
+            elderly.elderlyPhone = elderData.elderlyPhone,
+            elderly.elderlyAddress = elderData.elderlyAddress,
+            elderly.isHealth = elderData.isHealth,
+            elderly.bookerName = elderData.bookerName,
+            elderly.bookerTime = elderData.bookerTime,
+            elderly.isVoluntaryOccupancy = elderData.isVoluntaryOccupancy,
+            elderly.note = elderData.note,
+            elderly.isReserved = elderData.isReserved
+        // 2. 扣除余额
+        await axios.put(`/user/deductBalance`, { uid: loginUser.uid, money: earnest.value });
+
+        // 3. 记录交易
+        await transactionDeduct();
+
+        // 4. **创建老人信息（核心合同操作）**
+        await axios.post(`/elderly/addNewElderly`, {
             eid: routeEid,
             elderlyName: elderly.elderlyName,
             elderlySex: elderly.elderlySex,
@@ -701,15 +700,21 @@ function signCheckIn() {
             balance: earnest.value,
             uid: loginUser.uid,
             roomType: selectedBedType.value
-        }).then(function (response) {
-            console.log(response)
-        }).catch(function (error) {
-            console.log(error);
-        })
-    }).catch(function (error) {
-        console.log(error);
-    })
+        });
+        const now = new Date();
+        const isoDateTime = now.toISOString();
+        const response = await axios.put('/today/incrementNewContracts', {
+            date: isoDateTime
+        });
+        // 5. 更新合同计数（本地 + 后端）
+        getBalance()
+
+        ElMessage.success('签约成功！');
+    } catch (error) {
+        ElMessage.error('签约失败：' + error.message);
+    }
 }
+
 
 const addIn = () => {
     axios.post("/transaction/addIn", {
@@ -747,7 +752,6 @@ onMounted(() => {
     fetchData(routeEid)
     fetchBedInfo()
     getBalance()
-
 })
 </script>
 <style scoped>
