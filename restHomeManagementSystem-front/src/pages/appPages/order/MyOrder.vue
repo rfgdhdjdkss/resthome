@@ -37,11 +37,11 @@
                                 <span class="product-quantity">x{{ item.quantity }}</span>
                             </div>
                             <div style="display: flex; align-items: center;justify-content: end;">
-                                <button class="repurchase-btn" @click="repurchase(order)">再次购买</button>
+                                <button class="repurchase-btn">再次购买</button>
                                 <button class="repurchase-btn" v-if="order.orderStatus === 'pending'"
                                     @click.stop="gotoPay(order)">去付款</button>
                                 <button v-if="order.orderStatus === 'evaluation'" class="repurchase-btn"
-                                    @click="gotoGoodsCommentPage(item.gid, order)">去评价</button>
+                                    @click.stop="gotoGoodsCommentPage(item.gid, order)">去评价</button>
                                 <button v-if="order.orderStatus === 'evaluation'" class="repurchase-btn"
                                     @click="repurchase(order)">去售后</button>
                             </div>
@@ -79,10 +79,6 @@ const fetchData = async () => {
 // 订单数据
 const orders = ref([]);
 
-// 组件挂载时获取数据
-onMounted(() => {
-    fetchData();
-});
 
 // 订单状态分类标签
 const orderTabs = ref([
@@ -105,8 +101,6 @@ const filteredOrders = computed(() => {
     let filtered = orders.value.filter(order =>
         !order.orderNumber.startsWith('CATERING') // 使用可选链防止空值
     );
-    console.log(filtered);
-
     // 第一步：按标签筛选
     if (currentTab.value !== 'all') {
         filtered = orders.value.filter(order =>
@@ -168,6 +162,11 @@ const gotoGoodsDetailPage = (gid) => {
         }
     })
 }
+
+// 组件挂载时获取数据
+onMounted(() => {
+    fetchData();
+});
 </script>
 
 <style scoped>

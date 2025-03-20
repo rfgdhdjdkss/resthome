@@ -28,8 +28,8 @@ public class FileController {
     private UserService userService;
     @Autowired
     private DishesService dishesService;
-@Autowired
-private GoodsService goodsService;
+    @Autowired
+    private GoodsService goodsService;
 
     //文件上传存储路径
 //    private static final String filePath = System.getProperty("user.dir") + "/upload";

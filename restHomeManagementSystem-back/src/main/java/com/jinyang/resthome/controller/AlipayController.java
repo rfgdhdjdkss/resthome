@@ -147,7 +147,7 @@ public class AlipayController {
         // 4. 处理交易结果
         if (queryResponse.isSuccess() && "TRADE_SUCCESS".equals(queryResponse.getTradeStatus())) {
             // 更新订单状态
-            order.setOrderStatus("finished");
+            order.setOrderStatus("evaluation");
             ordersMapper.updateById(order);
             //添加交易记录
             TransactionRecord transactionRecord = new TransactionRecord();

@@ -155,9 +155,11 @@ const confirmPayment = async () => {
                 inOrOut: 0
             })
             ElMessage.success('购买成功')
-            updateOrderStatus("finished")
+            updateOrderStatus("evaluation")
+            router.push({ name: 'MyOrder_app', query: { tab: 'all' } })
+
         }
-        else{
+        else {
             ElMessage.error('余额不足')
         }
     }
@@ -170,7 +172,11 @@ const confirmPayment = async () => {
             description: `${loginUser.nickname}购买的商品订单`,
             inOrOut: 0
         })
-        updateOrderStatus("finished")
+        updateOrderStatus("evaluation")
+        setTimeout(() => {
+            router.push({ name: 'MyOrder_app', query: { tab: 'all' } })
+
+        }, 1000)
 
     }
     console.log('确认支付，支付方式：', paymentMethod.value);

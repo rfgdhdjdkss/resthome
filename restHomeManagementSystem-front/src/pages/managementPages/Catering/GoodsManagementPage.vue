@@ -15,10 +15,11 @@
                         <div
                             style="width: 100px; height: 100px; background-color: #f0f0f0; display: flex; align-items: center;justify-content: center;">
                             <img :src="`http://localhost:8999/images/upload/goodsImg/${scope.row.image}`" alt="商品图片"
-                                style="width: 80px; height: 80px;">
+                                style="width: 100px; height: 100px;">
                         </div>
                     </template>
                 </el-table-column>
+                <!-- <el-table-column label="商品描述" prop="description" /> -->
                 <el-table-column label="商品价格" prop="price" />
                 <el-table-column label="商品库存" prop="quantity" />
                 <el-table-column label="商品折扣" prop="discount" />
@@ -63,31 +64,27 @@
                     </div>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item @click="changePageSize(7)">7条/页</el-dropdown-item>
-                            <el-dropdown-item @click="changePageSize(10)">10条/页</el-dropdown-item>
-                            <el-dropdown-item @click="changePageSize(12)">12条/页</el-dropdown-item>
+                            <el-dropdown-item @click="handlePageSizeChange(7)">7条/页</el-dropdown-item>
+                            <el-dropdown-item @click="handlePageSizeChange(10)">10条/页</el-dropdown-item>
+                            <el-dropdown-item @click="handlePageSizeChange(12)">12条/页</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
                 <div id="changePageDiv">
-                    <el-icon style="cursor: pointer;" @click="changePrevPage">
+                    <el-icon style="cursor: pointer;" @click="handlePageChange(pageInfo.currentPage - 1)">
                         <ArrowLeftBold />
                     </el-icon>
                     <div id="pageDiv">
-                        <span class="pageNum" v-if="pageInfo.hasPrevious && pageInfo.currentPage > 2"
-                            @click="gotoPageByNum(pageInfo.currentPage - 2)">{{ pageInfo.currentPage - 2 }}</span>
-                        <span class="pageNum" v-if="pageInfo.hasPrevious"
-                            @click="gotoPageByNum(pageInfo.currentPage - 1)">{{
-                                pageInfo.currentPage - 1 }}</span>
-                        <span class="pageNum" @click="gotoPageByNum(pageInfo.currentPage)" style="color: #409EFF;">{{
-                            pageInfo.currentPage }}</span>
-                        <span class="pageNum" v-if="pageInfo.hasNext"
-                            @click="gotoPageByNum(pageInfo.currentPage + 1)">{{
-                                pageInfo.currentPage + 1 }}</span>
-                        <span class="pageNum" v-if="Number(pageInfo.pages) - pageInfo.currentPage >= 2"
-                            @click="gotoPageByNum(pageInfo.currentPage + 2)">{{ pageInfo.currentPage + 2 }}</span>
+                        <span
+                            v-for="page in pageNumbers"
+                            :key="page"
+                            :class="['pageNum', { active: page === pageInfo.currentPage }]"
+                            @click="handlePageChange(page)"
+                        >
+                            {{ page }}
+                        </span>
                     </div>
-                    <el-icon style="cursor: pointer;" @click="changeNextPage">
+                    <el-icon style="cursor: pointer;" @click="handlePageChange(pageInfo.currentPage + 1)">
                         <ArrowRightBold />
                     </el-icon>
                 </div>
@@ -120,6 +117,9 @@
                         </el-icon>
                         <div class="changeHead">修改商品图片</div>
                     </el-upload>
+                </el-form-item>
+                <el-form-item label="商品描述" :label-width="formLabelWidth">
+                    <el-input v-model="form.description" autocomplete="off" />
                 </el-form-item>
                 <el-form-item label="商品价格" :label-width="formLabelWidth">
                     <el-input v-model="form.price" autocomplete="off" />
@@ -171,6 +171,9 @@
                         <div class="changeHead">修改商品图片</div>
                     </el-upload>
                 </el-form-item>
+                <el-form-item label="商品描述" :label-width="formLabelWidth">
+                    <el-input v-model="form.description" autocomplete="off" />
+                </el-form-item>
                 <el-form-item label="商品价格" :label-width="formLabelWidth">
                     <el-input v-model="form.price" autocomplete="off" />
                 </el-form-item>
@@ -215,8 +218,8 @@ import { ElMessage } from 'element-plus';
 const pageInfo = reactive({
     currentPage: 1,
     pageSize: 10,
-    total: '',
-    pages: '',
+    total: 0,
+    pages: 0,
     hasPrevious: false,
     hasNext: false,
 });
@@ -227,21 +230,39 @@ const filterTableData = ref<Goods[]>([]);
 // 前往第几页的页数定义
 const gotoPageNum = ref(1);
 
-// 监听当输入框页数发送变化时，向服务器发送请求，将对应页码的记录显示
-watch(gotoPageNum, (newPage, oldPage) => {
-    if (newPage >= 1 && newPage <= Number(pageInfo.pages)) {
-        pageInfo.currentPage = newPage;
-        if (search.value === '') {
-            fetchData();
-        } else {
-            searchTableData(search.value);
-        }
+// 动态计算显示的页码
+const pageNumbers = computed(() => {
+    const pages = Number(pageInfo.pages);
+    const current = pageInfo.currentPage;
+    const result = [];
+
+    // 添加当前页前两页（如果存在）
+    if (current - 2 >= 1) {
+        result.push(current - 2);
     }
+    if (current - 1 >= 1) {
+        result.push(current - 1);
+    }
+
+    // 添加当前页
+    result.push(current);
+
+    // 添加当前页后两页（如果存在）
+    if (current + 1 <= pages) {
+        result.push(current + 1);
+    }
+    if (current + 2 <= pages) {
+        result.push(current + 2);
+    }
+
+    return result;
 });
 
-// 页面下方单击页码数翻页的事件
-function gotoPageByNum(pageNum) {
-    pageInfo.currentPage = pageNum;
+// 分页器点击事件
+function handlePageChange(page: number) {
+    if (page < 1 || page > Number(pageInfo.pages)) return;
+
+    pageInfo.currentPage = page;
     if (search.value === '') {
         fetchData();
     } else {
@@ -249,39 +270,18 @@ function gotoPageByNum(pageNum) {
     }
 }
 
-// 页面下方选择每页有几条数据的事件
-function changePageSize(pageSize) {
-    pageInfo.pageSize = pageSize;
-    if (search.value === '') {
-        fetchData();
-    } else {
-        searchTableData(search.value);
-    }
+// 每页显示条数变更
+function handlePageSizeChange(size: number) {
+    pageInfo.pageSize = size;
+    handlePageChange(1);
 }
 
-// 页面下方'<'向前翻页的事件
-function changePrevPage() {
-    if (pageInfo.hasPrevious) {
-        pageInfo.currentPage--;
-        if (search.value === '') {
-            fetchData();
-        } else {
-            searchTableData(search.value);
-        }
+// 监听跳转页码变更
+watch(gotoPageNum, (newPage) => {
+    if (newPage >= 1 && newPage <= Number(pageInfo.pages)) {
+        handlePageChange(newPage);
     }
-}
-
-// 页面下方'>'向后翻页的事件
-function changeNextPage() {
-    if (pageInfo.hasNext) {
-        pageInfo.currentPage++;
-        if (search.value === '') {
-            fetchData();
-        } else {
-            searchTableData(search.value);
-        }
-    }
-}
+});
 
 // 封装向服务器请求所有商品信息的事件
 async function fetchData() {
@@ -316,16 +316,18 @@ async function fetchData() {
 }
 
 const handleAvatarSuccess = (response) => {
+    console.log(response);
+
     headImgUrl.value = `http://localhost:8999/images/upload/goodsImg/${response}`;
     form.image = response;
+
+    console.log(form.image);
+
 };
 
 const beforeAvatarUpload = (rawFile) => {
     if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
         ElMessage.error('上传头像图片只能是 jpg 或者 png 格式');
-        return false;
-    } else if (rawFile.size / 1024 / 1024 > 2) {
-        ElMessage.error('上传的头像图片大小不能超过 2MB!');
         return false;
     }
     return true;
@@ -335,7 +337,7 @@ const getActionUrl = (gid) => {
     return `http://localhost:8999/files/upload/addNewGoods/${gid}`;
 };
 
-// 挂载时，第一次向服务器请求所有商品信息
+// 页面挂载时，第一次向服务器请求所有商品信息
 onMounted(() => {
     fetchData();
 });
@@ -472,10 +474,7 @@ function openAddDialog() {
 // 编辑状态下：不保存，返回
 const doNotSave = () => {
     dialogFormVisible.value = false;
-    ElMessage({
-        message: '取消保存，未成功修改数据',
-        type: 'warning',
-    });
+    addDialogFormVisible.value=false
 };
 
 // 编辑状态下，保存，并向服务器发送请求更新数据库中的数据
@@ -568,6 +567,8 @@ const addGoods = async () => {
     margin-top: 20px;
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 20px;
 }
 
 .example-showcase .el-dropdown-link {
@@ -580,11 +581,7 @@ const addGoods = async () => {
 #countDiv {
     height: 27px;
     display: flex;
-    justify-content: center;
     align-items: center;
-    font-size: var(--el-font-size-base);
-    color: var(--el-text-color-regular);
-    margin-right: 20px;
 }
 
 #sizeDiv {
@@ -594,41 +591,34 @@ const addGoods = async () => {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    cursor: pointer;
 }
 
 #changePageDiv {
     display: flex;
     align-items: center;
-    width: auto;
-    height: 27px;
-    margin-left: 20px;
-    color: var(--el-text-color-regular);
-    margin-right: 20px;
+    gap: 10px;
 }
 
 .pageNum {
     font-size: var(--el-font-size-base);
     color: var(--el-text-color-regular);
-    margin-left: 15px;
-    margin-right: 15px;
+    margin: 0 5px;
     cursor: pointer;
+}
+
+.pageNum.active {
+    color: #409EFF;
 }
 
 #gotoPageNumDiv {
     display: flex;
     align-items: center;
-    width: auto;
-    height: 27px;
-    color: var(--el-text-color-regular);
+    gap: 5px;
 }
 
 #inputDiv {
-    height: 25px;
-    width: 15px;
+    width: 40px;
     text-align: center;
-    font-size: var(--el-font-size-base);
-    color: var(--el-text-color-regular);
 }
 
 .pageNumDiv_span {

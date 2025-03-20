@@ -438,7 +438,7 @@ const gotoRegistrationApplicationPage = () => {
 
 .product-item img {
     width: 100%;
-    height: 152.5px;
+    height: 165px;
     object-fit: contain;
     background-color: #fff;
 }

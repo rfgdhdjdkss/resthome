@@ -86,6 +86,10 @@ const submitComment = async () => {
         if (response.data.code === 200) {
             ElMessage.success('评价成功')
             updateOrderStatus('finished')
+            setTimeout(() => {
+                router.push({ name: 'MyOrder_app', query: { tab: 'all' } })
+
+            }, 1000)
         } else {
             ElMessage.error('评价失败')
 
