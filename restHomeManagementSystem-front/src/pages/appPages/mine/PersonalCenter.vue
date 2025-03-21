@@ -10,10 +10,10 @@
             <div class="item-container">
                 <el-upload class="avatar-uploader" :action="getActionUrl()" :show-file-list="false"
                     :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-                    <img v-if="headImgUrl" :src="headImgUrl" class="avatar" />
-                    <el-icon v-else class="avatar-uploader-icon">
-                        <Plus />
-                    </el-icon>
+
+                    <img v-if="loginUser.headImgUrl" :src="headImgUrl" class="avatar" />
+                    <img v-else src="@/assets/images/avatar.png" class="avatar" />
+
                 </el-upload>
                 <el-icon>
                     <ArrowRight />
@@ -41,7 +41,7 @@
                     </el-icon>
                 </div>
             </div>
-            <div class="p-i" @click="editBirthday">
+            <div class="p-i" @click="gotoRechargePage">
                 <span>余额</span>
                 <div class="item-container">
                     <span class="item-info">{{ balance }}</span>
@@ -157,8 +157,8 @@ const confirmGender = async (updateSex) => {
         ElMessage.error(response.data.message)
     }
 }
-const editBirthday = () => {
-    console.log('编辑生日');
+const gotoRechargePage = () => {
+   router.push({ name: 'Recharge_app' })
 };
 
 const gotoShippingAddressListPage = () => {
