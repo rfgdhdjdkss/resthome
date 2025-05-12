@@ -115,7 +115,7 @@ async function register() {
     }).then(function (response) {
         // 如果服务器返回200，则跳转至登录页
         if (response.data.code == 200) {
-            router.push('/login');
+            router.push({name:'Login'});
         }
         else if (response.data.code == 505) {
             ruleForm.code = response.data.code

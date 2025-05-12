@@ -186,6 +186,7 @@ const fetchData = () => {
 };
 
 // 封装搜索框模糊查询事件
+// 封装搜索框模糊查询事件
 function searchTableData(searchValue) {
     axios.get("/eHealth/selectForSearchHealthManagement", {
         params: {
@@ -196,6 +197,7 @@ function searchTableData(searchValue) {
     }).then(response => {
         const convertedData = response.data.data.records.map(item => ({
             ...item,
+            status: item.status === 1, // 将 status 转换为布尔值
         }));
         tableData.splice(0, tableData.length, ...convertedData);
         pageInfo.total = response.data.data.total;

@@ -1,11 +1,11 @@
 <template>
     <div id="menu_div">
         <div id="logo_sysName_div">
-            <div>
+            <!-- <div>
                 <span>
-                    <img id="logo" src="@/assets/images/logo.jpg" alt="">
+                     <img id="logo" src="@/assets/images/logo.jpg" width="70px" height="70px" style="padding-bottom: 1px;" alt="">
                 </span>
-            </div>
+            </div> -->
             <div>
                 <span id="sysName">
                     养老生活--养老院管理系统
@@ -85,7 +85,7 @@
                         </router-link>
                     </el-sub-menu> -->
                     <!-- 人员管理 -->
-                    <el-sub-menu index="4">
+                    <el-sub-menu index="4"  v-if="loginUser.permission === '管理员'">
                         <template #title>
                             <el-icon>
                                 <User />
@@ -122,7 +122,7 @@
                             <el-menu-item index="6-2">餐饮套餐</el-menu-item>
                         </router-link> -->
 
-                    <el-sub-menu index="6">
+                    <el-sub-menu index="6"  v-if="loginUser.permission === '管理员'">
 
                         <template #title>
                             <el-icon>
@@ -234,7 +234,8 @@ const handleClose = (key: string, keyPath: string[]) => {
     width: 284px;
     height: 70px;
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    justify-content: center;
     align-items: center;
     gap: 10px;
 }
@@ -248,7 +249,7 @@ const handleClose = (key: string, keyPath: string[]) => {
 }
 
 #sysName {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
     line-height: 40px;
     color: white;

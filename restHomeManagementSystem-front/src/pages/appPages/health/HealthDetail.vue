@@ -99,8 +99,11 @@ const fetchData = () => {
         console.log(response);
         elderInfo.value = response.data.data.elderly
         vitalSigns.value = response.data.data.elderlyhealth
-        healthRecords.value = response.data.data.healthrecordList;
-        displayedRecords.value = healthRecords.value.slice(-3); // 只保留最新的3条记录
+        // 获取健康记录并排序，最新的记录排在最前面
+        const records = response.data.data.healthrecordList;
+        records.sort((a, b) => new Date(b.time) - new Date(a.time)); // 按时间降序排序
+        healthRecords.value = records;
+        displayedRecords.value = healthRecords.value.slice(0, 3); // 取最新的3条记录
     }).catch(function (error) {
         console.log(error);
     })

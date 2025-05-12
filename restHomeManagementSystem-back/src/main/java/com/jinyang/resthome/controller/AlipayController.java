@@ -72,14 +72,18 @@ public class AlipayController {
         bizContent.put("product_code", "FAST_INSTANT_TRADE_PAY"); // 产品码
 
         request.setBizContent(bizContent.toJSONString());
-
+        System.out.println(request.getBizContent());
         AlipayTradeWapPayResponse response = alipayClient.pageExecute(request);
+        // 打印签名
+        System.out.println("!2312312312321");
         return response.getBody(); // 返回支付宝的支付表单
     }
 
     @GetMapping("/return")
     public RedirectView handleReturn(HttpServletRequest request) throws AlipayApiException {
         // 1. 获取支付宝返回的订单号、subject 和 uid
+        String sign = request.getParameter("sign");
+        System.out.println("签名: " + sign);
         String orderNumber = request.getParameter("out_trade_no");
         String subject = request.getParameter("subject");
         String uidParam = request.getParameter("uid"); // 获取 uid 参数（可能为 null）

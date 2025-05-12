@@ -17,7 +17,7 @@
                     </template>
                     <template #default="scope">
                         <el-button size="default" @click="editInfo(scope.$index, scope.row)">
-                            Edit
+                            编辑
                         </el-button>
                         <el-popconfirm confirm-button-text="确定" cancel-button-text="取消" :icon="InfoFilled"
                             icon-color="#626AEF" title="您确定要删除这条记录吗?" @confirm="confirmEvent(scope.$index, scope.row)"
@@ -26,7 +26,7 @@
                                 type: 'warning',
                             })">
                             <template #reference>
-                                <el-button type="danger">Delete</el-button>
+                                <el-button type="danger">删除</el-button>
                             </template>
                         </el-popconfirm>
                     </template>

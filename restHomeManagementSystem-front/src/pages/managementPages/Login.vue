@@ -18,7 +18,7 @@
                     </el-form-item>
                     <el-form-item label="我是" label-position="left" prop="permission">
                         <el-radio-group v-model="ruleForm.permission">
-                            <el-radio value="普通用户">普通用户</el-radio>
+                            <!-- <el-radio value="普通用户">普通用户</el-radio> -->
                             <el-radio value="员工">员工</el-radio>
                             <el-radio value="管理员">管理员</el-radio>
                         </el-radio-group>

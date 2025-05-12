@@ -535,7 +535,7 @@ const selectedBedType = computed(() => {
 })
 //计算属性：根据被选中的卡片索引确定预缴金额
 const earnest = computed(() => {
-    return selectedCardIndex.value === 0 ? 5000 : (selectedCardIndex.value === 1 ? 4500 : 4000)
+    return selectedCardIndex.value === 0 ? 1700 : (selectedCardIndex.value === 1 ? 1400 : 1000)
 })
 //定义账户余额
 const balance = ref()

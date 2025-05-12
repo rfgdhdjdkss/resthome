@@ -36,6 +36,9 @@
                                 <span class="product-price">￥{{ item.price }}</span>
                                 <span class="product-quantity">x{{ item.quantity }}</span>
                             </div>
+                            <div>
+                                <span class="product-quantity"> 交易时间 {{ formatTimestamp(order.createTime) }}</span>
+                            </div>
                             <div style="display: flex; align-items: center;justify-content: end;">
                                 <button class="repurchase-btn">再次购买</button>
                                 <button class="repurchase-btn" v-if="order.orderStatus === 'pending'"
@@ -114,7 +117,18 @@ const filteredOrders = computed(() => {
         return new Date(b.createTime) - new Date(a.createTime);
     });
 });
+const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
 
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+}
 // 再次购买
 const repurchase = (order) => {
     console.log('再次购买', order);

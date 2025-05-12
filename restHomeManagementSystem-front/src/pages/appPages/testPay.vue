@@ -13,7 +13,7 @@ const handlePay = async () => {
   try {
     const orderId = `Recharge_${Date.now()}${loginUser.uid}`;
     const amount = 20;
-    const subject = '测试订单';
+    const subject = 'sasc';
 
     const htmlData = await createAlipayPayment(orderId, amount, subject);
     submitAlipayForm(htmlData);
